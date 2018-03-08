@@ -1,0 +1,835 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name: BBI Engineering, Inc. & U.C. San Francisco
+System Name: Panasonic PT-DZ8700U (16:9/16:10)
+System Number:
+Programmer: Sam T.S. Wong Modified by Tim Z Falconer, Bret Wittmann
+Comments:tzf added VGA2 & Composite Inputs
+Version r3: added discreet VideoMuteOn and VideoMuteOff commands; 
+changed name of VideoMute to VideoMuteToggle
+(also changed VGA nomenclature to RGB for consitency with projector labels)
+r4 seeks to recover VideoMuteFB functionality
+r5 Added AutoAdjust, send out lamp hours in Analog formats
+r6 Added Func1 Command to enable PIP "Mode" selection: Func1 should be set to "P in P" in the menu.
+r7 Added PinP ON and OFF Commands. PinP ON always puts projector in "PinP User1" Mode.
+r8 Added PinP SWAP command: In ANY PinP User Mode, swaps Left<->Right images. 
+r9 Adds PinP Sub Input selects and a buncha stuff
+r10 Adds DVI input; Lamp status (BRW)
+r11 Adds semphore to stop polling during rx$ evalution
+r12 Fixes video mute toggle
+r14 Puts polling outside of module for easy adjustment of poll interval, and attempts to handle poll interuptions
+R15 Eliminates as many cmd_send flags as possible as this was causing some polling problems
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+#SYMBOL_NAME "PT-DZ8700U"
+#HINT "Panasonic 3-Chip DLP Projectors"
+#DEFINE_CONSTANT SELECT_PWRON		"\x02ADZZ;PON\x03"
+#DEFINE_CONSTANT SELECT_PWROFF		"\x02ADZZ;POF\x03"
+#DEFINE_CONSTANT SELECT_RGB1		"\x02ADZZ;IIS:RG1\x03"
+#DEFINE_CONSTANT SELECT_RGB2		"\x02ADZZ;IIS:RG2\x03"
+#DEFINE_CONSTANT SELECT_SVIDEO		"\x02ADZZ;IIS:SVD\x03"
+#DEFINE_CONSTANT SELECT_POSITE		"\x02ADZZ;IIS:VID\x03"
+#DEFINE_CONSTANT SELECT_DVI			"\x02ADZZ;IIS:DVI\x03"
+#DEFINE_CONSTANT POWER_QUERY		"\x02ADZZ;QPW\x03"
+#DEFINE_CONSTANT LAMP_QUERY			"\x02ADZZ;Q$S\x03"
+#DEFINE_CONSTANT VIDEO_MUTE			"\x02ADZZ;OSH:1\x03"
+#DEFINE_CONSTANT VIDEO_UNMUTE		"\x02ADZZ;OSH:0\x03"
+#DEFINE_CONSTANT KEY_AUTOADJUST		"\x02ADZZ;OAS\x03"
+#DEFINE_CONSTANT LAMP1_HOUR			"\x02ADZZ;Q$L:1\x03"
+#DEFINE_CONSTANT LAMP2_HOUR			"\x02ADZZ;Q$L:2\x03"
+// Picture In Picture Command Constants
+#DEFINE_CONSTANT KEY_FUNC1			"\x02ADZZ;FC1\x03"
+#DEFINE_CONSTANT KEY_PINP_OFF		"\x02ADZZ;OPP:0\x03"
+//#DEFINE_CONSTANT PINP_IS_OFF$		"\x02ADZZ;0\x03"
+#DEFINE_CONSTANT KEY_PINP_ON		"\x02ADZZ;OPP:1\x03"
+//#DEFINE_CONSTANT PINP_IS_ON$		"\x02ADZZ;1\x03"
+#DEFINE_CONSTANT KEY_PINP_SWAP		"\x02ADZZ;OCL\x03"
+#DEFINE_CONSTANT SELECT_SUB_RGB1	"\x02ADZZ;SIS:RG1\x03"
+#DEFINE_CONSTANT SELECT_SUB_RGB2	"\x02ADZZ;SIS:RG2\x03"
+#DEFINE_CONSTANT SELECT_SUB_SVIDEO	"\x02ADZZ;SIS:SVD\x03"
+#DEFINE_CONSTANT SELECT_SUB_POSITE	"\x02ADZZ;SIS:VID\x03"
+#DEFINE_CONSTANT SELECT_SUB_DVI		"\x02ADZZ;SIS:DVI\x03"
+//#DEFINE_CONSTANT PINP_QUERY		 	"\x02ADZZ;QPP\x03"
+// COMMAND SENT CONSTANTS
+#DEFINE_CONSTANT NONE_SENT				0	
+#DEFINE_CONSTANT LAMP1_HOUR_CMD			1
+#DEFINE_CONSTANT LAMP2_HOUR_CMD			2
+#DEFINE_CONSTANT LAMP_QUERY_CMD     	3
+#DEFINE_CONSTANT PINP_QUERY_CMD     	4	
+#DEFINE_CONSTANT QuePWRON				5
+#DEFINE_CONSTANT QuePWROFF				6
+#DEFINE_CONSTANT QueLAMP				7
+#DEFINE_CONSTANT QueVideoMute			8
+#DEFINE_CONSTANT QueRGB1				9
+#DEFINE_CONSTANT QueRGB2				10
+#DEFINE_CONSTANT QueSVIDEO				11
+#DEFINE_CONSTANT QuePOSITE				12
+#DEFINE_CONSTANT QueDVI					13
+#DEFINE_CONSTANT QueSUB_RGB1			14
+#DEFINE_CONSTANT QueSUB_RGB2			15
+#DEFINE_CONSTANT QueSUB_SVIDEO			16
+#DEFINE_CONSTANT QueSUB_POSITE			17
+#DEFINE_CONSTANT QueSUB_DVI				18
+#DEFINE_CONSTANT QuePINP_SWAP			19
+#DEFINE_CONSTANT QuePINP_ON				20
+#DEFINE_CONSTANT QuePINP_OFF			21
+#DEFINE_CONSTANT QueFUNC1				22
+#DEFINE_CONSTANT QueVideo_MUTE			23
+#DEFINE_CONSTANT QueVideo_UNMUTE		24
+#DEFINE_CONSTANT QueVideo_AUTOADJUST	25
+
+
+
+#CATEGORY "24" // TV/Video Projector
+#DEFAULT_VOLATILE // #DEFAULT_NONVOLATILE
+#ENABLE_STACK_CHECKING
+
+#HELP_BEGIN
+	Panasonic PT-L6510 and PT-D7500 projector. 
+    Cope with the fact that there is very minimal control via the RS232 port.
+
+Inputs:
+	PowerOn - turn on projector, will always try to turn on projector
+	PowerOff - turn off projector, will always try to turn off projector
+	PowerToggle - toggle power state, if projector is on, it will raise
+				the QueryPopup output but won't turn off the projector.
+                The "Yes" reply from the projector shutdown query popup 
+				then pulses the PowerOff input to force the projector off.
+				If projector is off, it will turn on the projector. 
+	InputVGA - switch input to VGA
+	Input SVideo - switch input to SVideo
+	LampHour - query the projector for lamp hours.
+	VideoMuteToggle - toggle Video Mute state.
+	VideoMuteOn - Set video mute on
+	VideoMuteOff - Set video mute off
+	AutoAdjust - do auto adjustment for VGA inputs
+	Proj_rx$ - RS232 output from the projector.
+	The following functions are only tested, so far, with the 16:9 PT-DW7000:
+	Func1: Enables "PIP User Mode" selection: Func1 should be set to "P in P" in the On-Screen menu: 
+		then FUNC1 cycles between PinP User1->User2->User3->PinP OFF->User1... (not to be 
+		confused with the "User" Key on the IR remote, which accesses "sub memory" settings, for 
+		"registration of Input Signal Data"... the two are not related).
+		Using On-screen Menus, set the PinP User modes like this:
+			PinP User 1: 84% size RGB on Stage Right, 42% size S-Video on Stage Left. 
+			PinP User 2: 100% size RGB on Stage Left, 20% size S-Video on Stage Right.
+			PinP User 3: 50% size RGB on Stage Right, 50% size S-Video on Stage Left.
+			... or to whatever three modes you think are best.
+		Note: RGB and S-Video images can be swapped (see below); but these will be the initial modes when 
+		the PinP USER modes are entered. 
+	PinP ON: always puts the projector in "PinP User1" Mode, 
+	PinP OFF: reliably turns PinP off from any PinP User1, User2, or User3 Mode.
+	PinP SWAP: In ANY PinP User Mode, swaps Left<->Right images.
+    
+Outputs:
+    CoolDown - projector is cooling down
+	WarmUp - projector is warming up
+	IsOn - projector is on
+	VideoMuteFB - video mute state, high means muted
+	BlinkFB - one second high and one second low when the projector is warming up
+			or cooling down.
+	QueryPopup - goes high when the projector is on and a request to shutdown is made.
+	Proj_tx$ - serial output to projector
+	Status$ - message showing projector state.
+	LampHour$ - lamp hours as a string
+	Lamp1Hours - lamp 1 hour in analog format
+	Lamp2Hours - lamp 2 hour in analog format
+
+	The Main routine maintains a state machine to query and keep track of the state of 
+	the projector. So if the projector is cooling down and a Turn On is requested, it will
+    eventually turn the projector on, same for Warming up while received a shutdown request.
+	I guess it is ok to do this because the Main routine isn't doing anything time consuming.	
+
+#HELP_END
+
+
+/*******************************************************************************************
+  Include Libraries
+  (Uncomment and include additional librarys as needed)
+*******************************************************************************************/
+// #CRESTRON_LIBRARY ""
+// #USER_LIBRARY ""
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+DIGITAL_INPUT PowerOn;
+DIGITAL_INPUT PowerOff;
+DIGITAL_INPUT PowerToggle;
+DIGITAL_INPUT InputRGB1;
+DIGITAL_INPUT InputRGB2;
+DIGITAL_INPUT InputSVideo;
+DIGITAL_INPUT InputComposite;
+DIGITAL_INPUT InputDVI;
+DIGITAL_INPUT LampHour;
+DIGITAL_INPUT VideoMuteToggle;
+DIGITAL_INPUT VideoMuteOn;
+DIGITAL_INPUT VideoMuteOff;
+DIGITAL_INPUT AutoAdjust;
+DIGITAL_INPUT Poll;
+// Picture In Picture Function Inputs
+DIGITAL_INPUT FuncOne;
+DIGITAL_INPUT PinPOFF;
+DIGITAL_INPUT PinPON;
+DIGITAL_INPUT PinPSWAP;
+DIGITAL_INPUT SubInputRGB1;
+DIGITAL_INPUT SubInputRGB2;
+DIGITAL_INPUT SubInputSVideo;
+DIGITAL_INPUT SubInputComposite;
+DIGITAL_INPUT SubInputDVI;
+
+// ANALOG_INPUT 
+BUFFER_INPUT Proj_rx$[255];
+ 
+// DIGITAL OUTPUT
+DIGITAL_OUTPUT PowerIsOn;
+DIGITAL_OUTPUT PowerIsOff;
+DIGITAL_OUTPUT ProjIsWarming;
+DIGITAL_OUTPUT ProjIsCooling;
+DIGITAL_OUTPUT VideoMuteFB;
+DIGITAL_OUTPUT BlinkFB;
+DIGITAL_OUTPUT QueryPopup;
+DIGITAL_OUTPUT PinP_Is_On;
+DIGITAL_OUTPUT PinP_Is_Off;
+//STING OUTPUT
+STRING_OUTPUT Proj_tx$;
+STRING_OUTPUT Status$;
+STRING_OUTPUT LampHours$;
+// ANALOG_OUTPUT 
+ANALOG_OUTPUT Lamp1Hours;
+ANALOG_OUTPUT Lamp2Hours;
+
+/*******************************************************************************************
+  Structure Definitions
+  (Uncomment and define structure definitions as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: struct.myString = "";
+*******************************************************************************************/
+// STRUCTURE MyStruct1
+// {
+// };
+
+// MyStruct1 struct;
+
+/*******************************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: myString = "";
+*******************************************************************************************/
+INTEGER CmdSent;
+INTEGER videoMuted;
+INTEGER projIsOn;
+INTEGER isWarmUp, isCoolDown;
+INTEGER	SubRGB1Pending;
+INTEGER	SubRGB2Pending;
+INTEGER	SubSVideoPending;
+INTEGER	SubCompositePending;
+INTEGER	SubDVIPending;
+STRING  lamp1Hours$[4], lamp2Hours$[4]; 
+INTEGER SEMAPHORE;
+INTEGER POLL_SEMAPHORE;
+INTEGER CommandQueue;
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+FUNCTION ProcessCommandQue ()
+	{
+	wait (20, Qwait)
+		{
+		if (CommandQueue = QuePWRON)
+			{
+			ClearBuffer(Proj_rx$);
+			Proj_tx$ = SELECT_PWRON;
+			}
+		else if (CommandQueue = QuePWROFF)
+			{
+			ClearBuffer(Proj_rx$);
+			Proj_tx$ = SELECT_PWROFF;
+			}
+		else if (CommandQueue = QueLAMP)
+			{
+			ClearBuffer(Proj_rx$);
+			cmdSent = LAMP1_HOUR_CMD;
+			Proj_tx$ = LAMP1_HOUR;
+			delay (15);
+			ClearBuffer(Proj_rx$);
+			cmdSent = LAMP2_HOUR_CMD;
+			Proj_tx$ = LAMP2_HOUR;
+			}
+		else if (CommandQueue = QueVideoMute)
+			{
+			ClearBuffer(Proj_rx$);
+			if (VideoMuted = 1)
+				{
+				ClearBuffer(Proj_rx$);
+				Proj_tx$ = VIDEO_UNMUTE;
+				}
+			else
+				{
+				ClearBuffer(Proj_rx$);
+				Proj_tx$ = VIDEO_MUTE;
+				}
+			}
+            else if (CommandQueue = QueRGB1)
+			{
+			Proj_tx$ = SELECT_RGB1;
+			}
+		else if (CommandQueue = QueRGB2)
+			{
+			Proj_tx$ = SELECT_RGB2;
+			}
+		else if (CommandQueue = QueSVIDEO)
+			{
+			Proj_tx$ = SELECT_SVIDEO;
+			}
+		else if (CommandQueue = QuePOSITE)
+			{
+			Proj_tx$ = SELECT_POSITE;
+			}
+		else if (CommandQueue = QueDVI)
+			{
+			Proj_tx$ = SELECT_DVI;
+			}
+		else if (CommandQueue = QueSUB_RGB1)
+			{
+			Proj_tx$ = SELECT_SUB_RGB1;
+			}
+		else if (CommandQueue = QueSUB_RGB2)
+			{
+			Proj_tx$ = SELECT_SUB_RGB2;
+			}
+		else if (CommandQueue = QueSUB_SVIDEO)
+			{
+			Proj_tx$ = SELECT_SUB_SVIDEO;
+			}
+		else if (CommandQueue = QueSUB_POSITE)
+			{
+			Proj_tx$ = SELECT_SUB_POSITE;
+			}
+		else if (CommandQueue = QueSUB_DVI)
+			{
+			Proj_tx$ = SELECT_SUB_DVI;
+			}
+		else if (CommandQueue = QuePINP_SWAP)
+			{
+			ClearBuffer(Proj_rx$);
+			Proj_tx$ = KEY_PINP_SWAP;
+			}
+		else if (CommandQueue = QuePINP_ON)
+			{
+			ClearBuffer(Proj_rx$);
+			Proj_tx$ = KEY_PINP_ON;
+			}
+		else if (CommandQueue = QuePINP_OFF)
+			{
+			ClearBuffer(Proj_rx$);
+			Proj_tx$ = KEY_PINP_OFF;
+			}
+		else if (CommandQueue = QueFUNC1)
+			{
+			ClearBuffer(Proj_rx$);
+			Proj_tx$ = KEY_FUNC1;
+			}
+		else if	(CommandQueue = QueVideo_MUTE)
+			{
+			ClearBuffer(Proj_rx$);
+			Proj_tx$ = VIDEO_MUTE;
+			}
+		else if	(CommandQueue = QueVideo_UNMUTE)
+			{
+			ClearBuffer(Proj_rx$);
+			Proj_tx$ = VIDEO_UNMUTE;
+			}
+		else if	(CommandQueue = QueVideo_AUTOADJUST)
+			{
+			ClearBuffer(Proj_rx$);
+			Proj_tx$ = KEY_AUTOADJUST;
+			}               
+		}		          
+	}
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+PUSH Poll
+	{
+	if (SEMAPHORE = 0)
+		{
+		POLL_SEMAPHORE = 1;
+		ClearBuffer(Proj_rx$);
+		cmdsent = LAMP_QUERY_CMD;
+		Proj_tx$ = LAMP_QUERY;
+		delay (15);
+		ClearBuffer(Proj_rx$);
+		Proj_tx$ = POWER_QUERY;
+		POLL_SEMAPHORE = 0;
+		}
+	}
+
+
+PUSH LampHour
+	{
+	if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		ClearBuffer(Proj_rx$);
+		cmdSent = LAMP1_HOUR_CMD;
+		Proj_tx$ = LAMP1_HOUR;
+		delay (15);
+		ClearBuffer(Proj_rx$);
+		cmdSent = LAMP2_HOUR_CMD;
+		Proj_tx$ = LAMP2_HOUR;
+		}
+		else if ((SEMAPHORE = 1)||(POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueLAMP;
+		call ProcessCommandQue ();
+		}		
+	}
+     
+PUSH VideoMuteToggle
+	{
+	if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))	
+		{
+		ClearBuffer(Proj_rx$);
+		if (VideoMuted = 1)
+			{
+			Proj_tx$ = VIDEO_UNMUTE;
+			}
+			else
+			{
+			Proj_tx$ = VIDEO_MUTE;
+			}
+		}
+	else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))		
+			{
+	 		CommandQueue = QueVideoMute;
+	 		call ProcessCommandQue ();
+	 		}	
+	}
+	
+
+PUSH VideoMuteOn
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		ClearBuffer(Proj_rx$);
+		Proj_tx$ = VIDEO_MUTE;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueVideo_MUTE;
+		call ProcessCommandQue ();
+		}
+	}
+
+PUSH VideoMuteOff
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		ClearBuffer(Proj_rx$);
+		Proj_tx$ = VIDEO_UNMUTE;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueVideo_UNMUTE;
+		call ProcessCommandQue ();
+		}
+	}
+
+PUSH AutoAdjust
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		ClearBuffer(Proj_rx$);
+		Proj_tx$ = KEY_AUTOADJUST;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueVideo_AUTOADJUST;
+		call ProcessCommandQue ();
+		}
+	}
+
+PUSH FuncOne
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = KEY_FUNC1;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueFUNC1;
+		call ProcessCommandQue ();
+		}
+	}
+
+
+PUSH PinPOFF
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		ClearBuffer(Proj_rx$);
+		Proj_tx$ = KEY_PINP_OFF;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QuePINP_OFF;
+		call ProcessCommandQue ();
+		}
+	}
+
+PUSH PinPON
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		ClearBuffer(Proj_rx$);
+		Proj_tx$ = KEY_PINP_ON;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QuePINP_ON;
+		call ProcessCommandQue ();
+		}
+	}
+PUSH PinPSWAP
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = KEY_PINP_SWAP;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QuePINP_SWAP;
+		call ProcessCommandQue ();
+		}
+	}
+
+PUSH PowerToggle
+	{
+	if (isCoolDown)
+		TerminateEvent;
+	if (isWarmUp)
+		TerminateEvent;
+	if (projIsOn)
+		{
+		PULSE(50, QueryPopup);
+		}
+		else
+		{
+		Proj_tx$ = SELECT_PWRON;
+		}		
+	}
+
+PUSH PowerOn
+	{
+	if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		ClearBuffer(Proj_rx$);
+		Proj_tx$ = SELECT_PWRON;
+		}
+	else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QuePWRON;
+		call ProcessCommandQue ();
+		}
+	}
+ 
+PUSH PowerOff
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		ClearBuffer(Proj_rx$);
+		Proj_tx$ = SELECT_PWROFF;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QuePWROFF;
+		call ProcessCommandQue ();
+		}
+	}
+
+PUSH SubInputRGB1
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = SELECT_SUB_RGB1;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueSUB_RGB1;
+		call ProcessCommandQue ();
+		}
+	}
+
+PUSH SubInputRGB2
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = SELECT_SUB_RGB2;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueSUB_RGB2;
+		call ProcessCommandQue ();
+		}
+	}
+
+
+PUSH SubInputSVideo
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = SELECT_SUB_SVIDEO;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueSUB_SVIDEO;
+		call ProcessCommandQue ();
+		}
+	}
+
+PUSH SubInputComposite
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = SELECT_SUB_POSITE;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueSUB_POSITE;
+		call ProcessCommandQue ();
+		}
+	}
+
+PUSH SubInputDVI
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = SELECT_SUB_DVI;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueSUB_DVI;
+		call ProcessCommandQue ();
+		}
+	}
+ 
+PUSH InputRGB1
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = SELECT_RGB1;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueRGB1;
+		call ProcessCommandQue ();
+		}
+	}
+
+PUSH InputRGB2
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = SELECT_RGB2;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueRGB2;
+		call ProcessCommandQue ();
+		}
+	}
+
+
+PUSH InputSVideo
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = SELECT_SVIDEO;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueSVIDEO;
+		call ProcessCommandQue ();
+		}
+	}
+
+ 
+PUSH InputComposite
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = SELECT_POSITE;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QuePOSITE;
+		call ProcessCommandQue ();
+		}
+	}
+
+
+PUSH InputDVI
+	{
+		if ((SEMAPHORE = 0) && (POLL_SEMAPHORE = 0))
+		{
+		Proj_tx$ = SELECT_DVI;
+		}
+		else if ((SEMAPHORE = 1) || (POLL_SEMAPHORE = 1))
+		{
+		CommandQueue = QueDVI;
+		call ProcessCommandQue ();
+		}
+	}
+
+
+
+	
+CHANGE Proj_rx$
+	{
+		//cancelwait (Qwait);
+		If (SEMAPHORE = 0)
+		{
+		SEMAPHORE = 1;	
+			if (Find("\x02000\x03", Proj_rx$) = 1)
+			{
+			projIsOn = 0;
+			PowerIsOn = 0;
+			PowerIsOff = 1;
+				if (isWarmUp = 0 && isCoolDown = 0)
+				{
+				Status$ = "POWER IS OFF";
+				BlinkFB = 0;
+				}	
+			}
+			else if (Find("\x02001\x03", Proj_rx$) = 1)
+			{
+			projIsOn = 1;
+			PowerIsOn = 1;
+			PowerIsOff = 0;
+				if (isWarmUp = 0 && isCoolDown = 0)
+				{
+				Status$ = "POWER IS ON";
+				BlinkFB = 1;
+				}
+			}
+			else if (Find("\x02PON\x03", Proj_rx$) = 1)
+			{
+			ProjIsOn = 1;
+			PowerIsOn = 1;
+			PowerIsOff = 0;
+			}
+			else if (Find("\x02POF\x03", Proj_rx$) = 1)
+			{
+			ProjIsOn = 0;
+			PowerIsOn = 0;
+			PowerIsOff = 1;
+			}
+			else if (Find("\x020\x03", Proj_rx$) = 1)
+			{
+			ProjIsWarming = 0;
+			ProjIsCooling = 0;
+			}
+			else if (Find("\x021\x03", Proj_rx$) = 1)
+			{
+			ProjIsWarming = 1;
+			ProjIsCooling = 0;
+			}
+			else if (Find("\x022\x03", Proj_rx$) = 1)
+			{
+			ProjIsWarming = 0;
+			ProjIsCooling = 0;
+			}
+			else if (Find("\x023\x03", Proj_rx$) = 1)
+			{
+			ProjIsWarming = 0;
+			ProjIsCooling = 1;
+			}
+			else if ((cmdSent = LAMP1_HOUR_CMD) && (len(Proj_rx$) = 6))
+			{
+			lamp1Hours$ = Mid(Proj_rx$, 2, 4);
+			Lamp1Hours = ATOI(lamp1Hours$);
+			cmdSent = NONE_SENT;
+			}
+			else if ((cmdSent = LAMP2_HOUR_CMD) && (len(Proj_rx$) = 6))
+			{
+			lamp2Hours$ = Mid(Proj_rx$, 2, 4);
+			Lamp2Hours = ATOI(lamp2Hours$);
+			cmdSent = NONE_SENT;
+			}
+			else if (Find("\x02OSH:1\x03", Proj_rx$) = 1)
+			{
+			VideoMuteFB = 1;
+			VideoMuted = 1;
+			}
+			else if (Find("\x02OSH:0\x03", Proj_rx$) = 1)
+			{
+			VideoMuteFB = 0;
+			VideoMuted = 0;
+			}
+			else if (Find("\x02OPP:0\x03", Proj_rx$) = 1)
+			{
+			PinP_IS_ON = 0;
+			PinP_IS_OFF = 1;
+			}
+			else if (Find("\x02OPP:1\x03", Proj_rx$) = 1)
+			{
+			PinP_IS_ON = 1;
+			PinP_IS_OFF = 0;
+			}		
+		SEMAPHORE = 0;
+		}
+	}    
+
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+
+Function Main()
+	{
+//	INTEGER ITMP;
+    // TODO:  Add code here
+    // Initialize declared global and local variables/arrays as needed.
+
+    WaitForInitializationComplete();
+    // If you are reading any Input or Output variables, uncomment
+    //   the WaitForInitializationComplete statement above and read
+    //   them afterwards.  Input/Output variables will not have
+    //   their correct values set until after the logic processor
+    //   runs and propagates the values to them.
+	PowerIsOn = 0;
+	PowerIsOff = 1;
+	projIsOn = 0;
+	BlinkFB = 0;
+	VideoMuteFB = 0;
+	VideoMuted = 0;
+	QueryPopup = 0;
+	cmdSent = NONE_SENT;
+	Status$ = "POWER IS OFF";
+	LampHours$ = "?\r?";
+	lamp1Hours$ = "?";
+	lamp2Hours$ = "?";
+	CommandQueue = QuePWRON;
+	cmdSent = NONE_SENT;
+	SEMAPHORE = 0;
+	isCoolDown = 0;
+	isWarmUp = 0;
+	ProjIsWarming = 0;
+	ProjIsCooling = 0; 
+	} 	
+
+

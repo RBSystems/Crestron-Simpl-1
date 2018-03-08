@@ -1,0 +1,11 @@
+<Device Model="AV3">
+   <Network Type="Cresnet" Id="04"/>
+   <Network Type="Ethernet" Id="05">
+      <Device Model="Fusion Room" DeviceId="1B" Name="Fusion Room MH-1400"/>
+      <Device Model="Fusion Room" DeviceId="1C" Name="Fusion Room MH-1401"/>
+      <Device Model="Fusion Room" DeviceId="1D" Name="Fusion Room MH-1402"/>
+      <Device Model="Fusion Room" DeviceId="1E" Name="Fusion Room MH-1405"/>
+      <Device Model="Fusion Room" DeviceId="1F" Name="Fusion Room MH-1406"/>
+      <Device Model="Fusion Room" DeviceId="20" Name="Fusion Room MH-1407"/>
+   </Network>
+</Device>

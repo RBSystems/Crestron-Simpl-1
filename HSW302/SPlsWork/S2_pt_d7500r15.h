@@ -1,0 +1,181 @@
+#ifndef __S2_PT_D7500R15_H__
+#define __S2_PT_D7500R15_H__
+
+
+
+
+/*
+* Constructor and Destructor
+*/
+
+/*
+* DIGITAL_INPUT
+*/
+#define __S2_pt_d7500r15_POWERON_DIG_INPUT 0
+#define __S2_pt_d7500r15_POWEROFF_DIG_INPUT 1
+#define __S2_pt_d7500r15_POWERTOGGLE_DIG_INPUT 2
+#define __S2_pt_d7500r15_INPUTRGB1_DIG_INPUT 3
+#define __S2_pt_d7500r15_INPUTRGB2_DIG_INPUT 4
+#define __S2_pt_d7500r15_INPUTSVIDEO_DIG_INPUT 5
+#define __S2_pt_d7500r15_INPUTCOMPOSITE_DIG_INPUT 6
+#define __S2_pt_d7500r15_INPUTDVI_DIG_INPUT 7
+#define __S2_pt_d7500r15_LAMPHOUR_DIG_INPUT 8
+#define __S2_pt_d7500r15_VIDEOMUTETOGGLE_DIG_INPUT 9
+#define __S2_pt_d7500r15_VIDEOMUTEON_DIG_INPUT 10
+#define __S2_pt_d7500r15_VIDEOMUTEOFF_DIG_INPUT 11
+#define __S2_pt_d7500r15_AUTOADJUST_DIG_INPUT 12
+#define __S2_pt_d7500r15_POLL_DIG_INPUT 13
+#define __S2_pt_d7500r15_FUNCONE_DIG_INPUT 14
+#define __S2_pt_d7500r15_PINPOFF_DIG_INPUT 15
+#define __S2_pt_d7500r15_PINPON_DIG_INPUT 16
+#define __S2_pt_d7500r15_PINPSWAP_DIG_INPUT 17
+#define __S2_pt_d7500r15_SUBINPUTRGB1_DIG_INPUT 18
+#define __S2_pt_d7500r15_SUBINPUTRGB2_DIG_INPUT 19
+#define __S2_pt_d7500r15_SUBINPUTSVIDEO_DIG_INPUT 20
+#define __S2_pt_d7500r15_SUBINPUTCOMPOSITE_DIG_INPUT 21
+#define __S2_pt_d7500r15_SUBINPUTDVI_DIG_INPUT 22
+
+
+/*
+* ANALOG_INPUT
+*/
+
+
+#define __S2_pt_d7500r15_PROJ_RX$_BUFFER_INPUT 0
+#define __S2_pt_d7500r15_PROJ_RX$_BUFFER_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_pt_d7500r15, __PROJ_RX$, __S2_pt_d7500r15_PROJ_RX$_BUFFER_MAX_LEN );
+
+
+/*
+* DIGITAL_OUTPUT
+*/
+#define __S2_pt_d7500r15_POWERISON_DIG_OUTPUT 0
+#define __S2_pt_d7500r15_POWERISOFF_DIG_OUTPUT 1
+#define __S2_pt_d7500r15_PROJISWARMING_DIG_OUTPUT 2
+#define __S2_pt_d7500r15_PROJISCOOLING_DIG_OUTPUT 3
+#define __S2_pt_d7500r15_VIDEOMUTEFB_DIG_OUTPUT 4
+#define __S2_pt_d7500r15_BLINKFB_DIG_OUTPUT 5
+#define __S2_pt_d7500r15_QUERYPOPUP_DIG_OUTPUT 6
+#define __S2_pt_d7500r15_PINP_IS_ON_DIG_OUTPUT 7
+#define __S2_pt_d7500r15_PINP_IS_OFF_DIG_OUTPUT 8
+
+
+/*
+* ANALOG_OUTPUT
+*/
+#define __S2_pt_d7500r15_LAMP1HOURS_ANALOG_OUTPUT 3
+#define __S2_pt_d7500r15_LAMP2HOURS_ANALOG_OUTPUT 4
+
+#define __S2_pt_d7500r15_PROJ_TX$_STRING_OUTPUT 0
+#define __S2_pt_d7500r15_STATUS$_STRING_OUTPUT 1
+#define __S2_pt_d7500r15_LAMPHOURS$_STRING_OUTPUT 2
+
+
+/*
+* Direct Socket Variables
+*/
+
+
+
+
+/*
+* INTEGER_PARAMETER
+*/
+/*
+* SIGNED_INTEGER_PARAMETER
+*/
+/*
+* LONG_INTEGER_PARAMETER
+*/
+/*
+* SIGNED_LONG_INTEGER_PARAMETER
+*/
+/*
+* INTEGER_PARAMETER
+*/
+/*
+* SIGNED_INTEGER_PARAMETER
+*/
+/*
+* LONG_INTEGER_PARAMETER
+*/
+/*
+* SIGNED_LONG_INTEGER_PARAMETER
+*/
+/*
+* STRING_PARAMETER
+*/
+
+
+/*
+* INTEGER
+*/
+
+
+/*
+* LONG_INTEGER
+*/
+
+
+/*
+* SIGNED_INTEGER
+*/
+
+
+/*
+* SIGNED_LONG_INTEGER
+*/
+
+
+/*
+* STRING
+*/
+#define __S2_pt_d7500r15_LAMP1HOURS$_STRING_MAX_LEN 4
+CREATE_STRING_STRUCT( S2_pt_d7500r15, __LAMP1HOURS$, __S2_pt_d7500r15_LAMP1HOURS$_STRING_MAX_LEN );
+#define __S2_pt_d7500r15_LAMP2HOURS$_STRING_MAX_LEN 4
+CREATE_STRING_STRUCT( S2_pt_d7500r15, __LAMP2HOURS$, __S2_pt_d7500r15_LAMP2HOURS$_STRING_MAX_LEN );
+
+/*
+* STRUCTURE
+*/
+
+START_GLOBAL_VAR_STRUCT( S2_pt_d7500r15 )
+{
+   void* InstancePtr;
+   struct GenericOutputString_s sGenericOutStr;
+   unsigned short LastModifiedArrayIndex;
+
+   unsigned short __ONPENDING;
+   unsigned short __OFFPENDING;
+   unsigned short __RGB1PENDING;
+   unsigned short __RGB2PENDING;
+   unsigned short __SVIDEOPENDING;
+   unsigned short __COMPOSITEPENDING;
+   unsigned short __DVIPENDING;
+   unsigned short __CMDSENT;
+   unsigned short __VIDEOMUTED;
+   unsigned short __PROJISON;
+   unsigned short __ISWARMUP;
+   unsigned short __ISCOOLDOWN;
+   unsigned short __SUBRGB1PENDING;
+   unsigned short __SUBRGB2PENDING;
+   unsigned short __SUBSVIDEOPENDING;
+   unsigned short __SUBCOMPOSITEPENDING;
+   unsigned short __SUBDVIPENDING;
+   unsigned short __SEMAPHORE;
+   unsigned short __POLL_SEMAPHORE;
+   unsigned short __COMMANDQUEUE;
+   DECLARE_STRING_STRUCT( S2_pt_d7500r15, __LAMP1HOURS$ );
+   DECLARE_STRING_STRUCT( S2_pt_d7500r15, __LAMP2HOURS$ );
+   DECLARE_STRING_STRUCT( S2_pt_d7500r15, __PROJ_RX$ );
+};
+
+START_NVRAM_VAR_STRUCT( S2_pt_d7500r15 )
+{
+};
+
+DEFINE_WAITEVENT( S2_pt_d7500r15, QWAIT );
+
+
+#endif //__S2_PT_D7500R15_H__
+

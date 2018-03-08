@@ -1,0 +1,150 @@
+#ifndef __S2_NTP_TIME_SYNC_V1_0_H__
+#define __S2_NTP_TIME_SYNC_V1_0_H__
+
+
+
+
+/*
+* Constructor and Destructor
+*/
+
+/*
+* DIGITAL_INPUT
+*/
+#define __S2_NTP_Time_Sync_v1_0_DEBUG_DIG_INPUT 0
+#define __S2_NTP_Time_Sync_v1_0_LOGGING_DIG_INPUT 1
+
+#define __S2_NTP_Time_Sync_v1_0_SYNCTIME_DIG_INPUT 2
+#define __S2_NTP_Time_Sync_v1_0_SYNCTIME_ARRAY_LENGTH 4
+
+/*
+* ANALOG_INPUT
+*/
+#define __S2_NTP_Time_Sync_v1_0_GMT_OFFSET_MINUTES_ANALOG_INPUT 0
+
+
+
+#define __S2_NTP_Time_Sync_v1_0_SERVER_IP$_STRING_INPUT 1
+#define __S2_NTP_Time_Sync_v1_0_SERVER_IP$_ARRAY_NUM_ELEMS 4
+#define __S2_NTP_Time_Sync_v1_0_SERVER_IP$_ARRAY_NUM_CHARS 64
+CREATE_STRING_ARRAY( S2_NTP_Time_Sync_v1_0, __SERVER_IP$, __S2_NTP_Time_Sync_v1_0_SERVER_IP$_ARRAY_NUM_ELEMS, __S2_NTP_Time_Sync_v1_0_SERVER_IP$_ARRAY_NUM_CHARS );
+
+/*
+* DIGITAL_OUTPUT
+*/
+#define __S2_NTP_Time_Sync_v1_0_BUSY_DIG_OUTPUT 0
+
+#define __S2_NTP_Time_Sync_v1_0_SYNCSUCCESSFUL_DIG_OUTPUT 1
+#define __S2_NTP_Time_Sync_v1_0_SYNCSUCCESSFUL_ARRAY_LENGTH 4
+#define __S2_NTP_Time_Sync_v1_0_SYNCFAILED_DIG_OUTPUT 5
+#define __S2_NTP_Time_Sync_v1_0_SYNCFAILED_ARRAY_LENGTH 4
+
+/*
+* ANALOG_OUTPUT
+*/
+
+
+
+/*
+* Direct Socket Variables
+*/
+
+#define __S2_NTP_Time_Sync_v1_0_NTPSERVER_SOCKET 12
+#define __S2_NTP_Time_Sync_v1_0_NTPSERVER_STRING_MAX_LEN 256
+START_SOCKET_DEFINITION( S2_NTP_Time_Sync_v1_0, __NTPSERVER )
+{
+   int SocketStatus;
+   enum ESplusSocketType eSocketType;
+   int SocketID;
+   void *SocketPtr;
+CREATE_SOCKET_STRING( S2_NTP_Time_Sync_v1_0, SocketRxBuf, __S2_NTP_Time_Sync_v1_0_NTPSERVER_STRING_MAX_LEN );
+};
+
+
+
+/*
+* INTEGER_PARAMETER
+*/
+/*
+* SIGNED_INTEGER_PARAMETER
+*/
+/*
+* LONG_INTEGER_PARAMETER
+*/
+/*
+* SIGNED_LONG_INTEGER_PARAMETER
+*/
+/*
+* INTEGER_PARAMETER
+*/
+/*
+* SIGNED_INTEGER_PARAMETER
+*/
+/*
+* LONG_INTEGER_PARAMETER
+*/
+/*
+* SIGNED_LONG_INTEGER_PARAMETER
+*/
+/*
+* STRING_PARAMETER
+*/
+
+
+/*
+* INTEGER
+*/
+
+
+/*
+* LONG_INTEGER
+*/
+
+
+/*
+* SIGNED_INTEGER
+*/
+
+
+/*
+* SIGNED_LONG_INTEGER
+*/
+
+
+/*
+* STRING
+*/
+#define __S2_NTP_Time_Sync_v1_0_TEMPRXIP$_STRING_MAX_LEN 16
+CREATE_STRING_STRUCT( S2_NTP_Time_Sync_v1_0, __TEMPRXIP$, __S2_NTP_Time_Sync_v1_0_TEMPRXIP$_STRING_MAX_LEN );
+#define __S2_NTP_Time_Sync_v1_0_TEMPSTAMP$_STRING_MAX_LEN 8
+CREATE_STRING_STRUCT( S2_NTP_Time_Sync_v1_0, __TEMPSTAMP$, __S2_NTP_Time_Sync_v1_0_TEMPSTAMP$_STRING_MAX_LEN );
+
+/*
+* STRUCTURE
+*/
+
+START_GLOBAL_VAR_STRUCT( S2_NTP_Time_Sync_v1_0 )
+{
+   void* InstancePtr;
+   struct GenericOutputString_s sGenericOutStr;
+   unsigned short LastModifiedArrayIndex;
+
+   DECLARE_IO_ARRAY( __SYNCTIME );
+   DECLARE_IO_ARRAY( __SYNCSUCCESSFUL );
+   DECLARE_IO_ARRAY( __SYNCFAILED );
+   unsigned short __CURRSERVER;
+   DECLARE_STRING_STRUCT( S2_NTP_Time_Sync_v1_0, __TEMPRXIP$ );
+   DECLARE_STRING_STRUCT( S2_NTP_Time_Sync_v1_0, __TEMPSTAMP$ );
+   DECLARE_STRING_ARRAY( S2_NTP_Time_Sync_v1_0, __SERVER_IP$ );
+   DECLARE_SOCKET( S2_NTP_Time_Sync_v1_0, __NTPSERVER );
+};
+
+START_NVRAM_VAR_STRUCT( S2_NTP_Time_Sync_v1_0 )
+{
+};
+
+DEFINE_WAITEVENT( S2_NTP_Time_Sync_v1_0, SERVERWAIT );
+
+
+#endif //__S2_NTP_TIME_SYNC_V1_0_H__
+

@@ -1,0 +1,108 @@
+/***********************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+***********************************************************************/
+/*
+Dealer Name: Crestron Electronics
+System Name:
+System Number:
+Programmer: CRR
+Comments:
+*/
+
+/***********************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+***********************************************************************/
+#SYMBOL_NAME "ClearOne Converge Generator v1.1"
+#HINT "Generates the ASCII string to be sent for volume levels"
+#DEFAULT_VOLATILE
+// #DEFINE_CONSTANT
+
+#HELP_BEGIN
+This module is for use only within the ClearOne Converge suite of Crestron 
+modules.  Not to be used as a stand-alone module.
+#HELP_END
+
+
+/***********************************************************************
+  Include Libraries
+  (Uncomment and include additional librarys as needed)
+***********************************************************************/
+// #CRESTRON_LIBRARY ""
+// #USER_LIBRARY ""
+
+/***********************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+***********************************************************************/
+// DIGITAL_INPUT 
+ANALOG_INPUT VolumeMxb, VolumeMxb2, AmblvlMxb, AmblvlMxb2, NoiseMxb, NoiseMxb2;
+STRING_INPUT StartOfCommand$[24], StartOfCommand2$[16], Startofcommand3$[16];
+// BUFFER_INPUT 
+
+// DIGITAL_OUTPUT 
+// ANALOG_OUTPUT 
+STRING_OUTPUT To_Device$, VolumeText, AmblvlText, NoiseText;
+
+/***********************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+***********************************************************************/
+// INTEGER 
+// STRING
+
+/***********************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+***********************************************************************/
+
+/***********************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+***********************************************************************/
+  
+CHANGE StartOfCommand$
+	{
+	MakeString(To_Device$, "%s%d A\r", StartOfCommand$, VolumeMxb);
+	}
+
+CHANGE VolumeMxb2
+	{
+    Makestring(VolumeText, "%ddb", VolumeMxb2);
+	}
+
+CHANGE StartOfCommand2$
+	{
+	MakeString(To_Device$, "%s%d\r", StartOfCommand2$, AmblvlMxb);
+	}
+
+CHANGE AmblvlMxb2
+	{
+    Makestring(AmblvlText, "%ddb", AmblvlMxb2);
+	}
+
+CHANGE StartOfCommand3$
+	{
+	MakeString(To_Device$, "%s%d\r", StartOfCommand3$, NoiseMxb);
+	}
+
+CHANGE NoiseMxb2
+	{
+    Makestring(NoiseText, "%ddb", NoiseMxb2);
+	}
+
+/***********************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+***********************************************************************/
+/*
+Function Main()
+{
+    // TODO:  Add code here
+}
+*/
+

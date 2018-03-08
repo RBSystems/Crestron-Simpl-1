@@ -1,0 +1,462 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:	Crestron Electronics
+System Name:
+System Number:
+Programmer:		PAC
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+#SYMBOL_NAME "Alpha Numeric Password Drive"
+// #HINT ""
+#DEFINE_CONSTANT		ciPASSWORDS			6		//This is the maximum number of master passwords
+#DEFINE_CONSTANT		ciMAXCHARACTERS	20	//This is the maximum number of characters
+#DEFINE_CONSTANT		ciMINCHARACTERS	1		//This is the minimum number of characters
+#DEFINE_CONSTANT		ciSTATUSIDLE		10	//This is to reset the compare status
+
+#DEFINE_CONSTANT		csPASSWORDCHAR	"*"		//This is the password hide character
+
+#CATEGORY "0" // Security
+// #DEFAULT_VOLATILE
+#DEFAULT_NONVOLATILE
+
+#HELP_BEGIN
+	This module is for use in the "Alpha Numeric Password" module only.
+#HELP_END
+
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+DIGITAL_INPUT	enable_backdoor, set_backdoor, set_master_1, set_master_2, set_master_3,
+							set_master_4, set_master_5, initialize, enter;
+DIGITAL_INPUT  set_default1, set_default2, set_default3;
+DIGITAL_INPUT  set_default4, set_default5, set_default_backdoor;
+
+
+STRING_INPUT	password$[ciMAXCHARACTERS];
+STRING_INPUT   default1$[ciMAXCHARACTERS], default2$[ciMAXCHARACTERS], default3$[ciMAXCHARACTERS];
+STRING_INPUT   default4$[ciMAXCHARACTERS], default5$[ciMAXCHARACTERS], default_backdoor$[ciMAXCHARACTERS];
+
+DIGITAL_OUTPUT	set_backdoor_fb, set_master_1_fb, set_master_2_fb, set_master_3_fb,
+								set_master_4_fb, set_master_5_fb;
+ANALOG_OUTPUT	compare_status;		//0 = wrong, 1 - 5 = password ok, 6 = backdoor
+STRING_OUTPUT	master_out$, stars$;
+
+/*******************************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+*******************************************************************************************/
+INTEGER	iCompareStatus, iMaster, b;
+STRING	sMaster$[ciPASSWORDS][ciMAXCHARACTERS], sTempPassword[ciMAXCHARACTERS],
+				sTemp[ciMAXCHARACTERS];
+
+STRING   sDefault1$[ciMAXCHARACTERS], sDefault2$[ciMAXCHARACTERS], sDefault3$[ciMAXCHARACTERS];
+STRING   sDefault4$[ciMAXCHARACTERS], sDefault5$[ciMAXCHARACTERS], sDefaultBackdoor$[ciMAXCHARACTERS];
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+Integer_Function fComparePasswords(string sCompare)
+{
+	INTEGER a;
+	
+	for(a = 1 to ciPASSWORDS)
+	{
+		if(a = 6)
+		{
+			if(enable_backdoor = 1)
+			{
+				if(sMaster$[a] <> "-")
+				{
+					if(sCompare = sMaster$[6])
+					{
+						return(6);
+					}
+				}
+			}
+		}
+		else if(sMaster$[a] <> "-")
+		{
+			if(sCompare = sMaster$[a])
+			{
+				return(a);
+			}
+		}
+	}
+	return(0);
+}
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+
+PUSH enter
+{
+	if((len(password$) >= ciMINCHARACTERS) && (len(password$) <= ciMAXCHARACTERS))
+	{
+		sTempPassword = password$;
+		if(iMaster = 0)
+		{
+			iCompareStatus = fComparePasswords(sTempPassword);
+			compare_status = iCompareStatus;
+			processlogic();
+			iCompareStatus = ciSTATUSIDLE;
+			compare_status = iCompareStatus;
+		}
+		else
+		{
+			sMaster$[iMaster] = password$;
+			set_backdoor_fb = 0;
+			set_master_1_fb = 0;
+			set_master_2_fb = 0;
+			set_master_3_fb = 0;
+			set_master_4_fb = 0;
+			set_master_5_fb = 0;
+			iMaster = 0;
+			master_out$ = "";
+		}
+	}
+	sTemp = "";
+}
+
+//This will set the master list to a known value
+PUSH initialize
+{
+	for(b = 1 to 6)
+	{
+		sMaster$[b] = "-";
+	}
+	set_backdoor_fb = 0;
+	set_master_1_fb = 0;
+	set_master_2_fb = 0;
+	set_master_3_fb = 0;
+	set_master_4_fb = 0;
+	set_master_5_fb = 0;
+	iMaster = 0;
+	master_out$ = "";
+}
+
+PUSH set_default1
+{
+    sMaster$[1] = sDefault1$;
+    set_backdoor_fb = 0;
+    set_master_1_fb = 0;
+    set_master_2_fb = 0;
+    set_master_3_fb = 0;
+    set_master_4_fb = 0;
+    set_master_5_fb = 0;
+    iMaster = 0;
+    master_out$ = "";
+}
+
+PUSH set_default2
+{
+    sMaster$[2] = sDefault2$;
+    set_backdoor_fb = 0;
+    set_master_1_fb = 0;
+    set_master_2_fb = 0;
+    set_master_3_fb = 0;
+    set_master_4_fb = 0;
+    set_master_5_fb = 0;
+    iMaster = 0;
+    master_out$ = "";
+}
+
+PUSH set_default3
+{
+    sMaster$[3] = sDefault3$;
+    set_backdoor_fb = 0;
+    set_master_1_fb = 0;
+    set_master_2_fb = 0;
+    set_master_3_fb = 0;
+    set_master_4_fb = 0;
+    set_master_5_fb = 0;
+    iMaster = 0;
+    master_out$ = "";
+}
+
+PUSH set_default4
+{
+    sMaster$[4] = sDefault4$;
+    set_backdoor_fb = 0;
+    set_master_1_fb = 0;
+    set_master_2_fb = 0;
+    set_master_3_fb = 0;
+    set_master_4_fb = 0;
+    set_master_5_fb = 0;
+    iMaster = 0;
+    master_out$ = "";
+}
+
+PUSH set_default5
+{
+    sMaster$[5] = sDefault5$;
+    set_backdoor_fb = 0;
+    set_master_1_fb = 0;
+    set_master_2_fb = 0;
+    set_master_3_fb = 0;
+    set_master_4_fb = 0;
+    set_master_5_fb = 0;
+    iMaster = 0;
+    master_out$ = "";
+}
+
+PUSH set_default_backdoor
+{
+    sMaster$[6] = sDefaultBackdoor$;
+    set_backdoor_fb = 0;
+    set_master_1_fb = 0;
+    set_master_2_fb = 0;
+    set_master_3_fb = 0;
+    set_master_4_fb = 0;
+    set_master_5_fb = 0;
+    iMaster = 0;
+    master_out$ = "";
+}
+
+CHANGE default1$
+{
+    sDefault1$ = default1$;
+}
+
+CHANGE default2$
+{
+    sDefault2$ = default2$;
+}
+
+CHANGE default3$
+{
+    sDefault3$ = default3$;
+}
+ 
+CHANGE default4$
+{
+    sDefault4$ = default4$;
+}
+ 
+CHANGE default5$
+{
+    sDefault5$ = default5$;
+}
+ 
+CHANGE default_backdoor$
+{
+    sDefaultBackdoor$ = default_backdoor$;
+}
+
+
+
+
+/*******************************************************************************************
+
+	RELEASE set inputs
+		These will store the strings on the master or backdoor string inputs to
+		variables to be compared against the password input later.
+
+*******************************************************************************************/
+PUSH set_master_1
+{
+	if(set_master_1_fb = 0)
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		set_master_1_fb = 1;
+		iMaster = 1;
+		master_out$ = sMaster$[iMaster];
+	}
+	else
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		iMaster = 0;
+		master_out$ = "";
+	}
+}
+
+PUSH set_master_2
+{
+	if(set_master_2_fb = 0)
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		set_master_2_fb = 1;
+		iMaster = 2;
+		master_out$ = sMaster$[iMaster];
+	}
+	else
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		iMaster = 0;
+		master_out$ = "";
+	}
+}
+
+PUSH set_master_3
+{
+	if(set_master_3_fb = 0)
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		set_master_3_fb = 1;
+		iMaster = 3;
+		master_out$ = sMaster$[iMaster];
+	}
+	else
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		iMaster = 0;
+		master_out$ = "";
+	}
+}
+
+PUSH set_master_4
+{
+	if(set_master_4_fb = 0)
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		set_master_4_fb = 1;
+		iMaster = 4;
+		master_out$ = sMaster$[iMaster];
+	}
+	else
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		iMaster = 0;
+		master_out$ = "";
+	}
+}
+
+PUSH set_master_5
+{
+	if(set_master_5_fb = 0)
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		set_master_5_fb = 1;
+		iMaster = 5;
+		master_out$ = sMaster$[iMaster];
+	}
+	else
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		iMaster = 0;
+		master_out$ = "";
+	}
+}
+
+PUSH set_backdoor
+{
+	if(set_backdoor_fb = 0)
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		set_backdoor_fb = 1;
+		iMaster = 6;
+		master_out$ = sMaster$[iMaster];
+	}
+	else
+	{
+		set_backdoor_fb = 0;
+		set_master_1_fb = 0;
+		set_master_2_fb = 0;
+		set_master_3_fb = 0;
+		set_master_4_fb = 0;
+		set_master_5_fb = 0;
+		iMaster = 0;
+		master_out$ = "";
+	}
+}
+	
+CHANGE password$		// Send out stars for the password being entered
+{
+	if(len(password$) > 0)
+	{
+		sTemp = "";
+		for(b = 1 to len(password$))
+		{
+			sTemp = sTemp + csPASSWORDCHAR;
+		}
+	}
+	else
+	{
+		sTemp = "";
+	}
+	stars$ = sTemp;
+}
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+Function Main()
+{
+	iCompareStatus = ciSTATUSIDLE;
+	compare_status = iCompareStatus;
+	sTemp = "";
+	stars$ = sTemp;
+	master_out$ = "";
+}
+
+

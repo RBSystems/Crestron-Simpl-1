@@ -1,0 +1,330 @@
+#ifndef __S2_SONICFOUNDRY_MEDIASITERECORDER_MCIP_HEK_H__
+#define __S2_SONICFOUNDRY_MEDIASITERECORDER_MCIP_HEK_H__
+
+
+
+/*
+* STRUCTURE S2_SonicFoundry_MediasiteRecorder_MCIP_HEK__LISTINFO
+*/
+START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, LISTINFO )
+{
+   unsigned short LISTINFO__CITEMS;
+   unsigned short LISTINFO__IXMAXIMUM;
+   unsigned short LISTINFO__IXCURRENT;
+   unsigned short LISTINFO__IXSELECTED;
+   unsigned short LISTINFO__FUPDOWN;
+};
+
+/*
+* STRUCTURE S2_SonicFoundry_MediasiteRecorder_MCIP_HEK__SCHEDULEDINFO
+*/
+#define SCHEDULEDINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_NAME_STRING_MAX_LEN 512
+#define SCHEDULEDINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_ID_STRING_MAX_LEN 128
+START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO )
+{
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO__NAME, SCHEDULEDINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_NAME_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO__NAME );
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO__ID, SCHEDULEDINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_ID_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO__ID );
+};
+
+/*
+* STRUCTURE S2_SonicFoundry_MediasiteRecorder_MCIP_HEK__PRESETINFO
+*/
+#define PRESETINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_NAME_STRING_MAX_LEN 512
+#define PRESETINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DESCRIPTION_STRING_MAX_LEN 512
+#define PRESETINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SCANRATE_STRING_MAX_LEN 512
+#define PRESETINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SENSITIVITY_STRING_MAX_LEN 512
+#define PRESETINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_STABILIZATION_STRING_MAX_LEN 512
+START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO )
+{
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO__NAME, PRESETINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_NAME_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO__NAME );
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO__DESCRIPTION, PRESETINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DESCRIPTION_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO__DESCRIPTION );
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO__SCANRATE, PRESETINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SCANRATE_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO__SCANRATE );
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO__SENSITIVITY, PRESETINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SENSITIVITY_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO__SENSITIVITY );
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO__STABILIZATION, PRESETINFO__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_STABILIZATION_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO__STABILIZATION );
+};
+
+/*
+* STRUCTURE S2_SonicFoundry_MediasiteRecorder_MCIP_HEK__SCHEDULEDINFO2
+*/
+#define SCHEDULEDINFO2__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_NAME_STRING_MAX_LEN 512
+#define SCHEDULEDINFO2__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_PRESENTER_STRING_MAX_LEN 512
+#define SCHEDULEDINFO2__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_STARTDATE_STRING_MAX_LEN 32
+#define SCHEDULEDINFO2__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_STARTTIME_STRING_MAX_LEN 32
+#define SCHEDULEDINFO2__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_ID_STRING_MAX_LEN 128
+START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2 )
+{
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2__NAME, SCHEDULEDINFO2__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_NAME_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2__NAME );
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2__PRESENTER, SCHEDULEDINFO2__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_PRESENTER_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2__PRESENTER );
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2__STARTDATE, SCHEDULEDINFO2__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_STARTDATE_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2__STARTDATE );
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2__STARTTIME, SCHEDULEDINFO2__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_STARTTIME_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2__STARTTIME );
+   CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2__ID, SCHEDULEDINFO2__S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_ID_STRING_MAX_LEN );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2__ID );
+};
+
+
+/*
+* Constructor and Destructor
+*/
+int S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_LISTINFO_Constructor ( START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, LISTINFO ) * me, int nVerbose );
+int S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_LISTINFO_Destructor ( START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, LISTINFO ) * me, int nVerbose );
+int S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SCHEDULEDINFO_Constructor ( START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO ) * me, int nVerbose );
+int S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SCHEDULEDINFO_Destructor ( START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO ) * me, int nVerbose );
+int S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_PRESETINFO_Constructor ( START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO ) * me, int nVerbose );
+int S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_PRESETINFO_Destructor ( START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, PRESETINFO ) * me, int nVerbose );
+int S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SCHEDULEDINFO2_Constructor ( START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2 ) * me, int nVerbose );
+int S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SCHEDULEDINFO2_Destructor ( START_STRUCTURE_DEFINITION( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, SCHEDULEDINFO2 ) * me, int nVerbose );
+
+/*
+* DIGITAL_INPUT
+*/
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINSYSTEMSTATUS_DIG_INPUT 0
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINRECORD_DIG_INPUT 1
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINSTOP_DIG_INPUT 2
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINPUBLISHCD_DIG_INPUT 3
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINIMAGEADVANCE_DIG_INPUT 4
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINIMAGEAUTOSCENETOGGLE_DIG_INPUT 5
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINVERBOSESTATUSTOGGLE_DIG_INPUT 6
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINPROFILEUP_DIG_INPUT 7
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINPROFILEDOWN_DIG_INPUT 8
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINPROFILESELECT_DIG_INPUT 9
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINPROFILEREFRESH_DIG_INPUT 10
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINSCHEDULEDUP_DIG_INPUT 11
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINSCHEDULEDDOWN_DIG_INPUT 12
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINSCHEDULEDSELECT_DIG_INPUT 13
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINSCHEDULEDREFRESH_DIG_INPUT 14
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINREPLYTIMEOUTUP_DIG_INPUT 15
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINREPLYTIMEOUTDOWN_DIG_INPUT 16
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINPRESETUP_DIG_INPUT 17
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINPRESETDOWN_DIG_INPUT 18
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINPRESETSELECT_DIG_INPUT 19
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINPRESETREFRESH_DIG_INPUT 20
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINAUDIORECORDUP_DIG_INPUT 21
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINAUDIORECORDDOWN_DIG_INPUT 22
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINSCHEDULEDTODAY_DIG_INPUT 23
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINAUDIOLEVELCHECKTIMEUP_DIG_INPUT 24
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINAUDIOLEVELCHECKTIMEDOWN_DIG_INPUT 25
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINPAUSE_DIG_INPUT 26
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINENCODEVIDEO_DIG_INPUT 27
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINENCODEIMAGE_DIG_INPUT 28
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINENCODEIMAGEWITHPIP_DIG_INPUT 29
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DINIMAGEFAVORWIDESCREEN_DIG_INPUT 30
+
+
+/*
+* ANALOG_INPUT
+*/
+
+
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_RX$_BUFFER_INPUT 0
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_RX$_BUFFER_MAX_LEN 1024
+CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __RX$, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_RX$_BUFFER_MAX_LEN );
+
+
+/*
+* DIGITAL_OUTPUT
+*/
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTIMAGEAUTOSCENETOGGLE_DIG_OUTPUT 0
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTVERBOSESTATUSTOGGLE_DIG_OUTPUT 1
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTCOMMBUSY_DIG_OUTPUT 2
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTPROFILESELECTED_DIG_OUTPUT 3
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTPROFILESELECTDISABLE_DIG_OUTPUT 4
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTSCHEDULEDSELECTED_DIG_OUTPUT 5
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTSCHEDULEDSELECTDISABLE_DIG_OUTPUT 6
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTPRESETSELECTED_DIG_OUTPUT 7
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTPRESETSELECTDISABLE_DIG_OUTPUT 8
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTSCHEDULEDTODAY_DIG_OUTPUT 9
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTISRECORDING_DIG_OUTPUT 10
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTISPAUSED_DIG_OUTPUT 11
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTENCODEVIDEO_DIG_OUTPUT 12
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTENCODEIMAGE_DIG_OUTPUT 13
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTENCODEIMAGEWITHPIP_DIG_OUTPUT 14
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTIMAGEFAVORWIDESCREEN_DIG_OUTPUT 15
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTAUDIOLOWLEVEL_DIG_OUTPUT 16
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_DOUTAUDIOLOWWARNING_DIG_OUTPUT 17
+
+
+/*
+* ANALOG_OUTPUT
+*/
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_AOUTPROFILESELECTED_ANALOG_OUTPUT 9
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_AOUTSCHEDULEDSELECTED_ANALOG_OUTPUT 12
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_AOUTAUDIOLEVEL_ANALOG_OUTPUT 14
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_AOUTAUDIORECORDLEVEL_ANALOG_OUTPUT 15
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_AOUTPRESETSELECTED_ANALOG_OUTPUT 23
+
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_TX$_STRING_OUTPUT 0
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTSTATUS$_STRING_OUTPUT 1
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTTIME$_STRING_OUTPUT 2
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTVERSION$_STRING_OUTPUT 3
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTERROR$_STRING_OUTPUT 4
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTMESSAGE$_STRING_OUTPUT 5
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTIMAGECOUNT$_STRING_OUTPUT 6
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTPROFILES$_STRING_OUTPUT 7
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTPROFILECURRENT$_STRING_OUTPUT 8
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTSCHEDULED$_STRING_OUTPUT 10
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTSCHEDULEDCURRENT$_STRING_OUTPUT 11
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTREPLYTIMEOUT$_STRING_OUTPUT 13
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTFREESPACE$_STRING_OUTPUT 16
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTPRESETNAME$_STRING_OUTPUT 17
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTPRESETDESCRIPTION$_STRING_OUTPUT 18
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTPRESETSCANRATE$_STRING_OUTPUT 19
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTPRESETSENSITIVITY$_STRING_OUTPUT 20
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTPRESETSTABILIZATION$_STRING_OUTPUT 21
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTPRESETCURRENT$_STRING_OUTPUT 22
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTSCHEDULEDCURRENTPRESENTER$_STRING_OUTPUT 24
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTSCHEDULEDCURRENTDATE$_STRING_OUTPUT 25
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTSCHEDULEDCURRENTTIME$_STRING_OUTPUT 26
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_SOUTAUDIOLEVELCHECKTIME$_STRING_OUTPUT 27
+
+
+/*
+* Direct Socket Variables
+*/
+
+
+
+
+/*
+* INTEGER_PARAMETER
+*/
+/*
+* SIGNED_INTEGER_PARAMETER
+*/
+/*
+* LONG_INTEGER_PARAMETER
+*/
+/*
+* SIGNED_LONG_INTEGER_PARAMETER
+*/
+/*
+* INTEGER_PARAMETER
+*/
+/*
+* SIGNED_INTEGER_PARAMETER
+*/
+/*
+* LONG_INTEGER_PARAMETER
+*/
+/*
+* SIGNED_LONG_INTEGER_PARAMETER
+*/
+/*
+* STRING_PARAMETER
+*/
+
+
+/*
+* INTEGER
+*/
+
+
+/*
+* LONG_INTEGER
+*/
+
+
+/*
+* SIGNED_INTEGER
+*/
+
+
+/*
+* SIGNED_LONG_INTEGER
+*/
+
+
+/*
+* STRING
+*/
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GRXSTRING$_STRING_MAX_LEN 1024
+CREATE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GRXSTRING$, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GRXSTRING$_STRING_MAX_LEN );
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GPARAMETER_ARRAY_NUM_ELEMS 10
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GPARAMETER_ARRAY_NUM_CHARS 1024
+CREATE_STRING_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GPARAMETER, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GPARAMETER_ARRAY_NUM_ELEMS, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GPARAMETER_ARRAY_NUM_CHARS );
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GPROFILES$_ARRAY_NUM_ELEMS 99
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GPROFILES$_ARRAY_NUM_CHARS 256
+CREATE_STRING_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GPROFILES$, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GPROFILES$_ARRAY_NUM_ELEMS, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GPROFILES$_ARRAY_NUM_CHARS );
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GEXPECTEDREPLIES$_ARRAY_NUM_ELEMS 10
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GEXPECTEDREPLIES$_ARRAY_NUM_CHARS 100
+CREATE_STRING_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GEXPECTEDREPLIES$, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GEXPECTEDREPLIES$_ARRAY_NUM_ELEMS, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GEXPECTEDREPLIES$_ARRAY_NUM_CHARS );
+
+/*
+* STRUCTURE
+*/
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GSCHEDULEDINFO_STRUCT_MAX_LEN 499
+CREATE_STRUCTURE_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GSCHEDULEDINFO, SCHEDULEDINFO, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GSCHEDULEDINFO_STRUCT_MAX_LEN );
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GSCHEDULEDINFO2_STRUCT_MAX_LEN 499
+CREATE_STRUCTURE_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GSCHEDULEDINFO2, SCHEDULEDINFO2, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GSCHEDULEDINFO2_STRUCT_MAX_LEN );
+#define __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GPRESETINFO_STRUCT_MAX_LEN 499
+CREATE_STRUCTURE_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GPRESETINFO, PRESETINFO, __S2_SonicFoundry_MediasiteRecorder_MCIP_HEK_GPRESETINFO_STRUCT_MAX_LEN );
+
+START_GLOBAL_VAR_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK )
+{
+   void* InstancePtr;
+   struct GenericOutputString_s sGenericOutStr;
+   unsigned short LastModifiedArrayIndex;
+
+   unsigned short __GTRANSFLAG;
+   unsigned short __GFBUSY;
+   unsigned short __GCEXPECTEDREPLIES;
+   unsigned short __GFCANPUBLISH;
+   unsigned short __GFVERBOSESTATUS;
+   unsigned short __GFIMAGEAUTOSCENE;
+   unsigned short __GFSCHEDULEDTODAY;
+   unsigned short __GFERRORRECORDER;
+   unsigned short __GFERRORMCIP;
+   unsigned short __GFUPDATEFOCUS;
+   unsigned short __GFAUDIORECORDUPDOWN;
+   unsigned short __GFAUDIORECORDCHANGED;
+   unsigned short __GIAUDIORECORDLEVEL;
+   unsigned short __GFAUDIOLEVELCHECKTIMEUPDOWN;
+   unsigned short __GFAUDIOLEVELCHECKTIMECHANGED;
+   unsigned short __GIAUDIOLEVELCHECKTIME;
+   unsigned short __GIENCODERVIDEOINPUT;
+   unsigned short __GFIMAGEFAVORWIDESCREEN;
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GRXSTRING$ );
+   DECLARE_STRING_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GPARAMETER );
+   DECLARE_STRING_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GPROFILES$ );
+   DECLARE_STRING_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GEXPECTEDREPLIES$ );
+   DECLARE_STRING_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __RX$ );
+   DECLARE_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, LISTINFO, __GPROFILES );
+   DECLARE_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, LISTINFO, __GSCHEDULED );
+   DECLARE_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, LISTINFO, __GPRESETS );
+   DECLARE_STRUCT_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GSCHEDULEDINFO );
+   DECLARE_STRUCT_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GSCHEDULEDINFO2 );
+   DECLARE_STRUCT_ARRAY( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, __GPRESETINFO );
+};
+
+START_NVRAM_VAR_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK )
+{
+   unsigned short __GFREPLYTIMEOUTMODIFIED;
+   DECLARE_STRUCT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, LISTINFO, __GREPLYTIMEOUT );
+};
+
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITPROFILEUP );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITPROFILEDOWN );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITPRESETUP );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITPRESETDOWN );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITSCHEDULEDUP );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITSCHEDULEDDOWN );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITREPLYTIMEOUTDOWN );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITREPLYTIMEOUTUP );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITAUDIOLEVELCHECKTIMEDOWN );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITAUDIOLEVELCHECKTIMEUP );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITAUDIORECORDLEVELUP );
+DEFINE_WAITEVENT( S2_SonicFoundry_MediasiteRecorder_MCIP_HEK, WAITAUDIORECORDLEVELDOWN );
+
+
+#endif //__S2_SONICFOUNDRY_MEDIASITERECORDER_MCIP_HEK_H__
+

@@ -1,0 +1,203 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:		Crestron Electronics
+System Name:
+System Number:
+Programmer:			PAC
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+#SYMBOL_NAME "Generic Dialer"
+// #HINT ""
+#DEFINE_CONSTANT		ciMAXCHARS			30
+#DEFINE_CONSTANT		ciMAXDIRCHARS		50
+#DEFINE_CONSTANT		ciNUM1					1
+#DEFINE_CONSTANT		ciNUM2					2
+#DEFINE_CONSTANT		ciHEADERLENGTH	25
+#DEFINE_CONSTANT		ciNUMSEPLENGTH	10
+#DEFINE_CONSTANT		ciFOOTERLENGTH	25
+#DEFINE_CONSTANT        ciENTERINGNUM1  1
+#DEFINE_CONSTANT        ciENTERINGNUM2  2
+#DEFINE_CONSTANT        ciENTERINGNAME  3
+#DEFINE_CONSTANT        ciENTERINGNONE  0
+
+#CATEGORY "32"
+// #DEFAULT_VOLATILE
+// #DEFAULT_NONVOLATILE
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+
+/*******************************************************************************************
+  Include Libraries
+  (Uncomment and include additional librarys as needed)
+*******************************************************************************************/
+// #CRESTRON_LIBRARY ""
+// #USER_LIBRARY ""
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+DIGITAL_INPUT		select_num_1, select_num_2, select_directory, select_none, clear_num_1_num_2,
+								copy_num_1_to_num_2, dial;
+ANALOG_INPUT		max_phone_number_characters;
+STRING_INPUT		header$[ciHEADERLENGTH], number_separater$[ciNUMSEPLENGTH], footer$[ciFOOTERLENGTH],
+								num_1$[ciMAXCHARS], num_2$[ciMAXCHARS], directory_name$[ciMAXDIRCHARS], text$[ciMAXCHARS];
+// BUFFER_INPUT		
+
+// DIGITAL_OUTPUT	// ANALOG_OUTPUT
+STRING_OUTPUT		num_1_fb$, num_2_fb$, directory_name_fb$, text_fb$, to_device$; 
+
+/*******************************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+*******************************************************************************************/
+INTEGER	iMaxChars, iFlag2, iIncomingText;
+STRING	sNum1[ciMAXCHARS], sNum2[ciMAXCHARS], sHeader[ciHEADERLENGTH], sFooter[ciFOOTERLENGTH],
+				sSeparater[ciNUMSEPLENGTH], sDirectoryName[ciMAXDIRCHARS];
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+PUSH select_num_1
+{
+	text_fb$ = sNum1;
+	iIncomingText = ciENTERINGNUM1;
+}
+
+PUSH select_num_2
+{
+	text_fb$ = sNum2;
+	iIncomingText = ciENTERINGNUM2;
+}
+
+PUSH select_directory
+{
+	text_fb$ = sDirectoryName;
+	iIncomingText = ciENTERINGNAME;
+}
+
+PUSH select_None
+	{
+	iIncomingText = ciENTERINGNONE;
+	}
+
+PUSH copy_num_1_to_num_2
+{
+	sNum2 = sNum1;
+	num_2_fb$ = sNum2;
+}
+
+PUSH clear_num_1_num_2
+{
+	sNum1 = "";
+	sNum2 = "";
+	num_1_fb$ = sNum1;
+	num_2_fb$ = sNum2;
+}
+
+PUSH dial
+{
+	if(len(sNum2) > 0)
+	{
+		makestring(to_device$, "%s%s%s%s%s", sHeader, sNum1, sSeparater, sNum2, sFooter);
+	}
+	else if(len(sNum2) = 0)
+	{
+		makestring(to_device$,  "%s%s%s", sHeader, sNum1, sFooter);
+	}
+}
+
+CHANGE max_phone_number_characters
+{
+	iMaxChars = max_phone_number_characters;
+}
+
+CHANGE header$
+{
+	sHeader = header$;
+}
+
+CHANGE footer$
+{
+	sFooter = footer$;
+}
+
+CHANGE number_separater$
+{
+	sSeparater = number_separater$;
+}
+
+CHANGE num_1$
+{
+	sNum1 = num_1$;
+//	num_1_fb = sNum1;
+}
+
+CHANGE num_2$
+{
+	sNum2 = num_2$;
+//	num_2_fb = sNum2;
+}
+
+CHANGE directory_name$
+{
+	sDirectoryName = directory_name$;
+//	directory_name_fb = sDirectoryName;
+}
+
+CHANGE text$
+{
+	if(iFlag2 = 0)
+	{
+		iFlag2 = 1;
+		if(iIncomingText = ciENTERINGNUM1)
+		{
+			sNum1 = text$;
+			num_1_fb$ = sNum1;
+		}
+		else if(iIncomingText = ciENTERINGNUM2)
+		{
+			sNum2 = text$;
+			num_2_fb$ = sNum2;
+		}
+		else if(iIncomingText = ciENTERINGNAME)
+		{
+			sDirectoryName = text$;
+			directory_name_fb$ = sDirectoryName;
+		}
+		iFlag2 = 0;
+	}
+}
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+Function Main()
+{
+	iFlag2 = 0;
+	clearbuffer(sHeader);
+	clearbuffer(sFooter);
+	clearbuffer(sSeparater);
+	clearbuffer(sNum1);
+	clearbuffer(sNum2);
+	clearbuffer(sDirectoryName);
+	num_1_fb$ = sNum1;
+	num_2_fb$ = sNum2;
+	directory_name_fb$ = sDirectoryName;
+	text_fb$ = "";
+	iIncomingText = ciENTERINGNONE;
+}

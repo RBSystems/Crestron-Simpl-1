@@ -1,0 +1,13 @@
+<Device Model="CP3">
+   <Network Type="Cresnet" Id="01">
+      <Device Model="ST-LT" DeviceId="1C"/>
+   </Network>
+   <Network Type="Ethernet" Id="02">
+      <Device Model="DM-MD8x8" DeviceId="03"/>
+      <Device Model="TSW-1050" DeviceId="04" Name="TSW-1050 M-989A"/>
+      <Device Model="TSW-1050" DeviceId="05" Name="TSW-1050 M-989B"/>
+      <Device Model="XPanel 2.0 Smart Graphics" DeviceId="0C" Name="Xpanel M-989A"/>
+      <Device Model="RoomView SE/RoomView 7.2" DeviceId="0D"/>
+      <Device Model="XPanel 2.0 Smart Graphics" DeviceId="0E" Name="Xpanel M-989B"/>
+   </Network>
+</Device>

@@ -1,0 +1,8 @@
+<Device Model="AV3">
+   <Network Type="Cresnet" Id="04"/>
+   <Network Type="Ethernet" Id="05">
+      <Device Model="TPMC-9" DeviceId="03" Name="TPMC-9 (Ethernet)"/>
+      <Device Model="DM-MD8x8" DeviceId="04"/>
+      <Device Model="Fusion Room" DeviceId="2A" Name="Fusion Room - MH-1400"/>
+   </Network>
+</Device>

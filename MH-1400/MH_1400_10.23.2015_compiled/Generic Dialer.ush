@@ -1,0 +1,107 @@
+[BEGIN]
+  Version=1
+[END]
+[BEGIN]
+  ObjTp=FSgntr
+  Sgntr=UserSPlus
+  RelVrs=1
+  IntStrVrs=1
+  SPlusVrs=4.03.11
+  CrossCplrVrs=1.3
+[END]
+[BEGIN]
+  ObjTp=Hd
+[END]
+[BEGIN]
+  ObjTp=Symbol
+  Exclusions=1,19,20,21,88,89,310,718,756,854,
+  Exclusions_CDS=5
+  Inclusions_CDS=6
+  Name=Generic Dialer
+  SmplCName=Generic Dialer.usp
+  Code=1
+  SysRev5=4.006
+  SMWRev=3.00.00
+  InputCue1=select_num_1
+  InputSigType1=Digital
+  InputCue2=select_num_2
+  InputSigType2=Digital
+  InputCue3=select_directory
+  InputSigType3=Digital
+  InputCue4=select_none
+  InputSigType4=Digital
+  InputCue5=clear_num_1_num_2
+  InputSigType5=Digital
+  InputCue6=copy_num_1_to_num_2
+  InputSigType6=Digital
+  InputCue7=dial
+  InputSigType7=Digital
+  InputList2Cue1=max_phone_number_characters
+  InputList2SigType1=Analog
+  InputList2Cue2=header$
+  InputList2SigType2=Serial
+  InputList2Cue3=number_separater$
+  InputList2SigType3=Serial
+  InputList2Cue4=footer$
+  InputList2SigType4=Serial
+  InputList2Cue5=num_1$
+  InputList2SigType5=Serial
+  InputList2Cue6=num_2$
+  InputList2SigType6=Serial
+  InputList2Cue7=directory_name$
+  InputList2SigType7=Serial
+  InputList2Cue8=text$
+  InputList2SigType8=Serial
+  OutputList2Cue1=num_1_fb$
+  OutputList2SigType1=Serial
+  OutputList2Cue2=num_2_fb$
+  OutputList2SigType2=Serial
+  OutputList2Cue3=directory_name_fb$
+  OutputList2SigType3=Serial
+  OutputList2Cue4=text_fb$
+  OutputList2SigType4=Serial
+  OutputList2Cue5=to_device$
+  OutputList2SigType5=Serial
+  ParamCue1=[Reference Name]
+  MinVariableInputs=7
+  MaxVariableInputs=7
+  MinVariableInputsList2=8
+  MaxVariableInputsList2=8
+  MinVariableOutputs=0
+  MaxVariableOutputs=0
+  MinVariableOutputsList2=5
+  MaxVariableOutputsList2=5
+  MinVariableParams=0
+  MaxVariableParams=0
+  Expand=expand_separately
+  Expand2=expand_separately
+  ProgramTree=Logic
+  SymbolTree=32
+  Hint=
+  PdfHelp=
+  HelpID= 
+  Render=4
+  Smpl-C=16
+  CompilerCode=-48
+  CompilerParamCode=27
+  CompilerParamCode5=14
+  NumFixedParams=1
+  Pp1=1
+  MPp=1
+  NVStorage=10
+  ParamSigType1=String
+  SmplCInputCue1=o#
+  SmplCOutputCue1=i#
+  SmplCInputList2Cue1=an#
+  SmplCOutputList2Cue1=ai#
+  SPlus2CompiledName=S2_Generic_Dialer
+  SymJam=NonExclusive
+  FileName=Generic Dialer.ush
+  SIMPLPlusModuleEncoding=0
+[END]
+[BEGIN]
+  ObjTp=Dp
+  H=1
+  Tp=1
+  NoS=False
+[END]

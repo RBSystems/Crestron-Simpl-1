@@ -1,0 +1,10 @@
+<Device Model="DMPS3-300-C" Name="DMPS3-300-C.">
+   <Network Type="Cresnet" Id="06">
+      <Device Model="TPMC-9" DeviceId="03" Name="TPMC-9 (Cresnet)"/>
+      <Device Model="C2N-IO" DeviceId="05"/>
+   </Network>
+   <Network Type="Ethernet" Id="07">
+      <Device Model="RoomView SE/RoomView 7.2" DeviceId="04"/>
+      <Device Model="Core3 UI XPanel" DeviceId="08" Name="XPanel 2.0 Smart Graphics"/>
+   </Network>
+</Device>

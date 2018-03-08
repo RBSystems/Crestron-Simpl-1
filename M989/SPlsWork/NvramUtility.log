@@ -1,0 +1,4 @@
+Exception has been thrown by the target of an invocation.mscorlib   at System.RuntimeMethodHandle._InvokeConstructor(Object[] args, SignatureStruct& signature, IntPtr declaringType)
+   at System.RuntimeMethodHandle.InvokeConstructor(Object[] args, SignatureStruct signature, RuntimeTypeHandle declaringType)
+   at System.Reflection.RuntimeConstructorInfo.Invoke(BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at NVRamUtility.Program.Main(String[] args)

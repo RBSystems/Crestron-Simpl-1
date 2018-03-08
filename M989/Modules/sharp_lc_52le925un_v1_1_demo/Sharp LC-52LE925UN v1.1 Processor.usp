@@ -1,0 +1,1030 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:
+System Name:
+System Number:
+Programmer:
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+// #ENABLE_DYNAMIC
+#SYMBOL_NAME "Sharp LC-52LE925UN v1.1 Processor"
+// #HINT ""
+
+#DEFINE_CONSTANT	ciPower  		1
+#DEFINE_CONSTANT	ciInput  		2
+#DEFINE_CONSTANT	ciAVMode  		3
+#DEFINE_CONSTANT	ciAspect  		4
+#DEFINE_CONSTANT	ciVolumeMute 	5
+#DEFINE_CONSTANT	ciSleep  		6
+#DEFINE_CONSTANT	ciEffect3D  	7
+#DEFINE_CONSTANT	ciVolume	  	8
+#DEFINE_CONSTANT	ciAudioMode	  	9
+#DEFINE_CONSTANT	ciSurroundMode	10  	
+#DEFINE_CONSTANT	ciClosedCaption	11
+#DEFINE_CONSTANT	ciChannelReq	12
+#DEFINE_CONSTANT	ciChannelUp		13
+#DEFINE_CONSTANT	ciChannelDown	14
+#DEFINE_CONSTANT	ciPoll  		30
+#DEFINE_CONSTANT	ciClear 		31
+
+// #CATEGORY "" 
+#DEFAULT_VOLATILE
+// #PRINT_TO_TRACE
+// #DIGITAL_EXPAND 
+// #ANALOG_SERIAL_EXPAND 
+// #OUTPUT_SHIFT 
+// #HELP_PDF_FILE ""
+// #DEFAULT_NONVOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+#HELP_BEGIN
+To be used with the Sharp LC-52LE925UN v1.1.umc module only.
+Not to be used as a stand-alone module.
+#HELP_END
+
+
+/*******************************************************************************************
+  Include Libraries
+  (Uncomment and include additional libraries as needed)
+*******************************************************************************************/
+// #CRESTRON_LIBRARY ""
+// #USER_LIBRARY ""
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+DIGITAL_INPUT Response_Timeout, Response_Timeout_2, AudioMode, SurroundMode, ClosedCaption, ChannelUp, ChannelDown;
+DIGITAL_INPUT Air, Cable, KP[13];
+DIGITAL_INPUT Power[2];
+DIGITAL_INPUT Input[8];
+DIGITAL_INPUT AVMode[12];
+DIGITAL_INPUT Aspect[11];
+DIGITAL_INPUT VolumeMute[2];
+DIGITAL_INPUT Sleep[5];
+DIGITAL_INPUT Effect3D[8];
+DIGITAL_INPUT Poll[8];
+
+// ANALOG_INPUT 
+STRING_INPUT From_Device[25];
+// BUFFER_INPUT 
+
+DIGITAL_OUTPUT iWaitingForResponse; 
+ANALOG_OUTPUT Current_Power, Current_Input, Current_AVMode, Current_Aspect, Current_VolumeMute, Current_Sleep, Current_Effect3D, Current_Volume; 
+STRING_OUTPUT Number$, To_Device; 
+
+/*******************************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: myString = "";
+*******************************************************************************************/
+//INTEGER iWaitingForResponse, iCommand, iValue;
+INTEGER iCommand, iValue, iValueIn, aLoc;
+INTEGER iPowerQueue, iInputQueue, iAVModeQueue, iAspectQueue, iVolumeMuteQueue, iSleepQueue, iEffect3DQueue;
+INTEGER iAudioModeQueue, iSurroundModeQueue, iClosedCaptionQueue, iChannelReqQueue, iChannelUpQueue, iChannelDownQueue, iPollQueue;
+INTEGER iPowerSent, iInputSent, iAVModeSent, iAspectSent, iVolumeMuteSent, iSleepSent, iEffect3DSent, iPollSent;
+
+// LONG_INTEGER
+// SIGNED_INTEGER
+// SIGNED_LONG_INTEGER
+STRING sToDeviceTemp[10];
+STRING sNumber[10], sChannelF[9], sChannelR[9], sChannelTemp[30];
+
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+
+String_Function SendPower(INTEGER iValue)
+{
+//	print("iPowerValue=%d", iValue);
+	switch(iValue)
+	{
+		case(1):
+			sToDeviceTemp = "POWR1   \x0D";	
+		case(2):
+			sToDeviceTemp = "POWR0   \x0D";
+	}
+	Return (sToDeviceTemp);
+}
+
+
+String_Function SendInput(INTEGER iValue)
+{
+//	print("iInputValue=%d", iValue);
+	switch(iValue)
+	{
+		case(1):
+			sToDeviceTemp = "IAVD1   \x0D";	
+		case(2):
+			sToDeviceTemp = "IAVD2   \x0D";
+		case(3):
+			sToDeviceTemp = "IAVD3   \x0D";	
+		case(4):
+			sToDeviceTemp = "IAVD4   \x0D";
+		case(5):
+			sToDeviceTemp = "IAVD5   \x0D";
+		case(6):
+			sToDeviceTemp = "IAVD6   \x0D";
+		case(7):
+			sToDeviceTemp = "IAVD7   \x0D";	
+		case(8):
+			sToDeviceTemp = "ITVD0   \x0D";	
+	}
+	Return (sToDeviceTemp);
+}
+
+String_Function SendAVMode(INTEGER iValue)
+{
+//	print("iAVModeValue=%d", iValue);
+	switch(iValue)
+	{
+		case(1):
+			sToDeviceTemp = "AVMD1   \x0D";	
+		case(2):
+			sToDeviceTemp = "AVMD2   \x0D";
+		case(3):
+			sToDeviceTemp = "AVMD3   \x0D";	
+		case(4):
+			sToDeviceTemp = "AVMD4   \x0D";
+		case(5):
+			sToDeviceTemp = "AVMD5   \x0D";
+		case(6):
+			sToDeviceTemp = "AVMD6   \x0D";
+		case(7):
+			sToDeviceTemp = "AVMD7   \x0D";	
+		case(8):
+			sToDeviceTemp = "AVMD8   \x0D";	
+		case(9):
+			sToDeviceTemp = "AVMD14  \x0D";	
+		case(10):
+			sToDeviceTemp = "AVMD15  \x0D";	
+		case(11):
+			sToDeviceTemp = "AVMD16  \x0D";	
+		case(12):
+			sToDeviceTemp = "AVMD100 \x0D";	
+	}
+	Return (sToDeviceTemp);
+}
+
+String_Function SendAspect(INTEGER iValue)
+{
+//	print("iAspectValue=%d", iValue);
+	switch(iValue)
+	{
+		case(1):
+			sToDeviceTemp = "WIDE1   \x0D";	
+		case(2):
+			sToDeviceTemp = "WIDE2   \x0D";
+		case(3):
+			sToDeviceTemp = "WIDE3   \x0D";	
+		case(4):
+			sToDeviceTemp = "WIDE4   \x0D";
+		case(5):
+			sToDeviceTemp = "WIDE5   \x0D";
+		case(6):
+			sToDeviceTemp = "WIDE6   \x0D";
+		case(7):
+			sToDeviceTemp = "WIDE7   \x0D";	
+		case(8):
+			sToDeviceTemp = "WIDE8   \x0D";	
+		case(9):
+			sToDeviceTemp = "WIDE9   \x0D";	
+	}
+	Return (sToDeviceTemp);
+}
+
+String_Function SendVolumeMute(INTEGER iValue)
+{
+//	print("iVolumeMuteValue=%d", iValue);
+	switch(iValue)
+	{
+		case(1):
+			sToDeviceTemp = "MUTE1   \x0D";	
+		case(2):
+			sToDeviceTemp = "MUTE2   \x0D";
+	}
+	Return (sToDeviceTemp);
+}
+
+String_Function SendSleep(INTEGER iValue)
+{
+//	print("iSleepValue=%d", iValue);
+	switch(iValue)
+	{
+		case(1):
+			sToDeviceTemp = "OFTM0   \x0D";	
+		case(2):
+			sToDeviceTemp = "OFTM1   \x0D";	
+		case(3):
+			sToDeviceTemp = "OFTM2   \x0D";	
+		case(4):
+			sToDeviceTemp = "OFTM3   \x0D";	
+		case(5):
+			sToDeviceTemp = "OFTM4   \x0D";	
+	}
+	Return (sToDeviceTemp);
+}
+
+String_Function SendEffect3D(INTEGER iValue)
+{
+//	print("iEffect3DValue=%d", iValue);
+	switch(iValue)
+	{
+		case(1):
+			sToDeviceTemp = "TDCH0   \x0D";	
+		case(2):
+			sToDeviceTemp = "TDCH1   \x0D";	
+		case(3):
+			sToDeviceTemp = "TDCH2   \x0D";	
+		case(4):
+			sToDeviceTemp = "TDCH3   \x0D";	
+		case(5):
+			sToDeviceTemp = "TDCH4   \x0D";	
+		case(6):
+			sToDeviceTemp = "TDCH5   \x0D";	
+		case(7):
+			sToDeviceTemp = "TDCH6   \x0D";	
+		case(8):
+			sToDeviceTemp = "TDCH7   \x0D";	
+	}
+	Return (sToDeviceTemp);
+}
+
+String_Function SendPoll(INTEGER iValue)
+{
+//	print("iPollValue=%d", iValue);
+	switch(iValue)
+	{
+		case(1):
+			sToDeviceTemp = "POWR?   \x0D";	
+		case(2):
+			sToDeviceTemp = "IAVD?   \x0D";
+		case(3):
+			sToDeviceTemp = "AVMD?   \x0D";
+		case(4):
+			sToDeviceTemp = "WIDE?   \x0D";
+		case(5):
+			sToDeviceTemp = "MUTE?   \x0D";
+		case(6):
+			sToDeviceTemp = "OFTM?   \x0D";
+		case(7):
+			sToDeviceTemp = "TDCH?   \x0D";
+		case(8):
+			sToDeviceTemp = "VOLM?   \x0D";
+	}
+	Return (sToDeviceTemp);
+}
+
+Function SendCommandQueued()
+{
+	if(iWaitingForResponse = 1 && (iPowerQueue <> 0 || iInputQueue <> 0 || iAVModeQueue <> 0 || iAspectQueue <> 0 || iVolumeMuteQueue <> 0 || iSleepQueue <> 0
+													|| iEffect3DQueue <> 0 || iAudioModeQueue <> 0 || iSurroundModeQueue <> 0 || iClosedCaptionQueue <> 0
+													|| iChannelReqQueue <> 0 || iChannelUpQueue <> 0 || iChannelDownQueue <>0))
+	{
+		if(iPowerQueue <> 0)
+		{
+			To_Device = SendPower(iPowerQueue);
+		 	iCommand = ciPower;
+			iPowerSent = iPowerQueue;
+		}
+		else if(iInputQueue <> 0)		
+		{
+			To_Device = SendInput(iInputQueue);
+		 	iCommand = ciInput;
+			iInputSent = iInputQueue;
+		}
+		else if(iAVModeQueue <> 0)		
+		{
+			To_Device = SendAVMode(iAVModeQueue);	   
+		 	iCommand = ciAVMode;
+			iAVModeSent = iAVModeQueue;
+		}
+		else if(iAspectQueue <> 0)		
+		{
+			To_Device = SendAspect(iAspectQueue);	   
+		 	iCommand = ciAspect;
+			iAspectSent = iAspectQueue;
+		}
+		else if(iVolumeMuteQueue <> 0)		
+		{
+			To_Device = SendVolumeMute(iVolumeMuteQueue);	   
+		 	iCommand = ciVolumeMute;
+			iVolumeMuteSent = iVolumeMuteQueue;
+		}
+		else if(iSleepQueue <> 0)		
+		{
+			To_Device = SendSleep(iSleepQueue);	   
+		 	iCommand = ciSleep;
+			iSleepSent = iSleepQueue;
+		}
+		else if(iEffect3DQueue <> 0)		
+		{
+			To_Device = SendEffect3D(iEffect3DQueue);	   
+		 	iCommand = ciEffect3D;
+			iEffect3DSent = iEffect3DQueue;
+		}
+		else if(iAudioModeQueue <> 0)		
+		{
+			To_Device = "ACHA1   \x0D";
+	 	 	iCommand = ciAudioMode;
+		}
+		else if(iSurroundModeQueue <> 0)		
+		{
+			To_Device = "ACSU0   \x0D";
+	 	 	iCommand = ciSurroundMode;
+		}
+		else if(iClosedCaptionQueue <> 0)		
+		{
+			To_Device = "CLCP1   \x0D";
+	 	 	iCommand = ciClosedCaption;
+		}
+   		else if(iChannelReqQueue <> 0)
+		{
+			To_Device = sChannelTemp;
+	 	 	iCommand = ciChannelReq;
+		}
+		else if(iChannelUpQueue <> 0)		
+		{
+			To_Device = "CHUP1   \x0D";
+	 	 	iCommand = ciChannelUp;
+		}
+		else if(iChannelDownQueue <> 0)		
+		{
+			To_Device = "CHDW1   \x0D";
+	 	 	iCommand = ciChannelDown;
+		}
+	}
+}
+		
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+
+PUSH Power
+{
+	iPowerQueue = getlastmodifiedarrayindex();
+	
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = SendPower(iPowerQueue);
+	 	iCommand = ciPower;
+		iPowerSent = iPowerQueue;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH Input
+{
+	iInputQueue = getlastmodifiedarrayindex();
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = SendInput(iInputQueue);
+	 	iCommand = ciInput;
+		iInputSent = iInputQueue;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH AVMode
+{
+	iAVModeQueue = getlastmodifiedarrayindex();
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = SendAVMode(iAVModeQueue);
+	 	iCommand = ciAVMode;
+		iAVModeSent = iAVModeQueue;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH Aspect
+{
+	iAspectQueue = getlastmodifiedarrayindex();
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = SendAspect(iAspectQueue);
+	 	iCommand = ciAspect;
+		iAspectSent = iAspectQueue;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH VolumeMute
+{
+	iVolumeMuteQueue = getlastmodifiedarrayindex();
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = SendVolumeMute(iVolumeMuteQueue);
+	 	iCommand = ciVolumeMute;
+		iVolumeMuteSent = iVolumeMuteQueue;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH Sleep
+{
+	iSleepQueue = getlastmodifiedarrayindex();
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = SendSleep(iSleepQueue);
+	 	iCommand = ciSleep;
+		iSleepSent = iSleepQueue;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH Effect3D
+{
+	iEffect3DQueue = getlastmodifiedarrayindex();
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = SendEffect3D(iEffect3DQueue);
+	 	iCommand = ciEffect3D;
+		iEffect3DSent = iEffect3DQueue;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH Poll
+{
+	iPollQueue = getlastmodifiedarrayindex();
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = SendPoll(iPollQueue);
+		iCommand = ciPoll;
+		iPollSent = iPollQueue;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH AudioMode
+{
+	iAudioModeQueue = 1;
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = "ACHA1   \x0D";
+		iCommand = ciAudioMode;
+		iWaitingForResponse = 1;
+	
+	}
+}
+
+PUSH SurroundMode
+{
+	iSurroundModeQueue = 1;
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = "ACSU0   \x0D";
+		iCommand = ciSurroundMode;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH ClosedCaption
+{
+	iClosedCaptionQueue = 1;
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = "CLCP1   \x0D";
+		iCommand = ciClosedCaption;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH ChannelUp
+{
+	iChannelUpQueue = 1;
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = "CHUP1   \x0D";
+		iCommand = ciChannelUp;
+		iWaitingForResponse = 1;
+	}
+}
+
+PUSH ChannelDown
+{
+	iChannelDownQueue = 1;
+	if(iWaitingForResponse = 0)
+	{
+		To_Device = "CHDW1   \x0D";
+		iCommand = ciChannelDown;
+		iWaitingForResponse = 1;
+	}
+}
+
+CHANGE From_Device
+{
+	if(From_Device = "OK\x0D")
+	{
+		if(iCommand = ciPower)
+		{
+			Current_Power = iPowerSent;
+			if(Current_Power = iPowerQueue)
+				iPowerQueue = 0;
+		}
+		else if(iCommand = ciInput)
+		{
+			Current_Input = iInputSent;
+			if(Current_Input = iInputQueue)
+				iInputQueue = 0;
+		}
+		else if(iCommand = ciAVMode)
+		{
+			Current_AVMode = iAVModeSent;
+			if(Current_AVMode = iAVModeQueue)
+				iAVModeQueue = 0;
+		}
+		else if(iCommand = ciAspect)
+		{
+			Current_Aspect = iAspectSent;
+			if(Current_Aspect = iAspectQueue)
+				iAspectQueue = 0;
+		}
+		else if(iCommand = ciVolumeMute)
+		{
+			Current_VolumeMute = iVolumeMuteSent;
+			if(Current_VolumeMute = iVolumeMuteQueue)
+				iVolumeMuteQueue = 0;
+		}
+		else if(iCommand = ciSleep)
+		{
+			Current_Sleep = iSleepSent;
+			if(Current_Sleep = iSleepQueue)
+				iSleepQueue = 0;
+		}
+		else if(iCommand = ciEffect3D)
+		{
+			Current_Effect3D = iEffect3DSent;
+			if(Current_Effect3D = iEffect3DQueue)
+				iEffect3DQueue = 0;
+		}
+		else if(iCommand = ciAudioMode)
+				iAudioModeQueue = 0;
+		else if(iCommand = ciSurroundMode)
+				iSurroundModeQueue = 0;
+		else if(iCommand = ciClosedCaption)
+				iClosedCaptionQueue = 0;
+		else if(iCommand = ciChannelReq)
+				iChannelReqQueue = 0;
+		else if(iCommand = ciChannelUp)
+				iChannelUpQueue = 0;
+		else if(iCommand = ciChannelDown)
+				iChannelDownQueue = 0;
+	}					
+	else if(From_Device = "ERR\x0D" || From_Device = "\xFF\xFF\xFF")
+	{
+		if(iCommand = ciPower)
+				iPowerQueue = 0;	
+		else if(iCommand = ciInput)
+				iInputQueue = 0;
+		else if(iCommand = ciAVMode)
+				iAVModeQueue = 0;
+		else if(iCommand = ciAspect)
+				iAspectQueue = 0;
+		else if(iCommand = ciVolumeMute)
+				iVolumeMuteQueue = 0;
+		else if(iCommand = ciSleep)
+				iSleepQueue = 0;
+		else if(iCommand = ciEffect3D)
+				iEffect3DQueue = 0;
+		else if(iCommand = ciAudioMode)
+				iAudioModeQueue = 0;
+		else if(iCommand = ciSurroundMode)
+				iSurroundModeQueue = 0;
+		else if(iCommand = ciClosedCaption)
+				iClosedCaptionQueue = 0;
+		else if(iCommand = ciChannelReq)
+				iChannelReqQueue = 0;
+		else if(iCommand = ciChannelUp)
+				iChannelUpQueue = 0;
+		else if(iCommand = ciChannelDown)
+				iChannelDownQueue = 0;
+		else if(iCommand = ciPoll)
+				iPollQueue = 0;
+		if(iPollSent = ciInput)	// if input is TV.  this input produces an "ERR\x0D" message when polled.  No other way to poll for TV input.
+			Current_Input = 8;
+	}
+	else
+	{
+		iValueIn = atoi(From_Device);
+		if(iPollSent = ciPower)
+		{
+			switch(iValueIn)
+			{
+				case(1):
+					Current_Power = 1;
+				case(0):
+					Current_Power = 2;
+			}
+		}
+		if(iPollSent = ciInput)
+		{
+			switch(iValueIn)
+			{
+				case(1):
+					Current_Input = 1;
+				case(2):
+					Current_Input = 2;
+				case(3):
+					Current_Input = 3;
+				case(4):
+					Current_Input = 4;
+				case(5):
+					Current_Input = 5;
+				case(6):
+					Current_Input = 6;
+				case(7):
+					Current_Input = 7;
+			}
+		}
+		if(iPollSent = ciAVMode)
+		{
+			switch(iValueIn)
+			{
+				case(1):
+					Current_AVMode = 1;
+				case(2):
+					Current_AVMode = 2;
+				case(3):
+					Current_AVMode = 3;
+				case(4):
+					Current_AVMode = 4;
+				case(5):
+					Current_AVMode = 5;
+				case(6):
+					Current_AVMode = 6;
+				case(7):
+					Current_AVMode = 7;
+				case(8):
+					Current_AVMode = 8;
+				case(14):
+					Current_AVMode = 9;
+				case(15):
+					Current_AVMode = 10;
+				case(16):
+					Current_AVMode = 11;
+				case(100):
+					Current_AVMode = 12;
+			}	
+		}
+		if(iPollSent = ciAspect)
+		{
+			switch(iValueIn)
+			{
+				case(1):
+					Current_Aspect = 1;
+				case(2):
+					Current_Aspect = 2;
+				case(3):
+					Current_Aspect = 3;
+				case(4):
+					Current_Aspect = 4;
+				case(5):
+					Current_Aspect = 5;
+				case(6):
+					Current_Aspect = 6;
+				case(7):
+					Current_Aspect = 7;
+				case(8):
+					Current_Aspect = 8;
+				case(9):
+					Current_Aspect = 9;
+			}
+		}
+		if(iPollSent = ciVolumeMute)
+		{
+			switch(iValueIn)
+			{
+				case(1):
+					Current_VolumeMute = 1;
+				case(2):
+					Current_VolumeMute = 2;
+			}	
+		}
+		if(iPollSent = ciSleep)
+		{
+			switch(iValueIn)
+			{
+				case(0):
+					Current_Sleep = 1;
+				case(1):
+					Current_Sleep = 2;
+				case(2):
+					Current_Sleep = 3;
+				case(3):
+					Current_Sleep = 4;
+				case(4):
+					Current_Sleep = 5;
+			}
+		}
+		if(iPollSent = ciEffect3D)
+		{
+			switch(iValueIn)
+			{
+				case(1):
+					Current_Effect3D = 1;
+				case(2):
+					Current_Effect3D = 2;
+				case(3):
+					Current_Effect3D = 3;
+				case(4):
+					Current_Effect3D = 4;
+				case(5):
+					Current_Effect3D = 5;
+				case(6):
+					Current_Effect3D = 6;
+				case(7):
+					Current_Effect3D = 7;
+			}
+		}
+		if(iPollSent = ciVolume)
+		{
+			Current_Volume = iValueIn;
+		}
+	}
+	if(iWaitingForResponse = 1 && (iPowerQueue <> 0 || iInputQueue <> 0 || iAVModeQueue <> 0 || iAspectQueue <> 0 || iVolumeMuteQueue <> 0 || iSleepQueue <> 0
+													|| iEffect3DQueue <> 0 || iAudioModeQueue <> 0 || iSurroundModeQueue <> 0 || iClosedCaptionQueue <> 0
+													|| iChannelReqQueue <> 0 || iChannelUpQueue <> 0 || iChannelDownQueue <>0))
+	{
+		if(iPowerQueue <> 0)
+		{
+			To_Device = SendPower(iPowerQueue);
+		 	iCommand = ciPower;
+			iPowerSent = iPowerQueue;
+		}
+		else if(iInputQueue <> 0)		
+		{
+			To_Device = SendInput(iInputQueue);
+		 	iCommand = ciInput;
+			iInputSent = iInputQueue;
+		}
+		else if(iAVModeQueue <> 0)		
+		{
+			To_Device = SendAVMode(iAVModeQueue);	   
+		 	iCommand = ciAVMode;
+			iAVModeSent = iAVModeQueue;
+		}
+		else if(iAspectQueue <> 0)		
+		{
+			To_Device = SendAspect(iAspectQueue);	   
+		 	iCommand = ciAspect;
+			iAspectSent = iAspectQueue;
+		}
+		else if(iVolumeMuteQueue <> 0)		
+		{
+			To_Device = SendVolumeMute(iVolumeMuteQueue);	   
+		 	iCommand = ciVolumeMute;
+			iVolumeMuteSent = iVolumeMuteQueue;
+		}
+		else if(iSleepQueue <> 0)		
+		{
+			To_Device = SendSleep(iSleepQueue);	   
+		 	iCommand = ciSleep;
+			iSleepSent = iSleepQueue;
+		}
+		else if(iEffect3DQueue <> 0)		
+		{
+			To_Device = SendEffect3D(iEffect3DQueue);	   
+		 	iCommand = ciEffect3D;
+			iEffect3DSent = iEffect3DQueue;
+		}
+		else if(iAudioModeQueue <> 0)		
+		{
+			To_Device = "ACHA1   \x0D";
+	 	 	iCommand = ciAudioMode;
+		}
+		else if(iSurroundModeQueue <> 0)		
+		{
+			To_Device = "ACSU0   \x0D";
+	 	 	iCommand = ciSurroundMode;
+		}
+		else if(iClosedCaptionQueue <> 0)		
+		{
+			To_Device = "CLCP1   \x0D";
+	 	 	iCommand = ciClosedCaption;
+		}
+   		else if(iChannelReqQueue <> 0)
+		{
+			To_Device = sChannelTemp;
+	 	 	iCommand = ciChannelReq;
+		}
+		else if(iChannelUpQueue <> 0)		
+		{
+			To_Device = "CHUP1   \x0D";
+	 	 	iCommand = ciChannelUp;
+		}
+		else if(iChannelDownQueue <> 0)		
+		{
+			To_Device = "CHDW1   \x0D";
+	 	 	iCommand = ciChannelDown;
+		}
+	}
+	else
+		iWaitingForResponse = 0;
+	iPollSent = ciClear;
+}
+
+PUSH Response_Timeout
+{
+	if(iWaitingForResponse = 1 && (iPowerQueue <> 0 || iInputQueue <> 0 || iAVModeQueue <> 0 || iAspectQueue <> 0 || iVolumeMuteQueue <> 0 || iSleepQueue <> 0
+													|| iEffect3DQueue <> 0 || iAudioModeQueue <> 0 || iSurroundModeQueue <> 0 || iClosedCaptionQueue <> 0
+													|| iChannelReqQueue <> 0 || iChannelUpQueue <> 0 || iChannelDownQueue <>0))
+	{
+		if(iPowerQueue <> 0)
+		{
+			To_Device = SendPower(iPowerQueue);
+		 	iCommand = ciPower;
+			iPowerSent = iPowerQueue;
+		}
+		else if(iInputQueue <> 0)		
+		{
+			To_Device = SendInput(iInputQueue);
+		 	iCommand = ciInput;
+			iInputSent = iInputQueue;
+		}
+		else if(iAVModeQueue <> 0)		
+		{
+			To_Device = SendAVMode(iAVModeQueue);	   
+		 	iCommand = ciAVMode;
+			iAVModeSent = iAVModeQueue;
+		}
+		else if(iAspectQueue <> 0)		
+		{
+			To_Device = SendAspect(iAspectQueue);	   
+		 	iCommand = ciAspect;
+			iAspectSent = iAspectQueue;
+		}
+		else if(iVolumeMuteQueue <> 0)		
+		{
+			To_Device = SendVolumeMute(iVolumeMuteQueue);	   
+		 	iCommand = ciVolumeMute;
+			iVolumeMuteSent = iVolumeMuteQueue;
+		}
+		else if(iSleepQueue <> 0)		
+		{
+			To_Device = SendSleep(iSleepQueue);	   
+		 	iCommand = ciSleep;
+			iSleepSent = iSleepQueue;
+		}
+		else if(iEffect3DQueue <> 0)		
+		{
+			To_Device = SendEffect3D(iEffect3DQueue);	   
+		 	iCommand = ciEffect3D;
+			iEffect3DSent = iEffect3DQueue;
+		}
+		else if(iAudioModeQueue <> 0)		
+		{
+			To_Device = "ACHA1   \x0D";
+	 	 	iCommand = ciAudioMode;
+		}
+		else if(iSurroundModeQueue <> 0)		
+		{
+			To_Device = "ACSU0   \x0D";
+	 	 	iCommand = ciSurroundMode;
+		}
+		else if(iClosedCaptionQueue <> 0)		
+		{
+			To_Device = "CLCP1   \x0D";
+	 	 	iCommand = ciClosedCaption;
+		}
+   		else if(iChannelReqQueue <> 0)
+		{
+			To_Device = sChannelTemp;
+	 	 	iCommand = ciChannelReq;
+		}
+		else if(iChannelUpQueue <> 0)		
+		{
+			To_Device = "CHUP1   \x0D";
+	 	 	iCommand = ciChannelUp;
+		}
+		else if(iChannelDownQueue <> 0)		
+		{
+			To_Device = "CHDW1   \x0D";
+	 	 	iCommand = ciChannelDown;
+		}
+	}
+	else
+		iWaitingForResponse = 0;
+	iPollSent = ciClear;
+}
+
+PUSH KP
+{
+	switch(getlastmodifiedarrayindex())
+	{
+		case(1):
+			makestring(sNumber, "%s0", sNumber);
+		case(2):
+			makestring(sNumber, "%s1", sNumber);
+		case(3):
+			makestring(sNumber, "%s2", sNumber);
+		case(4):
+			makestring(sNumber, "%s3", sNumber);
+		case(5):
+			makestring(sNumber, "%s4", sNumber);
+		case(6):
+			makestring(sNumber, "%s5", sNumber);
+		case(7):
+			makestring(sNumber, "%s6", sNumber);
+		case(8):
+			makestring(sNumber, "%s7", sNumber);
+		case(9):
+			makestring(sNumber, "%s8", sNumber);
+		case(10):
+			makestring(sNumber, "%s9", sNumber);
+		case(11):
+		{
+			aLoc = find(".", sNumber);
+			if(aLoc = 0)
+			{
+				makestring(sNumber, "%s.", sNumber);
+			}
+		}
+		case(12):
+		{
+			clearbuffer(sNumber);
+		}
+		case(13):
+		{	
+			aLoc = find(".", sNumber);
+			if(aLoc <> 0)
+			{
+				if(Air)
+				{
+					makestring(sChannelF, "%02d", atoi(left(sNumber, aLoc - 1)));
+					makestring(sChannelR, "%02d", atoi(right(sNumber, len(sNumber) - aLoc)));
+					makestring(sChannelTemp, "DA2P%s%s\r", sChannelF, sChannelR);
+				}
+				else if(Cable)
+				{
+					makestring(sChannelF, "%03d", atoi(left(sNumber, aLoc - 1)));
+					makestring(sChannelR, "%03d", atoi(right(sNumber, len(sNumber) - aLoc)));
+					makestring(sChannelTemp, "DC2U%s \rDC2L%s \r", sChannelF, sChannelR);
+				}
+		   	}
+			else
+			{
+				if(Air)
+				{
+					makestring(sChannelF, "%02d", atoi(sNumber));
+					makestring(sChannelTemp, "DCCH%s  \r", sChannelF);
+				}
+				else if(Cable)
+				{
+					makestring(sChannelF, "%03d", atoi(sNumber));
+					makestring(sChannelTemp, "DCCH%s \r", sChannelF);
+				}
+			}
+			iChannelReqQueue = 1;
+			if(iWaitingForResponse = 0)
+			{
+				To_Device = sChannelTemp;
+				iCommand = ciChannelReq;
+				iWaitingForResponse = 1;
+			}
+			clearbuffer(sNumber);
+		}
+    }
+	Number$ = sNumber;
+}		
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+
+Function Main()
+{
+	iWaitingForResponse = 0;
+	iPowerQueue = 0;
+    iInputQueue = 0;
+    iAVModeQueue = 0;
+    iAspectQueue = 0;
+    iVolumeMuteQueue = 0;
+    iSleepQueue = 0;
+    iEffect3DQueue = 0;
+	iAudioModeQueue = 0;
+	iSurroundModeQueue = 0;
+	iClosedCaptionQueue = 0;
+	iChannelReqQueue = 0;
+	iChannelUpQueue = 0;
+	iChannelDownQueue = 0;
+}
+
+

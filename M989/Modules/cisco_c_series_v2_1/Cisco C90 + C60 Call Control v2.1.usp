@@ -1,0 +1,2109 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:	Crestron Electronics
+System Name:
+System Number:
+Programmer:		PAC
+Comments:
+*/
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+#SYMBOL_NAME "Cisco C90 + C60 Call Control v2.1"
+// #HINT
+// #DEFINE_CONSTANT
+// #CATEGORY
+// #DIGITAL_EXPAND 
+// #ANALOG_SERIAL_EXPAND 
+// #OUTPUT_SHIFT
+
+// #ENABLE_TRACE
+#DEFAULT_VOLATILE
+//#DEFAULT_NONVOLATILE
+
+#ENABLE_STACK_CHECKING
+#DEFINE_CONSTANT MAXENTRIES 255
+#DEFINE_CONSTANT MAXENTRIESDISCRETE 20
+#DEFINE_CONSTANT ENTRIESPERREQUEST 20
+#DEFINE_CONSTANT MAXENTRIESPERPAGE	20
+#DEFINE_CONSTANT MAXCALLS 3
+#DEFINE_CONSTANT FAILURESALLOWED 1
+#DEFINE_CONSTANT MAXENTRIESINLOCALPHONEBOOK 2000
+#DEFINE_CONSTANT MAXCONTACTS 4000
+#DEFINE_CONSTANT PHONEBOOKSOURCELOCALPHONEBOOK 1
+#DEFINE_CONSTANT PHONEBOOKSOURCECORPORATEPHONEBOOK 2
+#DEFINE_CONSTANT ISFOLDERTAG "[+]  "
+#DEFINE_CONSTANT SEARCHMAX 50
+
+#DEFINE_CONSTANT CORPDIRDIRECTIONFIRST 1
+#DEFINE_CONSTANT CORPDIRDIRECTIONNEXT 2
+#DEFINE_CONSTANT CORPDIRDIRECTIONPREV 3
+
+#DEFINE_CONSTANT NOTAVAILABLETEXT ""
+#DEFINE_CONSTANT GHOSTTAG "(ghost=True): /"
+#DEFINE_CONSTANT ONLINE_TIMEOUT 2500	//25 seconds
+
+#DEFINE_CONSTANT DEBUGMODE 0
+
+#HELP_BEGIN
+	For use inside the Cisco C90 + C60 v2.0 module only.
+
+	Revision History
+	v2.0	First version for revision history.
+			Correct issue with multiple contact methods
+			Added search funcationality to work similarly to Cisco panels.
+			Changed search approach to dig through folders first to eliminate issue with address books with too many folders.
+
+#HELP_END
+/*******************************************************************************************
+  Inputs & Outputs
+*******************************************************************************************/
+BUFFER_INPUT	device_rx$[10000];
+STRING_OUTPUT 	device_tx$;
+                            
+ANALOG_INPUT	entryOffSet;
+ANALOG_INPUT	entriesPerPage;
+ANALOG_INPUT	DTMFSendCallSlot;
+STRING_INPUT	DTMFSend[32];
+
+DIGITAL_INPUT	getLocalPhonebook;
+ANALOG_INPUT	selectedEntryNumber;
+ANALOG_INPUT	pagesSelectedEntryNumber;
+DIGITAL_INPUT	clearSelectedEntryNumber;
+DIGITAL_INPUT	dialSelectedPhonebookEntryNumber;
+ANALOG_INPUT	phonebookSourceId; // local or corporate
+DIGITAL_INPUT	topLevel;
+DIGITAL_INPUT	upOneLevel; // pressed when in a subfolder and user has asked to browse to previous level
+DIGITAL_INPUT	searchPhonebook;
+
+STRING_INPUT	phonebookSearchString[82];
+
+
+DIGITAL_INPUT	callControlAcceptIncomingCall;
+DIGITAL_INPUT	callControlRejectIncomingCall;
+ANALOG_INPUT	disconnectCallWithId;
+DIGITAL_INPUT	disconnectAllCalls;
+STRING_INPUT	dialNumber[255];
+STRING_INPUT	dialCallRate[6];
+STRING_INPUT	dialCallProtocol[4];
+DIGITAL_INPUT 	dialCall;
+
+ANALOG_INPUT	farEndControlCallSlot; // the active call to control farEndControl camera and presentation for
+DIGITAL_INPUT	farEndControlCameraPanLeft;
+DIGITAL_INPUT	farEndControlCameraPanRight;
+DIGITAL_INPUT	farEndControlCameraTiltUp;
+DIGITAL_INPUT	farEndControlCameraTiltDown;
+DIGITAL_INPUT	farEndControlCameraZoomIn;
+DIGITAL_INPUT	farEndControlCameraZoomOut;
+DIGITAL_INPUT	farEndControlCameraFocusIn;
+DIGITAL_INPUT	farEndControlCameraFocusOut;
+DIGITAL_INPUT	farEndControlCameraStop;
+ANALOG_INPUT	farEndControlPresentationSourceId;
+ANALOG_INPUT	farEndControlPresetActivateId; 
+ANALOG_INPUT	setVolumeLevel;  
+
+DIGITAL_INPUT	resyncronizeCallStatusList;
+
+
+STRING_OUTPUT	TString_Receive_Text;
+STRING_INPUT	TString_Send_Text[1450]; // max message size is 1450 bytes
+
+STRING_OUTPUT	SString_Receive_Text;
+STRING_INPUT	SString_Send_Text[256];// max message size is 256 bytes
+
+DIGITAL_INPUT	dataToTrace;
+ANALOG_INPUT	searchDelayStart;
+ANALOG_INPUT	searchDelayMod;
+ANALOG_INPUT	searchDelay;
+DIGITAL_INPUT	defaultCallTypeSIP;
+
+STRING_OUTPUT  SelectedPhonebook_Name, SelectedPhonebook_Number, SelectedPhonebook_CallRate, Phonebook_Search_Text;
+ANALOG_OUTPUT  getVolumeLevel;
+STRING_OUTPUT  getSystemName;
+STRING_OUTPUT  getSystemNetworkAddress;
+STRING_OUTPUT  getGatekeeperStatus;
+STRING_OUTPUT  getGatekeeperRegistrationMode;
+STRING_OUTPUT  getGatekeeperNetworkAddress;
+STRING_OUTPUT  getSystemH323ID;
+STRING_OUTPUT  getSystemE164Alias;
+STRING_OUTPUT  getSystemSIPURI;
+STRING_OUTPUT  getSystemSoftwareVersion;
+
+STRING_OUTPUT  From_Device_ConfigurationChanges;
+STRING_OUTPUT  From_Device_StatusChanges;
+
+STRING_OUTPUT  Message_Alert_Text;
+DIGITAL_OUTPUT Message_Alert_IsActive;               
+DIGITAL_OUTPUT Message_Prompt_IsActive;               
+STRING_OUTPUT  Message_Prompt_Title;
+STRING_OUTPUT  Message_Prompt_Text;
+STRING_OUTPUT  Message_Prompt_Option1_Text;
+STRING_OUTPUT  Message_Prompt_Option2_Text;
+STRING_OUTPUT  Message_Prompt_Option3_Text;
+STRING_OUTPUT  Message_Prompt_Option4_Text;
+STRING_OUTPUT  Message_Prompt_Option5_Text;
+DIGITAL_OUTPUT Message_Prompt_Option1_IsActive;               
+DIGITAL_OUTPUT Message_Prompt_Option2_IsActive;               
+DIGITAL_OUTPUT Message_Prompt_Option3_IsActive;               
+DIGITAL_OUTPUT Message_Prompt_Option4_IsActive;               
+DIGITAL_OUTPUT Message_Prompt_Option5_IsActive;               
+
+DIGITAL_OUTPUT Message_Prompt_Option1_WasSelected;               
+DIGITAL_OUTPUT Message_Prompt_Option2_WasSelected;               
+DIGITAL_OUTPUT Message_Prompt_Option3_WasSelected;               
+DIGITAL_OUTPUT Message_Prompt_Option4_WasSelected;               
+DIGITAL_OUTPUT Message_Prompt_Option5_WasSelected;               
+
+DIGITAL_OUTPUT	Phonebook_Searchresult_Is_From_Subfolder;
+ANALOG_OUTPUT	currentFirstPhonebookItemNumber;
+ANALOG_OUTPUT	currentLastPhonebookItemNumber;
+STRING_OUTPUT	Phonebook_Selected_Folder_Name;
+DIGITAL_OUTPUT	DirectoryDownloadBusy;
+ANALOG_OUTPUT	TotalRowsForSearch;
+DIGITAL_OUTPUT	selectedIsFolder,
+				selectedIsContact;
+STRING_OUTPUT	CallHistoryName, CallHistoryNumber;
+
+DIGITAL_OUTPUT	getRebootCodec_Is_In_Progress;
+DIGITAL_OUTPUT	signalIncomingCall;
+DIGITAL_OUTPUT	Device_Online;
+STRING_OUTPUT	incomingCallNumber;
+ANALOG_OUTPUT	NumberOfActiveCalls;
+ANALOG_OUTPUT	phonebookPagesCurrentPage, phonebookPagesTotalPages;
+DIGITAL_OUTPUT	DirectoryOnTopLevel;
+DIGITAL_OUTPUT 	CallStatus_IsConnected[MAXCALLS]; // indicates whether a call is connected or not
+DIGITAL_OUTPUT 	CallStatus_SupportsPresentation[MAXCALLS]; // indicates whether the remote site supports presentation (H.239 or not)
+DIGITAL_OUTPUT 	CallStatus_IsActive[MAXCALLS, MAXCALLS]; // indicates whether a call is active or not
+STRING_OUTPUT	Input_Source_Name[5];
+
+// These MUST be last as they are expandable: 
+STRING_OUTPUT 	Phonebook_Name[MAXENTRIES];
+STRING_OUTPUT 	Phonebook_Pages_Name[MAXENTRIESPERPAGE];
+STRING_OUTPUT	CallStatus_Status[MAXCALLS],
+				CallStatus_CallType[MAXCALLS],
+				CallStatus_RemoteSite[MAXCALLS],
+				CallStatus_Duration[MAXCALLS],
+				CallStatus_TransmitCallRate[MAXCALLS],
+				CallStatus_ReceiveCallRate[MAXCALLS],
+				CallStatus_Direction[MAXCALLS, MAXCALLS]; // Let the last one be fully expanded or else user might not see that more calls have been added if MAXCALLs is changed
+ANALOG_OUTPUT 	CallStatus_CallId[MAXCALLS,MAXCALLS];
+/*******************************************************************************************
+  Variable Declarations
+*******************************************************************************************/
+INTEGER 	Semaphore, dialSemaphore;
+STRING 		Tempstring$[1000];
+INTEGER 	callId;
+STRING 		callresponsetype[40];
+STRING 		callStatus[30];
+INTEGER 	tmp;
+STRING 		remoteNumber[255];
+INTEGER 	CallSlot;
+STRING		gTempDisplayName[40];
+STRING		gTempValue[10];
+STRING		gTempSegment[64];
+INTEGER		inputSourceItem;
+
+INTEGER ContactItem, entityId;
+STRING  phonebookEntryType[30];
+STRING phoneBookType[9];
+INTEGER previousFoundContactItem;
+INTEGER nextAvailableDirEntry;
+INTEGER	nextAvailableContactMethod; //v2.0
+INTEGER internalEntryOffSet;
+STRING  Message_Prompt_FeedbackId[255];
+STRING	sSearchText[82];
+INTEGER	nextFolderEntry;
+INTEGER	phonebookParseFailure;
+INTEGER	receivingPhonebook;
+INTEGER	phonebookLevelTotalRows;
+INTEGER	previousFoundContactMethod;
+INTEGER	ContactMethod;
+INTEGER selectedFolder;
+INTEGER searchResult[SEARCHMAX];
+INTEGER searchActive;
+INTEGER selectedEntry;
+INTEGER selectedEntryMethod;
+INTEGER searchIndex;
+INTEGER globalSearchCount;
+INTEGER	iPhonebookPagesCurrentPage, iPhonebookPagesTotalPages, iPhonbookPagesEntryOffset;
+/*******************************************************************************************
+	Structures
+*******************************************************************************************/
+
+STRUCTURE	phonebook	//v2.0
+{
+	INTEGER	parentFolder;
+	INTEGER	firstChild;
+	STRING	entryName[100];
+	STRING	folderId[100];
+	INTEGER	childCount; //v2.0changed from callType
+
+};
+
+STRUCTURE contactList	//v2.0
+{
+    STRING	contactNumber[100];
+	STRING	callRate[20];
+	INTEGER callType;
+};
+  
+phonebook phonebookEntry[MAXENTRIESINLOCALPHONEBOOK];	//v2.0
+
+contactList contact[MAXCONTACTS];
+/*******************************************************************************************
+	Functions
+*******************************************************************************************/
+FUNCTION PrintSavedData()
+{
+	INTEGER i;
+	for(i= 1 to 10)
+	{
+		TRACE("%s \t %d", contact[i].contactNumber, contact[i].callType);
+	}
+	for(i = 10 to 20)
+	{
+		TRACE("%s \t %d \t %d", phonebookEntry[i].entryName, phonebookEntry[i].firstChild, phonebookEntry[i].childCount);
+	}
+}
+
+FUNCTION ContactSearch(INTEGER indexContact, INTEGER searchCount)
+{
+	INTEGER i;
+	for(i = phonebookEntry[indexContact].firstChild to (phonebookEntry[indexContact].firstChild + phonebookEntry[indexContact].childCount - 1))
+	{
+		if(searchCount <> globalSearchCount || searchIndex >= SEARCHMAX)
+		{
+			return;
+		}
+		if(len(phonebookEntry[i].folderId) > 0)
+		{
+			CALL ContactSearch(i, searchCount);
+		}
+		else
+		{
+			if(find(upper(phonebookSearchString), upper(phonebookEntry[i].entryName)) > 0)
+			{
+				searchIndex = searchIndex + 1;
+				searchResult[searchIndex] = i;
+			}
+		}
+	}	
+}
+
+FUNCTION FolderSearch(INTEGER indexFolder, INTEGER searchCount)
+{
+	INTEGER i;
+	for(i = phonebookEntry[indexFolder].firstChild to (phonebookEntry[indexFolder].firstChild + phonebookEntry[indexFolder].childCount - 1))
+	{
+		if(searchCount <> globalSearchCount || searchIndex >= SEARCHMAX)                                                           
+		{
+			return;
+		}
+		if(len(phonebookEntry[i].folderId) > 0)
+		{
+			if(find(upper(phonebookSearchString), upper(phonebookEntry[i].entryName)) > 0)
+			{
+				searchIndex = searchIndex + 1;
+				searchResult[searchIndex] = i;								
+			}
+			CALL FolderSearch(i, searchCount);
+		}
+	}
+	if(indexFolder = selectedFolder && searchIndex < SEARCHMAX)
+	{
+		CALL ContactSearch(indexFolder, searchCount);
+	}		
+}
+
+FUNCTION PhonebookSearch(INTEGER searchCount)
+{
+	INTEGER indexReset;
+	INTEGER indexList;
+    
+	for(indexReset = 1 to SEARCHMAX)
+	{
+		searchResult[indexReset] = 0;
+	 	searchResult[indexReset] = 0;
+	}
+	searchIndex = 0;	
+	    
+	CALL FolderSearch(selectedFolder, searchCount);	
+
+	if(searchCount = globalSearchCount)
+	{
+		if(searchIndex = 0)
+		{
+			TotalRowsForSearch = 1;
+			Phonebook_Name[1] = "No Results";
+		}
+		else 
+		{
+			if(searchIndex = SEARCHMAX)
+			{
+				TotalRowsForSearch = SEARCHMAX + 1;
+				Phonebook_Name[SEARCHMAX + 1] = "More Entries Available. Refine Search.";
+				if(searchIndex = entriesPerPage)
+				{
+					Phonebook_Pages_Name[entriesPerPage] = "More Entries Available. Refine Search.";
+				}
+			}
+			else
+			{
+				TotalRowsForSearch = searchIndex;
+			}
+			for(indexList = 1 to searchIndex)
+			{
+				if(searchCount <> globalSearchCount)
+				{
+					break;
+				}
+				
+				if(len(phonebookEntry[searchResult[indexList]].folderId) > 0)
+				{
+					Phonebook_Name[indexList] = ISFOLDERTAG + phonebookEntry[searchResult[indexList]].entryName;
+					if(searchIndex = SEARCHMAX + 1)
+					{
+						if(indexList < entriesPerPage)
+						{
+							Phonebook_Pages_Name[entriesPerPage] = ISFOLDERTAG + phonebookEntry[searchResult[indexList]].entryName;
+						}
+					}
+					else
+					{
+						if(indexList < entriesPerPage)
+						{
+							Phonebook_Pages_Name[entriesPerPage] = ISFOLDERTAG + phonebookEntry[searchResult[indexList]].entryName;
+						}
+					}
+				}
+				else
+				{
+					Phonebook_Name[indexList] = phonebookEntry[searchResult[indexList]].entryName;
+					if(searchIndex = SEARCHMAX + 1)
+					{
+						if(indexList < entriesPerPage)
+						{
+							Phonebook_Pages_Name[entriesPerPage] = phonebookEntry[searchResult[indexList]].entryName;
+						}
+					}
+					else
+					{
+						if(indexList < entriesPerPage)
+						{
+							Phonebook_Pages_Name[entriesPerPage] = phonebookEntry[searchResult[indexList]].entryName;
+						}
+					}
+				}
+			}
+		}
+	}		
+}
+
+STRING_FUNCTION searchReplace(STRING data, STRING search, STRING replace)
+{
+	INTEGER pos;
+	pos = find(search, data);
+	while(pos>0)
+	{
+		SETSTRING(replace, pos, data);
+		data = mid(data, 1, pos) + mid(data, pos + 2, len(data));
+		pos = find(search, data);
+	}
+	if(DEBUGMODE) print("searchReplace\n");
+	return(data);
+}
+
+STRING_FUNCTION utf8ToISO8859(STRING data)
+{
+	data = searchReplace(data, "\xC3\xA6","æ");
+	data = searchReplace(data, "\xC3\xB8","ø");
+	data = searchReplace(data, "\xC3\xA5","å");
+	data = searchReplace(data, "\xC3\x86","Æ");
+	data = searchReplace(data, "\xC3\x98","Ø");
+	data = searchReplace(data, "\xC3\x85","Å");
+	data = searchReplace(data, "\xC3\xA9","é");
+	return (data);
+}  
+
+FUNCTION setSelectedMessagePromptResponse(INTEGER optionId){
+
+	if(optionId = 1) Message_Prompt_Option1_WasSelected = 1; else Message_Prompt_Option1_WasSelected = 0;
+	if(optionId = 2) Message_Prompt_Option2_WasSelected = 1; else Message_Prompt_Option2_WasSelected = 0;
+	if(optionId = 3) Message_Prompt_Option3_WasSelected = 1; else Message_Prompt_Option3_WasSelected = 0;
+	if(optionId = 4) Message_Prompt_Option4_WasSelected = 1; else Message_Prompt_Option4_WasSelected = 0;
+	if(optionId = 5) Message_Prompt_Option5_WasSelected = 1; else Message_Prompt_Option5_WasSelected = 0;
+}
+
+FUNCTION ResetMessagePrompt()
+{
+	Message_Prompt_IsActive = 0;
+	Message_Prompt_FeedbackId = "";
+	Message_Prompt_Title = "";
+	Message_Prompt_Text = "";
+	Message_Prompt_Option1_Text = "";
+	Message_Prompt_Option2_Text = "";
+	Message_Prompt_Option3_Text = "";
+	Message_Prompt_Option4_Text = "";
+	Message_Prompt_Option5_Text = "";
+	Message_Prompt_Option1_IsActive = 0;               
+	Message_Prompt_Option2_IsActive = 0;               
+	Message_Prompt_Option3_IsActive = 0;               
+	Message_Prompt_Option4_IsActive = 0;               
+	Message_Prompt_Option5_IsActive = 0; 
+}
+/* Gets whatever comes after token in text string */
+STRING_FUNCTION getStringAfterToken(STRING text, STRING token)
+{
+	INTEGER marker1, marker2;
+	STRING retVal[255];
+	if(find("\x0D\x0A", text) > 0)
+	{
+		text = mid(text, 1, find("\x0D\x0A", text)-1);
+	}
+	marker1 = find(token, text) + len(token);
+	marker2 = len(text) - (marker1-1);
+	retVal = mid(text, marker1, marker2);
+	return (retVal);
+}
+                  
+
+// Gets whatever comes after ":" in input string. Does NOT change the data string.
+STRING_FUNCTION getTagValueRemoveAmpersands(ByRef STRING data)
+{
+	INTEGER marker1, marker2;
+	STRING value[500];
+	marker1 = find(": \x22", data) + 3; // after ': "'
+	marker2 = find("\x22", data, marker1); // before last '"'
+	value = mid(data, marker1, marker2 - marker1);
+	return(value);
+}
+
+
+// Gets whatever comes after ":" in input string. Does NOT change the data string.
+STRING_FUNCTION getTagValue(ByRef STRING data)
+{
+	INTEGER marker1, marker2;
+	STRING value[500];
+	if(find(GHOSTTAG, data))
+	{
+		return(NOTAVAILABLETEXT);
+	}
+	marker1 = find(": ", data) + 2; // after ": "
+	marker2 = find("\x0D\x0A", data); // before "\x0D\x0A"
+	value = mid(data, marker1, marker2 - marker1);
+	return(value);
+}
+
+// Gets whatever is in between two ampersands ("). e.g. str = '"hello world"' will return 'hello world'. If it does not find two '"' then returns str.
+STRING_FUNCTION removeAmpersands(STRING str)
+{
+	INTEGER marker1, marker2;
+	STRING value[500];
+	if(left(str, 2) = "\x22\x22")
+	{
+		return ("");
+	}
+	marker1 = find("\x22", str)+1;
+	marker2 = find("\x22", str, marker1)- marker1;
+	if(marker2 > marker1)
+	{
+		return(mid(str, marker1, marker2));
+	}
+	else
+	{
+		return(str);
+	}
+}
+
+// Gets whatever is in between two ampersands (") after give token e.g. text = ' myvalue: "hello world"' will return 'hello world'. If it does not find myvalue and two '"' then returns ""
+STRING_FUNCTION getStringTokenValue(STRING text, STRING token)
+{
+	INTEGER marker1, marker2;
+	STRING value[500];
+	INTEGER endOfToken, startOfText, endOfText;
+	STRING retVal[255];
+	endOfToken = find(token, text) + len(token);
+	startOfText = find("\x22", text, endOfToken+1) + 1;
+	endOfText = find("\x22", text, startOfText);
+	if(endOfText > startOfText)
+	{
+		retVal = mid(text, startOfText, endOfText - startOfText);
+	}
+	return (retVal);
+}
+
+STRING_FUNCTION getCallRateFromText(STRING text)
+{
+	STRING retVal[20];
+	if(text = NOTAVAILABLETEXT)
+	{
+		return (text);
+	}
+	makeString(retVal, "%s Kbps", text);
+	return (retVal);
+}
+
+STRING_FUNCTION getDurationFromText(STRING text)
+{
+	STRING retVal[20];
+	if(text = NOTAVAILABLETEXT)
+	{
+		return (text);
+	}
+	makeString(retVal, "%s s", text);
+	return (retVal);
+}
+
+//Simulate call slots
+INTEGER_FUNCTION getCallSlotFromCallId(INTEGER CallId)
+{
+	INTEGER callNumber;
+	INTEGER i;
+	callNumber = 0;
+	for(i = 1 to MAXCALLS)
+	{
+		if(CallStatus_CallId[i] = CallId) // we have found a matching call Id, break for loop and return this callslot
+		{
+			callNumber = i;
+			break;
+		}
+		else
+		{
+			if(CallStatus_CallId[i] = 0 && callNumber = 0) // we have not yet found the call id, but we have found an empty slot, lets use this as the current call slot, but
+			{		// continue to search for one that matches further in the list. If not found then this will become the found call slot!
+				callNumber = i;
+			}
+		}
+	}
+	return (callNumber);
+}
+
+FUNCTION clearCall(INTEGER CallSlot)
+{
+	CallStatus_CallId[CallSlot] = 0;
+	if(isSignalDefined(CallStatus_Status[CallSlot]))
+	{
+		CallStatus_Status[CallSlot] = NOTAVAILABLETEXT;
+	}
+	if(isSignalDefined(CallStatus_Direction[CallSlot]))
+	{
+		CallStatus_Direction[CallSlot] = NOTAVAILABLETEXT;
+	}
+	if(isSignalDefined(CallStatus_CallType[CallSlot]))
+	{
+		CallStatus_CallType[CallSlot] = NOTAVAILABLETEXT;
+	}
+	if(isSignalDefined(CallStatus_TransmitCallRate[CallSlot]))
+	{
+		CallStatus_TransmitCallRate[CallSlot] = NOTAVAILABLETEXT;
+	}
+	if(isSignalDefined(CallStatus_ReceiveCallRate[CallSlot]))
+	{
+		CallStatus_ReceiveCallRate[CallSlot] = NOTAVAILABLETEXT;
+	}
+	if(isSignalDefined(CallStatus_RemoteSite[CallSlot]))
+	{
+		CallStatus_RemoteSite[CallSlot] = NOTAVAILABLETEXT;
+	}
+	if(isSignalDefined(CallStatus_Duration[CallSlot]))
+	{
+		CallStatus_Duration[CallSlot] = NOTAVAILABLETEXT;
+	}
+	CallStatus_IsActive[CallSlot] = 0;
+	CallStatus_IsConnected[CallSlot] = 0;
+}
+        
+
+FUNCTION resetCallList()
+{
+	INTEGER i;
+
+	for(i = 1 to MAXCALLS)
+	{
+		clearCall(i);
+	}
+	makeString(device_tx$, "xStatus Call\n");	
+}
+
+PUSH resyncronizeCallStatusList
+{
+	INTEGER i;
+
+	for(i = 1 to MAXCALLS)
+	{
+		clearCall(i);
+	}
+	makeString(device_tx$, "xStatus Call\n");	
+}
+   
+// Clears all internal caches and phonebook signals
+Function ResetPhonebookList()
+{
+	INTEGER i;
+
+	TotalRowsForSearch = 0;
+
+	for(i = 1 to MAXENTRIES)
+	{
+		if(isSignalDefined(Phonebook_Name[i]))
+		{
+			Phonebook_Name[i] = NOTAVAILABLETEXT;
+		}
+	}
+}
+
+// Reset the current selected phonebook item
+FUNCTION ResetSelectedPhonebookItem()
+{
+	SelectedPhonebook_Name = "";
+	SelectedPhonebook_Number = "";
+	SelectedPhonebook_CallRate = "";
+	SelectedIsFolder = 0;
+	SelectedIsContact = 0;
+}
+
+FUNCTION disconnectCall(INTEGER callSlot)
+{
+	makeString(device_tx$, "xCommand Call Disconnect CallId: %d\n", CallStatus_CallId[callSlot]);
+}
+
+FUNCTION validResponseFound()
+{
+	if(!Device_Online)	//if device is currently offline, set it to online and then wait 30 seconds before setting it offline again (this timer will be reset if we get a response)
+	{
+		Device_Online = 1;
+
+		WAIT(ONLINE_TIMEOUT, CommTimeout)
+		{
+			Device_Online = 0;
+		}		
+	}
+	else	//if the device is already online, just reset the timer
+	{
+		RetimeWait(ONLINE_TIMEOUT, CommTimeout);
+	}
+}
+
+FUNCTION parseCallFeedback()
+{
+	callId = atoi(remove(" ", Tempstring$)); // Return everything before blank and remove from tempstring to get the callid.
+	CallSlot = getCallSlotFromCallId(callId);
+	CallStatus_CallId[CallSlot] = callId;
+	callresponsetype = remove(":", Tempstring$);
+	if (callresponsetype = "(ghost=True):")
+	{
+		clearCall(CallSlot);					
+	}
+	else if (callresponsetype = "Status:")
+	{
+		CallStatus_IsActive[CallSlot] = 1;
+		callStatus = getTagValue(Tempstring$);
+		if(isSignalDefined(CallStatus_Status[CallSlot]))
+		{
+			CallStatus_Status[CallSlot] = callStatus;
+		}
+		if(isSignalDefined(CallStatus_IsConnected[CallSlot]))
+		{
+			if(callStatus = "Connected")
+			{
+				CallStatus_IsConnected[CallSlot] = 1;
+			}
+			else
+			{
+				CallStatus_IsConnected[CallSlot] = 0;
+			}
+		}
+	}
+	else if (callresponsetype = "RemoteNumber:")
+	{
+		if(isSignalDefined(CallStatus_RemoteSite[CallSlot]))
+		{
+			CallStatus_RemoteSite[CallSlot] = removeAmpersands(getTagValue(Tempstring$));;
+		}
+	}
+	/* Not yet available in TC 1.1 */
+	else if (callresponsetype = "Duration:")
+	{
+		if(isSignalDefined(CallStatus_Duration[CallSlot]))
+		{
+			CallStatus_Duration[CallSlot] = getDurationFromText(getTagValue(Tempstring$));
+		}
+	}
+	/* Not yet available in TC 1.1 */
+	else if (callresponsetype = "CallType:")
+	{
+		if(isSignalDefined(CallStatus_CallType[CallSlot]))
+		{
+			CallStatus_CallType[CallSlot] = getTagValue(Tempstring$);
+		}
+	}
+
+	else if (callresponsetype = "Direction:")
+	{
+		if(isSignalDefined(CallStatus_Direction[CallSlot]))
+		{
+			CallStatus_Direction[CallSlot] = getTagValue(Tempstring$);
+		}
+	}
+	else if (callresponsetype = "DisplayName:")
+	{
+		if(isSignalDefined(CallStatus_RemoteSite[CallSlot]))
+		{
+			gTempDisplayName = removeAmpersands(getTagValue(Tempstring$));
+            if(gTempDisplayName = "")
+			{
+				// Don't set it if it is blank, which it will be before connection
+			}
+			else
+			{
+				CallStatus_RemoteSite[CallSlot] = gTempDisplayName;
+			}
+		}
+	}
+	else if (callresponsetype = "CallbackNumber:")
+	{
+		if(isSignalDefined(CallStatus_RemoteSite[CallSlot]))
+		{
+			CallStatus_RemoteSite[CallSlot] = removeAmpersands(getTagValue(Tempstring$));
+		}
+	}
+	else if (callresponsetype = "TransmitCallRate:") // >= TC 2.x
+	{
+		if(isSignalDefined(CallStatus_TransmitCallRate[CallSlot]))
+		{
+			CallStatus_TransmitCallRate[CallSlot] = getCallRateFromText(getTagValue(Tempstring$));
+		}
+	}
+	else if (callresponsetype = "ReceiveCallRate:") // >= TC 2.x
+	{
+		if(isSignalDefined(CallStatus_ReceiveCallRate[CallSlot]))
+		{
+			CallStatus_ReceiveCallRate[CallSlot] = getCallRateFromText(getTagValue(Tempstring$));
+		}
+	}
+}
+
+FUNCTION DisplayPhonebookPages()
+{
+	INTEGER i, j;
+	INTEGER folderTemp;
+
+	folderTemp = selectedFolder;trace("DisplayPhonebookPages: folderTemp = %d: phonebookEntry[folderTemp].childCount = %d", folderTemp, phonebookEntry[folderTemp].childCount);
+	
+	if(phonebookEntry[folderTemp].firstChild = (MAXENTRIESINLOCALPHONEBOOK + 1) || nextAvailableDirEntry = 0)
+	{
+		iPhonebookPagesCurrentPage = 1;
+		phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+		iPhonebookPagesTotalPages = 1;
+		phonebookPagesTotalPages = iPhonebookPagesTotalPages;
+		Phonebook_Pages_Name[1] = "No Contacts";
+	}
+	else 
+	{
+		if((min(phonebookEntry[folderTemp].childCount, MAXENTRIES) mod entriesPerPage) <> 0)
+		{
+			iPhonebookPagesTotalPages = (min(phonebookEntry[folderTemp].childCount, MAXENTRIES) / entriesPerPage) + 1;
+		}
+		else
+		{
+			iPhonebookPagesTotalPages = min(phonebookEntry[folderTemp].childCount, MAXENTRIES) / entriesPerPage;
+		}
+		phonebookPagesTotalPages = iPhonebookPagesTotalPages;
+		for(i = 1 to entriesPerPage)
+		{        
+			if((phonebookEntry[folderTemp].childCount > searchDelayStart) && ((i mod searchDelayMod) = 0))
+			{
+				delay(searchDelay);
+			}
+			if(folderTemp <> selectedFolder)
+			{
+				return;
+			}
+			j = (iPhonebookPagesCurrentPage - 1) * entriesPerPage + i;
+			if(len(phonebookEntry[j + phonebookEntry[folderTemp].firstChild - 1].folderID) > 0)
+			{
+				Phonebook_Pages_Name[i] = ISFOLDERTAG + phonebookEntry[j + phonebookEntry[folderTemp].firstChild - 1].entryName;
+			}
+			else
+			{
+				Phonebook_Pages_Name[i] = phonebookEntry[j + phonebookEntry[folderTemp].firstChild - 1].entryName;
+			}
+		}
+	}
+}
+
+FUNCTION DisplayPhonebook()
+{
+	INTEGER i;
+	INTEGER folderTemp;
+
+	folderTemp = selectedFolder;
+	
+	if(phonebookEntry[folderTemp].firstChild = (MAXENTRIESINLOCALPHONEBOOK + 1) || nextAvailableDirEntry = 0)
+	{
+		TotalRowsForSearch = 1;
+		Phonebook_Name[1] = "No Contacts";
+	}
+	else 
+	{
+		TotalRowsForSearch = min(phonebookEntry[folderTemp].childCount, MAXENTRIES);
+		for(i = 1 to TotalRowsForSearch)
+		{                                                         
+			if((phonebookEntry[folderTemp].childCount > searchDelayStart) && ((i mod searchDelayMod) = 0))
+			{
+				delay(searchDelay);
+			}
+			if(folderTemp <> selectedFolder)
+			{
+				return;
+			}
+			
+			if(len(phonebookEntry[i + phonebookEntry[folderTemp].firstChild - 1].folderID) > 0)
+			{
+				Phonebook_Name[i] = ISFOLDERTAG + phonebookEntry[i + phonebookEntry[folderTemp].firstChild - 1].entryName;
+			}
+			else
+			{
+				Phonebook_Name[i] = phonebookEntry[i + phonebookEntry[folderTemp].firstChild - 1].entryName;
+			}
+		}
+	}
+}
+                                             
+// Run the command for getting phonebook (same for local or corporate)
+Function runSearchPhonebook()
+{
+	INTEGER i;
+	INTEGER nextEntryToDisplay;
+	STRING path[125];
+	STRING searchString[81];
+	INTEGER firstEntryToDisplay;// lastEntryToDisplay;
+
+	firstEntryToDisplay = (ENTRIESPERREQUEST * internalEntryOffSet);
+	if(nextFolderEntry <> 0 && nextFolderEntry < MAXENTRIESINLOCALPHONEBOOK)
+	{
+		Phonebook_Searchresult_Is_From_Subfolder = 1;
+		MakeString(path, " FolderId: \x22%s\x22 ", phonebookEntry[nextFolderEntry].folderId);
+	}
+	else
+	{
+		Phonebook_Searchresult_Is_From_Subfolder = 0;
+		path = "";
+	}
+
+	//	Prevent requesting more information if it is already being received
+	if(receivingPhonebook = 0)	//v2.0
+	{
+		receivingPhonebook = 1;
+		previousFoundContactItem = 0;
+		makeString(searchString, " SearchString: \"%s\" ", sSearchText);
+		makeString(device_tx$, "xcommand Phonebook Search PhonebookType:%s Limit:%d Offset: %d %s%s Recursive:False\n", phoneBookType, ENTRIESPERREQUEST, firstEntryToDisplay, path, searchString);
+	
+		wait(1000, receivePhonebook)	//v2.0
+		{
+			receivingPhonebook = 0;
+			if(phonebookParseFailure < FAILURESALLOWED)
+			{
+				GenerateUserWarning("Directory Download Timed Out. (Attempt: %d) (Folder Name: %s) (FolderID %s)", (phonebookParseFailure + 1), phonebookEntry[nextFolderEntry].entryName, phonebookEntry[nextFolderEntry].folderId);
+				phonebookParseFailure = phonebookParseFailure + 1;
+				nextAvailableDirEntry = phonebookEntry[nextFolderEntry].firstChild + (ENTRIESPERREQUEST * internalEntryOffSet) - 1;
+				phonebookEntry[nextFolderEntry].childCount = ENTRIESPERREQUEST * internalEntryOffSet;
+				CALL runSearchPhonebook();
+			}
+			else
+			{
+				GenerateUserError("Directory Download Timed Out. (Folder Name: %s) (FolderID: %s) (Entries Expected: %d) (Entries Receive: %d)", phonebookEntry[nextFolderEntry].entryName, phonebookEntry[nextFolderEntry].folderId, phonebookLevelTotalRows, phonebookEntry[nextFolderEntry].childCount);
+				phonebookParseFailure = 0;
+				if (phonebookEntry[nextFolderEntry].childCount = 0)//this means we got no results from this directory on our first search attempt
+				{
+					phonebookEntry[nextFolderEntry].firstChild = MAXENTRIESINLOCALPHONEBOOK + 1;	//indicate that the last folder was empty
+				}
+				internalEntryOffset = 0;
+				do
+				{
+					nextFolderEntry = nextFolderEntry + 1;
+				}
+				until(nextFolderEntry >= MAXENTRIESINLOCALPHONEBOOK || (len(phonebookEntry[nextFolderEntry].folderID) > 0));
+				if(nextFolderEntry < MAXENTRIESINLOCALPHONEBOOK)
+				{
+					phonebookEntry[nextFolderEntry].firstChild = nextAvailableDirEntry + 1;
+					CALL runSearchPhonebook();
+				}
+				else
+				{
+					selectedFolder = 0;
+					DirectoryOnTopLevel = 1;
+					GenerateUserNotice("Directory Download Finished. (Entries: %d) Last Folder Failed. (Folder Name: %s) (FolderID: %s)", nextAvailableDirEntry, phonebookEntry[nextFolderEntry].entryName, phonebookEntry[nextFolderEntry].folderId);
+					CALL DisplayPhonebook();
+					iPhonebookPagesCurrentPage = 1;
+					phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+					CALL DisplayPhonebookPages();
+					DirectoryDownloadBusy = 0;                                                                                                                                                                                                   
+				}
+			}
+		}
+	}
+}
+
+FUNCTION processFeedback()
+{
+	while(Semaphore)
+	{
+		Tempstring$ = gather("\x0D\x0A", device_rx$);
+
+		//check for common responses first
+		if((TempString$ = "OK\x0D\x0A") || (TempString$ = "\x0D\x0A"))
+		{
+			CALL validResponseFound();
+		}
+		else if ((TempString$ = "** end\x0D\x0A"))
+		{
+			CALL validResponseFound();
+			if(receivingPhonebook = 1)
+			{
+				if(nextAvailableDirEntry = (phonebookEntry[nextFolderEntry].firstChild + (ENTRIESPERREQUEST * internalEntryOffSet) + ENTRIESPERREQUEST - 1) || nextAvailableDirEntry = (phonebookEntry[nextFolderEntry].firstChild + phonebookLevelTotalRows - 1))
+				{
+					cancelwait(receivePhonebook);
+					phonebookParseFailure = 0;
+					receivingPhonebook = 0;
+	
+					if(nextAvailableDirEntry >= MAXENTRIESINLOCALPHONEBOOK)
+					{
+						selectedFolder = 0;
+						DirectoryOnTopLevel = 1;
+						GenerateUserNotice("Directory Download Finished. Found Max Entries. (Entries: %d)", nextAvailableDirEntry);						
+						CALL DisplayPhonebook();
+						iPhonebookPagesCurrentPage = 1;
+						phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+						CALL DisplayPhonebookPages();
+						DirectoryDownloadBusy = 0;
+					}
+					else if(nextAvailableDirEntry < (phonebookEntry[nextFolderEntry].firstChild + phonebookLevelTotalRows - 1))	//Not done downloading current folder, download next chunk
+					{
+						internalEntryOffSet = internalEntryOffSet + 1;
+						CALL runSearchPhonebook();
+					}                                                                                                                                                                   
+					else if (nextAvailableDirEntry >= (phonebookEntry[nextFolderEntry].firstChild + phonebookLevelTotalRows - 1))	//Download next folder
+					{
+						if ((phonebookLevelTotalRows = 0) && (internalEntryOffset = 0))	//this means we got no results from this directory on our first search attempt
+						{
+							phonebookEntry[nextFolderEntry].firstChild = MAXENTRIESINLOCALPHONEBOOK + 1;	//indicate that the last folder was empty
+						}
+						internalEntryOffset = 0;	
+						do
+						{
+							nextFolderEntry = nextFolderEntry + 1;
+						}
+						until(nextFolderEntry = MAXENTRIESINLOCALPHONEBOOK || (len(phonebookEntry[nextFolderEntry].folderID) > 0));
+	
+						if(nextFolderEntry < MAXENTRIESINLOCALPHONEBOOK)
+						{
+							phonebookEntry[nextFolderEntry].firstChild = nextAvailableDirEntry + 1;
+							CALL runSearchPhonebook();
+						}
+						else if(nextFolderEntry >= MAXENTRIESINLOCALPHONEBOOK)
+						{
+							selectedFolder = 0;
+							DirectoryOnTopLevel = 1;
+							GenerateUserNotice("Directory Download Finished. (Entries: %d)", nextAvailableDirEntry);
+							CALL DisplayPhonebook();
+							iPhonebookPagesCurrentPage = 1;
+							phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+							CALL DisplayPhonebookPages();
+							DirectoryDownloadBusy = 0;
+						}
+					}
+				}
+			}
+		}
+		else //if a common response isn't found, now we start parsing for real
+		{
+			gTempSegment = remove("\x20", TempString$);	//remove everything up to the first space
+
+			if (gTempSegment = "*s ")	//handle all responses that start with '*s'
+			{
+				gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+
+				if((gTempSegment = "Audio ") || (gTempSegment = "Video ") || (gTempSegment = "Preset ") || (gTempSegment = "Standby "))
+				{
+					From_Device_StatusChanges = gTempSegment + TempString$;
+				}
+				else if(gTempSegment = "Call ")	//handle "*s Call" responses
+				{
+					CALL parseCallFeedback();	//handle this separately so it doesn't need to be instantiated every time
+					CALL validResponseFound();
+				}
+				else if (gTempSegment = "Conference ")	//handle "*s Conference" responses
+				{
+					CALL validResponseFound();
+                    From_Device_StatusChanges = gTempSegment + TempString$;
+					if(left(TempString$, 4) = "Site")
+					{
+						if(find("Capabilities Presentation:", Tempstring$) > 0) // TC 2.1+
+						{
+							callId = atoi(Tempstring$);
+							CallSlot = getCallSlotFromCallId(callId);
+							gTempValue = getStringTokenValue(Tempstring$, "Presentation:");
+							if(gTempValue = "True")
+							{
+								CallStatus_SupportsPresentation[CallSlot] = 1;
+							}
+							else
+							{
+								CallStatus_SupportsPresentation[CallSlot] = 0;
+							}
+						}
+					}
+				}
+				else if (gTempSegment = "SystemUnit ")	//handle "*s SystemUnit" responses
+				{
+					CALL validResponseFound();	//this will also indicate the system is online if we get a "*s SystemUnit Uptime: " response!
+					gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+					if(gTempSegment = "State ")	//handle "*s SystemUnit State" responses
+					{
+						gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+
+						if (gTempSegment = "NumberOfInProgressCalls: ")	//handle "*s SystemUnit State NumberOfInProgressCalls:"
+						{
+							if (TempString$ = "0\x0D\x0A")	//if this is all that's left, assume we have no in-progress calls, otherwise ignore the value
+							{
+								signalIncomingCall = 0;
+								incomingCallNumber = "";
+							}
+						}
+						else if (gTempSegment = "NumberOfActiveCalls: ") //handle "*s SystemUnit State NumberOfActiveCalls:"
+						{
+							NumberOfActiveCalls = atoi(TempString$);  //at this point, all that should be left in TempString$ is the number of calls and a CR/LF
+						}
+					}
+					else if(gTempSegment = "Software ")
+					{
+						gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+						
+						if(gTempSegment = "Version: ")
+						{
+							getSystemSoftwareVersion = left(Tempstring$, len(TempString$) - 2);//All that should be left in TempString$ is the version and a CR/LF
+						}
+					}
+				}
+				else if (gTempSegment = "H323 ")	//handle "*s H323" responses
+				{
+					CALL validResponseFound();
+					gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+					
+					if(gTempSegment = "GateKeeper ")
+					{
+						gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+						
+						if(gTempSegment = "Status: ")
+						{
+							getGatekeeperStatus = left(Tempstring$, len(TempString$) - 2);//All that should be left in TempString$ is the gatekeeper status and a CR/LF
+						}
+						else if(gTempSegment = "Address: ")
+						{
+							getGatekeeperNetworkAddress = left(Tempstring$, len(TempString$) - 2);//All that should be left in TempString$ is the gatekeeper address and a CR/LF
+						}
+					}
+				}
+				else if (gTempSegment = "Network ")	//handle "*s Network" responses
+				{
+					CALL validResponseFound();
+					gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+					
+					if(gTempSegment = "1 ")
+					{
+						gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+						
+						if(gTempSegment = "IPv4 ")
+						{
+							gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+							
+							if(gTempSegment = "Address: ")
+							{
+								getSystemNetworkAddress = left(Tempstring$, len(TempString$) - 2);//All that should be left in TempString$ is the system network address and a CR/LF
+							}
+						}
+					}
+				}
+			}
+			else if (gTempSegment = "*e ")	//handle all responses that start with '*e'
+			{
+				gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+
+				if(gTempSegment = "IncomingCallIndication ") // TC 2.0+
+				{
+					CALL validResponseFound();
+					incomingCallNumber = getStringTokenValue(Tempstring$, "DisplayNameValue:");
+					signalIncomingCall = 1;
+				}
+				else if(gTempSegment = "SString ")
+				{
+					CALL validResponseFound();
+					SString_Receive_Text = getTagValueRemoveAmpersands(Tempstring$);
+				}
+				else if(gTempSegment = "TString: ")
+				{
+					CALL validResponseFound();
+					TString_Receive_Text = getTagValueRemoveAmpersands(Tempstring$);
+				}
+				else if(gTempSegment = "Message ")
+				{
+					CALL validResponseFound();
+					gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+					
+					if(gTempSegment = "Prompt ")
+					{
+						gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+						
+						if((len(gTempSegment) = 0) && (find("Clear", TempString$) > 0))
+						{
+							ResetMessagePrompt();
+						}
+						else if(gTempSegment = "Display ")
+						{
+							gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+							if(gTempSegment = "Title: ")
+							{
+								Message_Prompt_Title = getTagValueRemoveAmpersands(Tempstring$);
+							}
+							else if(gTempSegment = "Text: ")
+							{
+								Message_Prompt_Title = getTagValueRemoveAmpersands(Tempstring$);
+								Message_Prompt_IsActive = 1;
+							}
+							else if(gTempSegment = "FeedbackID: ")
+							{
+								Message_Prompt_FeedbackId = getTagValueRemoveAmpersands(Tempstring$);
+							}
+							else if(gTempSegment = "Option.1: ")
+							{
+								Message_Prompt_Option1_Text = getTagValueRemoveAmpersands(Tempstring$);
+								Message_Prompt_Option1_IsActive = 1;               
+							}
+							else if(gTempSegment = "Option.2: ")
+							{
+								Message_Prompt_Option2_Text = getTagValueRemoveAmpersands(Tempstring$);
+								Message_Prompt_Option2_IsActive = 1;               
+							}
+							else if(gTempSegment = "Option.3: ")
+							{
+								Message_Prompt_Option3_Text = getTagValueRemoveAmpersands(Tempstring$);
+								Message_Prompt_Option3_IsActive = 1;               
+							}
+							else if(gTempSegment = "Option.4: ")
+							{
+								Message_Prompt_Option4_Text = getTagValueRemoveAmpersands(Tempstring$);
+								Message_Prompt_Option4_IsActive = 1;               
+							}
+							else if(gTempSegment = "Option.5: ")
+							{
+								Message_Prompt_Option5_Text = getTagValueRemoveAmpersands(Tempstring$);
+								Message_Prompt_Option5_IsActive = 1;               
+							}
+						}
+						else if(gTempSegment = "Response ")
+						{
+							gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+							if(gTempSegment = "OptionId: ")
+							{
+								setSelectedMessagePromptResponse(atoi(Tempstring$));
+							}
+						}
+						else if((gTempSegment = "Cleared ") || (gTempSegment = "Clear "))
+						{
+							ResetMessagePrompt();
+						}
+					}
+					else if(gTempSegment = "Alert ")
+					{
+						if(find("Display Text:", TempString$) > 0)
+						{
+							Message_Alert_Text = getTagValueRemoveAmpersands(Tempstring$);
+							Message_Alert_IsActive = 1;
+						}
+						else if(find("Cleared", TempString$) > 0)
+						{
+							Message_Alert_Text = "";
+							Message_Alert_IsActive = 0;
+						}
+					}
+				}
+			}
+			else if (gTempSegment = "*c ")	//handle all responses that start with '*c'
+			{
+				gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+
+				if(gTempSegment = "xConfiguration ") // TC 2.0+
+				{
+					CALL validResponseFound();
+					gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+
+					if((gTempSegment = "Conference ") || (gTempSegment = "Standby "))
+					{
+						From_Device_ConfigurationChanges = gTempSegment + Tempstring$;
+					}
+					else if(gTempSegment = "Audio ") // TC 2.0+
+					{
+						getVolumeLevel = atoi(Tempstring$);
+					}
+					else if(gTempSegment = "SystemUnit ") // TC 2.0+
+					{
+						gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+						
+						if(gTempSegment = "Name: ")
+						{
+							getSystemName = left(Tempstring$, len(TempString$) - 2);
+						}
+					}
+					else if(gTempSegment = "H323 ") // TC 2.0+
+					{
+						gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+						
+						if(gTempSegment = "Profile ")
+						{
+							gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+							
+							if(gTempSegment = "1 ")
+							{
+								gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+								
+								if(gTempSegment = "H323Alias")
+								{
+									gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+									
+									if(gTempSegment = "ID: ")
+									{
+										getSystemH323ID = left(Tempstring$, len(TempString$) - 2);
+									}
+									else if(gTempSegment = "E164: ")
+									{
+										getSystemE164Alias = left(Tempstring$, len(TempString$) - 2);
+									}
+								}
+								else if(gTempSegment = "Gatekeeper ")
+								{
+									gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+									
+									if(gTempSegment = "Discovery ")
+									{
+										getGatekeeperRegistrationMode = getTagValue(Tempstring$);
+									}
+								}
+							}
+						}
+					}
+					else if(gTempSegment = "SIP ") // TC 2.0+
+					{
+						gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+						
+						if(gTempSegment = "Profile ")
+						{
+							gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+							
+							if(gTempSegment = "1 ")
+							{
+								gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+								
+								if(gTempSegment = "URI: ")
+								{
+									getSystemSIPURI = left(Tempstring$, len(TempString$) - 2);
+								}
+							}
+						}
+					}
+					else if(gTempSegment = "Video ") // TC 2.0+
+					{
+						From_Device_ConfigurationChanges = gTempSegment + Tempstring$;
+						gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+						
+						if(gTempSegment = "Input ")
+						{
+							gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+							
+							if(gTempSegment = "Source ")
+							{
+								gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+								
+								inputSourceItem = atoi(gTempSegment);
+								gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+								
+								if(gTempSegment = "Name: ")
+								{
+									Input_Source_Name[inputSourceItem] = getTagValueRemoveAmpersands(Tempstring$);
+								}
+							}
+						}
+					}
+				}
+			}
+			else if (gTempSegment = "*r ")	//handle all responses that start with '*r'
+			{
+				CALL validResponseFound();
+				retimewait(1000, receivePhonebook);
+				gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+				if(gTempSegment = "BootResult ")
+				{
+					if(TempString$ = "(status=OK):\x0D\x0A")
+					{
+						pulse(10, getRebootCodec_Is_In_Progress);
+					}
+				}
+				else if(gTempSegment = "ResultSet ")
+				{
+                    gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+					if(gTempSegment = "Contact ")
+					{
+						if(nextAvailableDirEntry = 0)
+						{
+							CurrentFirstPhonebookItemNumber = internalEntryOffSet * ENTRIESPERREQUEST + 1;
+						}
+						ContactItem = atoi(remove(" ", Tempstring$)); // get entry item, the X in: "*r ResultSet Contact X"
+
+						//Lets see if this contact has already been found.		
+						if(previousFoundContactItem <> ContactItem)
+						{
+							nextAvailableDirEntry = nextAvailableDirEntry + 1;
+							nextAvailableContactMethod = nextAvailableContactMethod + 1;
+							if(nextAvailableDirEntry > MAXENTRIESINLOCALPHONEBOOK)
+							{
+								GenerateUserNotice("Directory Exceeds Module's Max Entries. (Max Entries: %d)", MAXENTRIESINLOCALPHONEBOOK);
+								nextAvailableDirEntry=MAXENTRIESINLOCALPHONEBOOK;
+								clearbuffer(device_rx$);
+								cancelwait(receivePhonebook);
+								CALL DisplayPhonebook();
+								iPhonebookPagesCurrentPage = 1;
+								phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+								CALL DisplayPhonebookPages();
+								DirectoryDownloadBusy = 0;
+								receivingPhonebook = 0;
+								Break;
+							}
+							if(nextAvailableContactMethod > MAXCONTACTS)
+							{
+								GenerateUserNotice("Directory Exceeds Module's Max Contact Methods. (Max Entries: %d)", MAXCONTACTS);
+								nextAvailableContactMethod=MAXCONTACTS;
+								clearbuffer(device_rx$);
+								cancelwait(receivePhonebook);
+								CALL DisplayPhonebook();
+								iPhonebookPagesCurrentPage = 1;
+								phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+								CALL DisplayPhonebookPages();
+								DirectoryDownloadBusy = 0;
+								receivingPhonebook = 0;
+								Break;
+							}
+							CurrentLastPhonebookItemNumber = CurrentLastPhonebookItemNumber + 1; // we found new item - increment last number of findings
+							previousFoundContactMethod = 1;
+							phonebookEntry[nextAvailableDirEntry].firstChild = nextAvailableContactMethod;
+							phonebookEntry[nextFolderEntry].childCount = phonebookEntry[nextFolderEntry].childCount + 1;
+							phonebookEntry[nextAvailableDirEntry].parentFolder = nextFolderEntry;
+
+						}
+						gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+						if(gTempSegment = "Name: ")
+						{
+							phonebookEntry[nextAvailableDirEntry].entryName = utf8ToISO8859(RemoveAmpersands(Tempstring$));
+						}
+						else if(gTempSegment = "ContactMethod ")	//v2.0
+						{
+							gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+							ContactMethod = atoi(gTempSegment);
+							if(previousFoundContactMethod <> ContactMethod)
+							{
+                                previousFoundContactMethod = ContactMethod;
+								nextAvailableContactMethod = nextAvailableContactMethod + 1;
+ 							}
+							gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+							
+							if(gTempSegment = "Number: ")
+							{
+								phonebookEntry[nextAvailableDirEntry].childCount = phonebookEntry[nextAvailableDirEntry].childCount + 1;
+								contact[nextAvailableContactMethod].contactNumber = removeAmpersands(Tempstring$);
+							}
+							else if(gTempSegment = "Protocol: ")
+							{
+								if(left(Tempstring$,3) = "SIP")
+								{
+									contact[nextAvailableContactMethod].callType = contact[nextAvailableContactMethod].callType | 0x02;
+								}
+							}
+							else if(gTempSegment = "CallRate: ")
+							{
+								contact[nextAvailableContactMethod].callRate = removeAmpersands(Tempstring$);
+							}
+						}
+						previousFoundContactItem = ContactItem;
+					}
+					else if(gTempSegment = "Folder ")
+					{
+						if(nextAvailableDirEntry = 0)
+						{
+							CurrentFirstPhonebookItemNumber = internalEntryOffSet * ENTRIESPERREQUEST + 1;
+						}
+						ContactItem = atoi(remove(" ", Tempstring$)); // get entry item, the X in: "*r ResultSet Contact X"
+						if(previousFoundContactItem <> ContactItem + MAXENTRIESINLOCALPHONEBOOK)	//	V2.0 + MAXENTRIESINLOCALPHONEBOOK to Fix Bug Where Folder 1 is Overwritten by Contact1
+						{
+							nextAvailableDirEntry = nextAvailableDirEntry + 1;
+							phonebookEntry[nextFolderEntry].childCount = phonebookEntry[nextFolderEntry].childCount + 1;	//v2.0
+							if(nextAvailableDirEntry > MAXENTRIESINLOCALPHONEBOOK)
+							{
+								GenerateUserNotice("Directory Exceeds Module's Max Entries. (Max Entries: %d)", MAXENTRIESINLOCALPHONEBOOK);
+								nextAvailableDirEntry=MAXENTRIESINLOCALPHONEBOOK;
+								clearbuffer(device_rx$);
+								cancelwait(receivePhonebook);
+								CALL DisplayPhonebook();
+								iPhonebookPagesCurrentPage = 1;
+								phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+								CALL DisplayPhonebookPages();
+								DirectoryDownloadBusy = 0;
+								receivingPhonebook = 0;
+								Break;
+							}
+							CurrentLastPhonebookItemNumber = CurrentLastPhonebookItemNumber +1; // we found new item - increment last number of findings
+							phonebookEntry[nextAvailableDirEntry].parentFolder = nextFolderEntry;
+						}
+						phonebookEntry[nextAvailableDirEntry].firstChild = MAXENTRIESINLOCALPHONEBOOK + 1;
+						phonebookEntryType = mid(Tempstring$, 1, find(": ", Tempstring$)-1);
+						if(phonebookEntryType = "Name")
+						{
+							phonebookEntry[nextAvailableDirEntry].entryName = utf8ToISO8859(getTagValueRemoveAmpersands(Tempstring$));
+						}
+						else if (phonebookEntryType = "FolderId")
+						{
+							phonebookEntry[nextAvailableDirEntry].folderID = getTagValueRemoveAmpersands(Tempstring$);
+						}	
+						previousFoundContactItem = ContactItem + MAXENTRIESINLOCALPHONEBOOK;
+					}
+					else if(gTempSegment = "ResultInfo ")
+					{
+	                    gTempSegment = remove("\x20", TempString$);	//remove everything up to the next space
+	                    
+	                    if(gTempSegment = "TotalRows: ")
+	                    {
+							phonebookLevelTotalRows = atoi(Tempstring$);
+						}
+					}
+				}
+			}
+		}
+	}
+	Semaphore = 0;
+}
+
+FUNCTION ResetEverything()
+{
+	INTEGER i;
+
+	TotalRowsForSearch = 0;
+	phonebookLevelTotalRows = 0;
+	internalEntryOffSet = 0;
+	selectedFolder = 0;
+	DirectoryOnTopLevel = 1;
+	Phonebook_Searchresult_Is_From_Subfolder = 0;	
+	nextAvailableDirEntry = 0;
+	nextAvailableContactMethod = 0;
+	nextFolderEntry = 0;
+	previousFoundContactItem = 0;
+ 	CurrentFirstPhonebookItemNumber = 0;
+	CurrentLastPhonebookItemNumber = 0;
+	Phonebook_Selected_Folder_Name = "";
+	ResetMessagePrompt();
+	iPhonebookPagesCurrentPage = 0;
+	phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+	iPhonebookPagesTotalPages = 0;
+	phonebookPagesTotalPages = iPhonebookPagesTotalPages;
+
+	for(i = 1 to entriesPerPage)
+	{
+		Phonebook_Pages_Name[i] = "";
+	}
+	
+	for(i = 0 to MAXENTRIESINLOCALPHONEBOOK)
+	{
+		phonebookEntry[i].parentFolder = 0;
+		phonebookEntry[i].firstChild = 0;
+		CLEARBUFFER (phonebookEntry[i].entryName);
+		CLEARBUFFER (phonebookEntry[i].folderId);
+		phonebookEntry[i].childCount = 0;
+		
+	}
+	for(i = 0 to MAXCONTACTS)
+	{
+		contact[i].callType = 0;
+		CLEARBUFFER (contact[i].contactNumber);
+		CLEARBUFFER (contact[i].callRate);
+	}
+	phonebookEntry[0].firstChild = 1;
+}
+
+
+
+FUNCTION SetPhonebookOffset(INTEGER newOffset)
+{
+	if(internalEntryOffSet != newOffset)
+	{
+	 	internalEntryOffSet = newOffset; 
+	}
+	CurrentFirstPhonebookItemNumber = newOffset * entriesPerPage;
+	CurrentLastPhonebookItemNumber = CurrentFirstPhonebookItemNumber;trace("SetPhonebookOffset: searchActive = %d", searchActive);
+	if((searchActive = 0) && ((newOffset + 1) <= phonebookPagesTotalPages))
+	{trace("SetPhonebookOffset: newOffset = %d", newOffset);
+		iPhonebookPagesCurrentPage = newOffset + 1;trace("SetPhonebookOffset: searchActive = %d: iPhonebookPagesCurrentPage = %d", searchActive, iPhonebookPagesCurrentPage);
+		phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+		CALL DisplayPhonebookPages();
+	}
+}
+/*******************************************************************************************
+  Event Handlers
+*******************************************************************************************/       
+/* Send volume command to device */
+CHANGE setVolumeLevel
+{
+	MakeString(device_tx$, "xConfiguration Audio Volume: %s\n", itoa(setVolumeLevel));
+}
+         
+THREADSAFE CHANGE device_rx$
+{
+	if(Semaphore = 0)
+	{
+		Semaphore = 1;
+    	CALL processFeedback();
+	}
+}
+
+CHANGE pagesSelectedEntryNumber
+{
+	INTEGER	i;
+	INTEGER	uriEntriesFound;
+	INTEGER	foundH323;
+	INTEGER	foundSIP;
+	INTEGER iEntryNumber;
+
+	uriEntriesFound = 0;
+	foundH323 = 0;
+	foundSIP = 0;
+	iEntryNumber = pagesSelectedEntryNumber + (entriesPerPage * (iPhonebookPagesCurrentPage - 1));
+
+	if(DirectoryDownloadBusy = 0)//SearchIsActive = 0)
+	{
+		call ResetSelectedPhonebookItem(); // clear what was previously selected
+	// check that there exists an item on the selected entry
+		if(searchActive = 1)
+		{
+			selectedEntry = searchResult[iEntryNumber];
+		}
+		else
+		{
+			selectedEntry = iEntryNumber + phonebookEntry[selectedFolder].firstChild - 1;
+		}
+		if((iEntryNumber > 0) && (phonebookEntry[selectedFolder].firstChild <= MAXENTRIESINLOCALPHONEBOOK) && (len(phonebookEntry[selectedEntry].entryName) > 0))
+		{
+			if(len(phonebookEntry[selectedEntry].folderId) > 0)
+			{
+					// the user has selected a folder in the phonebook listing. We therefore need to get the content of this
+					// folder and repopulate the lists.
+				selectedFolder = selectedEntry;
+				DirectoryOnTopLevel = 0;
+				Phonebook_Selected_Folder_Name = phonebookEntry[selectedFolder].entryName;
+				SelectedIsFolder = 1;
+			    Phonebook_Search_Text = "";
+				call DisplayPhonebook();
+				iPhonebookPagesCurrentPage = 1;
+				phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+				CALL DisplayPhonebookPages();
+			}
+			else
+			{
+				// copy values from the cache to the selected phonebook details signals;
+				SelectedPhonebook_Name = phonebookEntry[selectedEntry].entryName;
+
+				if(phonebookEntry[selectedEntry].childCount = 1)
+				{
+					selectedEntryMethod = phonebookEntry[selectedEntry].firstChild;
+				}
+				else
+				{
+					
+					for(i = phonebookEntry[selectedEntry].firstChild to (phonebookEntry[selectedEntry].firstChild + phonebookEntry[selectedEntry].childCount - 1))
+					{
+						if(find("@", contact[i].contactNumber) > 0)
+						{
+							selectedEntryMethod = i;
+							uriEntriesFound = uriEntriesFound + 1;
+							if(contact[i].callType & 0x02 && foundSIP = 0)
+							{
+								foundSIP = i;
+							}
+							else if(contact[i].callType & 0x00 && foundH323 = 0)
+							{
+								foundH323 = i;
+							}
+						}
+					}
+					if(uriEntriesFound = 0)
+					{
+						for(i = phonebookEntry[selectedEntry].firstChild to (phonebookEntry[selectedEntry].firstChild + phonebookEntry[selectedEntry].childCount - 1))
+						{
+							if(contact[i].callType & 0x02 && foundSIP = 0)
+							{
+								foundSIP = i;
+							}
+							else if(contact[i].callType & 0x00 && foundH323 = 0)
+							{
+								foundH323 = i;
+							}
+						}
+					}
+					if(uriEntriesFound <> 1)
+                    {
+						if(defaultCallTypeSIP = 1 || foundH323 = 0)
+						{
+							selectedEntryMethod = foundSIP;		
+						}
+						else
+						{
+							selectedEntryMethod = foundH323;
+						}
+					}
+				}
+				SelectedPhonebook_Number = contact[selectedEntryMethod].contactNumber;
+				SelectedPhonebook_CallRate = contact[selectedEntryMethod].callRate;
+				
+				SelectedIsContact = 1;
+			}
+		}
+	}
+}
+
+CHANGE selectedEntryNumber
+{
+	INTEGER	i;
+	INTEGER	uriEntriesFound;
+	INTEGER	foundH323;
+	INTEGER	foundSIP;
+
+	uriEntriesFound = 0;
+	foundH323 = 0;
+	foundSIP = 0;
+
+	if(DirectoryDownloadBusy = 0)//SearchIsActive = 0)
+	{
+		call ResetSelectedPhonebookItem(); // clear what was previously selected
+	// check that there exists an item on the selected entry
+		if(searchActive = 1)
+		{
+			selectedEntry = searchResult[selectedEntryNumber];
+		}
+		else
+		{
+			selectedEntry = selectedEntryNumber + phonebookEntry[selectedFolder].firstChild - 1;
+		}
+		if((selectedEntryNumber > 0) && (phonebookEntry[selectedFolder].firstChild <= MAXENTRIESINLOCALPHONEBOOK) && (len(phonebookEntry[selectedEntry].entryName) > 0))
+		{
+			if(len(phonebookEntry[selectedEntry].folderId) > 0)
+			{
+					// the user has selected a folder in the phonebook listing. We therefore need to get the content of this
+					// folder and repopulate the lists.
+				selectedFolder = selectedEntry;
+				DirectoryOnTopLevel = 0;
+				Phonebook_Selected_Folder_Name = phonebookEntry[selectedFolder].entryName;
+				SelectedIsFolder = 1;
+			    Phonebook_Search_Text = "";
+				call DisplayPhonebook();
+				iPhonebookPagesCurrentPage = 1;
+				phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+				CALL DisplayPhonebookPages();
+			}
+			else
+			{
+				// copy values from the cache to the selected phonebook details signals;
+				SelectedPhonebook_Name = phonebookEntry[selectedEntry].entryName;
+
+				if(phonebookEntry[selectedEntry].childCount = 1)
+				{
+					selectedEntryMethod = phonebookEntry[selectedEntry].firstChild;
+				}
+				else
+				{
+					
+					for(i = phonebookEntry[selectedEntry].firstChild to (phonebookEntry[selectedEntry].firstChild + phonebookEntry[selectedEntry].childCount - 1))
+					{
+						if(find("@", contact[i].contactNumber) > 0)
+						{
+							selectedEntryMethod = i;
+							uriEntriesFound = uriEntriesFound + 1;
+							if(contact[i].callType & 0x02 && foundSIP = 0)
+							{
+								foundSIP = i;
+							}
+							else if(contact[i].callType & 0x00 && foundH323 = 0)
+							{
+								foundH323 = i;
+							}
+						}
+					}
+					if(uriEntriesFound = 0)
+					{
+						for(i = phonebookEntry[selectedEntry].firstChild to (phonebookEntry[selectedEntry].firstChild + phonebookEntry[selectedEntry].childCount - 1))
+						{
+							if(contact[i].callType & 0x02 && foundSIP = 0)
+							{
+								foundSIP = i;
+							}
+							else if(contact[i].callType & 0x00 && foundH323 = 0)
+							{
+								foundH323 = i;
+							}
+						}
+					}
+					if(uriEntriesFound <> 1)
+                    {
+						if(defaultCallTypeSIP = 1 || foundH323 = 0)
+						{
+							selectedEntryMethod = foundSIP;		
+						}
+						else
+						{
+							selectedEntryMethod = foundH323;
+						}
+					}
+				}
+				SelectedPhonebook_Number = contact[selectedEntryMethod].contactNumber;
+				SelectedPhonebook_CallRate = contact[selectedEntryMethod].callRate;
+				
+				SelectedIsContact = 1;
+			}
+		}
+	}
+}
+
+PUSH clearSelectedEntryNumber
+{
+	call ResetSelectedPhonebookItem(); // clear what was previously selected
+}
+
+PUSH getLocalPhonebook
+{
+	if(DirectoryDownloadBusy = 0)
+	{
+		DirectoryDownloadBusy = 1;
+		ResetEverything();
+		if(phonebookSourceId = PHONEBOOKSOURCECORPORATEPHONEBOOK)
+		{
+			phoneBookType = "Corporate";
+		}
+		else
+		{
+			phoneBookType = "Local";
+		}
+		runSearchPhonebook();
+	}
+}
+
+PUSH dialSelectedPhonebookEntryNumber
+{
+	/* 
+	   This is a modified copy of the dialCall command found in the CallControl module.
+	   It is needed here until the Cx API gets a "xCommand Phonebook Dial" function for
+	   dialling a phonebook entry directly
+	*/
+	STRING dialString[220];
+	if(len(contact[selectedEntryMethod].contactNumber) > 0) // !!!
+	{
+		makeString(dialString, "xCommand Dial Number: \"%s\"", contact[selectedEntryMethod].contactNumber);
+		if(len(contact[selectedEntryMethod].callRate) > 0)
+		{
+			dialString = dialString + " CallRate: " + contact[selectedEntryMethod].callRate;
+		}
+
+		if(contact[selectedEntryMethod].callType & 0x02)
+		{
+			dialString = dialString + " Protocol: SIP";
+		}
+		else
+		{
+			dialString = dialString + " Protocol: H323";
+		}
+
+		if(contact[selectedEntryMethod].callType & 0x01)
+		{
+			dialString = dialString + " CallType: Audio";
+		}
+		else
+		{
+			dialString = dialString + " CallType: Video";
+		}
+		makeString(device_tx$, "%s\n", dialString);
+
+		if(len(phonebookEntry[selectedEntry].entryName) > 0)
+		{
+			CallHistoryName = phonebookEntry[selectedEntry].entryName;
+		}
+		else
+		{
+			CallHistoryName = contact[selectedEntryMethod].contactNumber;	//!!!
+		}
+		CallHistoryNumber = contact[selectedEntryMethod].contactNumber;
+	}
+}
+
+RELEASE searchPhonebook	
+{
+	if(len(phonebookSearchString) > 0)
+	{
+		searchActive = 1;
+		globalSearchCount = globalSearchCount + 1;
+		call PhonebookSearch(globalSearchCount);
+	}
+	else
+	{
+		searchActive = 0;
+		call displayPhonebook();
+		iPhonebookPagesCurrentPage = 1;
+		phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+		CALL DisplayPhonebookPages();
+	}
+}
+
+CHANGE entryOffset
+{
+	call SetPhonebookOffset(entryOffset);
+}
+
+CHANGE phonebookSearchString
+{
+	if(sSearchText <> phonebookSearchString)
+	{
+		sSearchText = phonebookSearchString;
+		Phonebook_Search_Text = sSearchText;
+	}
+}
+
+PUSH topLevel
+{
+    selectedFolder = 0;
+	DirectoryOnTopLevel = 1;
+	Phonebook_Search_Text = "";
+	call DisplayPhonebook();
+	iPhonebookPagesCurrentPage = 1;
+	phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+	CALL DisplayPhonebookPages();
+}
+
+PUSH upOneLevel
+{
+	selectedFolder = phonebookEntry[selectedFolder].parentFolder;
+	if(selectedFolder = 0)
+	{
+		DirectoryOnTopLevel = 1;
+	}
+    Phonebook_Search_Text = "";
+	call DisplayPhonebook();
+	iPhonebookPagesCurrentPage = 1;
+	phonebookPagesCurrentPage = iPhonebookPagesCurrentPage;
+	CALL DisplayPhonebookPages();
+}
+
+PUSH dialCall
+{
+	STRING dialString[220];
+	
+	if(len(dialNumber)>0)
+	{
+		makeString(dialString, "xCommand Dial Number: %s", dialNumber);
+		if(len(dialCallRate) > 0)
+		{
+			dialString = dialString + " CallRate: " + dialCallRate;
+		}
+		if(len(dialCallProtocol) > 0)
+		{
+			if(find("VOIP", dialCallProtocol) > 0)
+			{
+				makeString(dialString, "%s onlyaudio: true", dialString);
+			}
+			else
+			{
+				makeString(dialString, "%s Protocol: %s", dialString, dialCallProtocol);
+			}
+		}
+		makeString(device_tx$, "%s\n", dialString);
+		CallHistoryNumber = dialNumber;
+	}
+}
+
+CHANGE disconnectCallWithId
+{
+	call disconnectCall(disconnectCallWithId);
+}
+
+PUSH callControlAcceptIncomingCall
+{
+	makeString(device_tx$, "xCommand Call Accept\n");
+}
+
+PUSH callControlRejectIncomingCall
+{
+	makeString(device_tx$, "xCommand Call Reject\n");
+}
+
+PUSH disconnectAllCalls
+{
+	makeString(device_tx$, "xCommand Call DisconnectAll\n");
+}
+
+/* Send DTMF Signal to a call. If callId is not selected (0) then sends it to the first call */
+CHANGE DTMFSend
+{ 
+	if(DTMFSendCallSlot = 0)
+	{
+		MakeString(device_tx$, "xCommand DTMFSend DTMFString: \"%s\" CallId: \"%d\"\n", DTMFSend , CallStatus_CallId[1]);
+	}
+	else
+	{
+		MakeString(device_tx$, "xCommand DTMFSend DTMFString: \"%s\" CallId: \"%d\"\n", DTMFSend , CallStatus_CallId[DTMFSendCallSlot]);
+	}
+}
+ 
+function farEndControlCameraMove(STRING direction)
+{
+    if(farEndControlCallSlot = 0)
+    {
+		MakeString(device_tx$, "xCommand FarEndControl Camera Move Value: %s\n", direction);
+	}
+	else
+	{
+		MakeString(device_tx$, "xCommand FarEndControl Camera Move Value: %s CallId: \"%d\"\n", direction, CallStatus_CallId[farEndControlCallSlot]);
+	}                                                              
+}
+
+CHANGE farEndControlPresentationSourceId
+{
+    if(farEndControlCallSlot = 0)
+    {
+		MakeString(device_tx$, "xCommand FarEndControl Source Select SourceId: %d\n", farEndControlPresentationSourceId);
+	}
+	else
+	{
+		MakeString(device_tx$, "xCommand FarEndControl Source Select SourceId: %d  CallId: \"%d\"\n", farEndControlPresentationSourceId, CallStatus_CallId[farEndControlCallSlot]);
+	}                                                              
+}
+
+CHANGE farEndControlPresetActivateId
+{
+    if(farEndControlCallSlot = 0)
+    {
+		MakeString(device_tx$, "xCommand FarEndControl Preset Activate PresetId: %d\n", farEndControlPresetActivateId);
+	}
+	else
+	{
+		MakeString(device_tx$, "xCommand FarEndControl Preset Activate PresetId: %d  CallId: \"%d\"\n", farEndControlPresetActivateId, CallStatus_CallId[farEndControlCallSlot]);
+	}                                                              
+}
+
+PUSH farEndControlCameraStop
+{
+    if(farEndControlCallSlot = 0)
+    {
+		MakeString(device_tx$, "xCommand FarEndControl Camera Stop\n");
+	}
+	else
+	{
+		MakeString(device_tx$, "xcommand FarEndControl Camera Stop CallId: \"%d\"\n", CallStatus_CallId[farEndControlCallSlot]);
+	}                                                              
+}
+
+function sStringSendMessage(STRING message)
+{
+	MakeString(device_tx$, "xCommand SStringSend Message: \"%s\"\n", message);
+}
+   
+function tStringSendMessage(STRING message)
+{
+    if(DTMFSendCallSlot = 0)
+    {
+		MakeString(device_tx$, "xCommand TStringSend Message: \"%s\"\n", message);
+	}
+	else
+	{
+		MakeString(device_tx$, "xCommand TStringSend Message: \"%s\" CallId: \"%d\"\n", message, CallStatus_CallId[DTMFSendCallSlot]);
+	}                                                              
+}
+
+CHANGE TString_Send_Text
+{
+      tStringSendMessage(TString_Send_Text);
+}
+
+
+CHANGE SString_Send_Text
+{
+      sStringSendMessage(SString_Send_Text);
+}
+
+
+PUSH farEndControlCameraPanLeft
+{
+    farEndControlCameraMove("Left");
+}
+
+PUSH farEndControlCameraPanRight
+{
+    farEndControlCameraMove("Right");
+}
+
+PUSH farEndControlCameraTiltUp
+{
+    farEndControlCameraMove("Up");
+}
+
+PUSH farEndControlCameraTiltDown
+{
+    farEndControlCameraMove("Down");
+}
+
+PUSH farEndControlCameraZoomIn
+{
+    farEndControlCameraMove("ZoomIn");
+}
+
+PUSH farEndControlCameraZoomOut
+{
+    farEndControlCameraMove("ZoomOut");
+}
+
+PUSH farEndControlCameraFocusIn
+{
+    farEndControlCameraMove("FocusIn");
+}
+
+PUSH farEndControlCameraFocusOut
+{
+    farEndControlCameraMove("FocusOut");
+}
+
+PUSH dataToTrace
+{
+	CALL PrintSavedData();
+}
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+Function Main()
+{
+	Semaphore = 0;
+	dialSemaphore = 0;
+	signalIncomingCall = 0;
+	NumberOfActiveCalls = 0;
+	globalSearchCount = 0;
+	call ResetPhonebookList();
+	call ResetSelectedPhonebookItem();
+	ResetEverything();
+	phonebookEntry[0].firstChild = 1;
+}  
+ 

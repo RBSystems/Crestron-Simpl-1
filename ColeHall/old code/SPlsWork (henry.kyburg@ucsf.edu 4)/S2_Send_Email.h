@@ -1,0 +1,193 @@
+#ifndef __S2_SEND_EMAIL_H__
+#define __S2_SEND_EMAIL_H__
+
+
+
+
+/*
+* Constructor and Destructor
+*/
+
+/*
+* DIGITAL_INPUT
+*/
+#define __S2_Send_Email_CLEAR_FIELDS_DIG_INPUT 0
+#define __S2_Send_Email_EDIT_TO_DIG_INPUT 1
+#define __S2_Send_Email_EDIT_CC_DIG_INPUT 2
+#define __S2_Send_Email_EDIT_SUBJECT_DIG_INPUT 3
+#define __S2_Send_Email_EDIT_MESSAGE_DIG_INPUT 4
+#define __S2_Send_Email_SEND_DIG_INPUT 5
+
+
+/*
+* ANALOG_INPUT
+*/
+
+#define __S2_Send_Email_FROM$_STRING_INPUT 0
+#define __S2_Send_Email_FROM$_STRING_MAX_LEN 242
+CREATE_STRING_STRUCT( S2_Send_Email, __FROM$, __S2_Send_Email_FROM$_STRING_MAX_LEN );
+#define __S2_Send_Email_SERVER$_STRING_INPUT 1
+#define __S2_Send_Email_SERVER$_STRING_MAX_LEN 40
+CREATE_STRING_STRUCT( S2_Send_Email, __SERVER$, __S2_Send_Email_SERVER$_STRING_MAX_LEN );
+#define __S2_Send_Email_USER_NAME$_STRING_INPUT 2
+#define __S2_Send_Email_USER_NAME$_STRING_MAX_LEN 254
+CREATE_STRING_STRUCT( S2_Send_Email, __USER_NAME$, __S2_Send_Email_USER_NAME$_STRING_MAX_LEN );
+#define __S2_Send_Email_USER_PASSWORD$_STRING_INPUT 3
+#define __S2_Send_Email_USER_PASSWORD$_STRING_MAX_LEN 254
+CREATE_STRING_STRUCT( S2_Send_Email, __USER_PASSWORD$, __S2_Send_Email_USER_PASSWORD$_STRING_MAX_LEN );
+#define __S2_Send_Email_TO$_STRING_INPUT 4
+#define __S2_Send_Email_TO$_STRING_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_Send_Email, __TO$, __S2_Send_Email_TO$_STRING_MAX_LEN );
+#define __S2_Send_Email_CC$_STRING_INPUT 5
+#define __S2_Send_Email_CC$_STRING_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_Send_Email, __CC$, __S2_Send_Email_CC$_STRING_MAX_LEN );
+#define __S2_Send_Email_SUBJECT$_STRING_INPUT 6
+#define __S2_Send_Email_SUBJECT$_STRING_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_Send_Email, __SUBJECT$, __S2_Send_Email_SUBJECT$_STRING_MAX_LEN );
+#define __S2_Send_Email_MESSAGE$_STRING_INPUT 7
+#define __S2_Send_Email_MESSAGE$_STRING_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_Send_Email, __MESSAGE$, __S2_Send_Email_MESSAGE$_STRING_MAX_LEN );
+#define __S2_Send_Email_TEXT$_STRING_INPUT 8
+#define __S2_Send_Email_TEXT$_STRING_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_Send_Email, __TEXT$, __S2_Send_Email_TEXT$_STRING_MAX_LEN );
+
+
+
+/*
+* DIGITAL_OUTPUT
+*/
+#define __S2_Send_Email_SUCCESS_DIG_OUTPUT 0
+#define __S2_Send_Email_PART_SUCCESS_DIG_OUTPUT 1
+#define __S2_Send_Email_FAILURE_DIG_OUTPUT 2
+
+
+/*
+* ANALOG_OUTPUT
+*/
+#define __S2_Send_Email_ERROR_NUMBER_ANALOG_OUTPUT 0
+
+#define __S2_Send_Email_TO_FB$_STRING_OUTPUT 1
+#define __S2_Send_Email_CC_FB$_STRING_OUTPUT 2
+#define __S2_Send_Email_SUBJECT_FB$_STRING_OUTPUT 3
+#define __S2_Send_Email_MESSAGE_FB$_STRING_OUTPUT 4
+#define __S2_Send_Email_ERROR_TEXT$_STRING_OUTPUT 5
+#define __S2_Send_Email_TEXT_FB$_STRING_OUTPUT 6
+
+
+/*
+* Direct Socket Variables
+*/
+
+
+
+
+/*
+* INTEGER_PARAMETER
+*/
+/*
+* SIGNED_INTEGER_PARAMETER
+*/
+/*
+* LONG_INTEGER_PARAMETER
+*/
+/*
+* SIGNED_LONG_INTEGER_PARAMETER
+*/
+/*
+* INTEGER_PARAMETER
+*/
+/*
+* SIGNED_INTEGER_PARAMETER
+*/
+/*
+* LONG_INTEGER_PARAMETER
+*/
+/*
+* SIGNED_LONG_INTEGER_PARAMETER
+*/
+/*
+* STRING_PARAMETER
+*/
+
+
+/*
+* INTEGER
+*/
+
+
+/*
+* LONG_INTEGER
+*/
+
+
+/*
+* SIGNED_INTEGER
+*/
+
+
+/*
+* SIGNED_LONG_INTEGER
+*/
+
+
+/*
+* STRING
+*/
+#define __S2_Send_Email_SFROM_STRING_MAX_LEN 242
+CREATE_STRING_STRUCT( S2_Send_Email, __SFROM, __S2_Send_Email_SFROM_STRING_MAX_LEN );
+#define __S2_Send_Email_SSERVER_STRING_MAX_LEN 40
+CREATE_STRING_STRUCT( S2_Send_Email, __SSERVER, __S2_Send_Email_SSERVER_STRING_MAX_LEN );
+#define __S2_Send_Email_SNAME_STRING_MAX_LEN 254
+CREATE_STRING_STRUCT( S2_Send_Email, __SNAME, __S2_Send_Email_SNAME_STRING_MAX_LEN );
+#define __S2_Send_Email_SPASSWORD_STRING_MAX_LEN 254
+CREATE_STRING_STRUCT( S2_Send_Email, __SPASSWORD, __S2_Send_Email_SPASSWORD_STRING_MAX_LEN );
+#define __S2_Send_Email_STO_STRING_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_Send_Email, __STO, __S2_Send_Email_STO_STRING_MAX_LEN );
+#define __S2_Send_Email_SCC_STRING_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_Send_Email, __SCC, __S2_Send_Email_SCC_STRING_MAX_LEN );
+#define __S2_Send_Email_SSUBJECT_STRING_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_Send_Email, __SSUBJECT, __S2_Send_Email_SSUBJECT_STRING_MAX_LEN );
+#define __S2_Send_Email_SMESSAGE_STRING_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_Send_Email, __SMESSAGE, __S2_Send_Email_SMESSAGE_STRING_MAX_LEN );
+#define __S2_Send_Email_STEMP_STRING_MAX_LEN 255
+CREATE_STRING_STRUCT( S2_Send_Email, __STEMP, __S2_Send_Email_STEMP_STRING_MAX_LEN );
+
+/*
+* STRUCTURE
+*/
+
+START_GLOBAL_VAR_STRUCT( S2_Send_Email )
+{
+   void* InstancePtr;
+   struct GenericOutputString_s sGenericOutStr;
+   unsigned short LastModifiedArrayIndex;
+
+   DECLARE_STRING_STRUCT( S2_Send_Email, __FROM$ );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __SERVER$ );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __USER_NAME$ );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __USER_PASSWORD$ );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __TO$ );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __CC$ );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __SUBJECT$ );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __MESSAGE$ );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __TEXT$ );
+};
+
+START_NVRAM_VAR_STRUCT( S2_Send_Email )
+{
+   DECLARE_STRING_STRUCT( S2_Send_Email, __SFROM );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __SSERVER );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __SNAME );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __SPASSWORD );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __STO );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __SCC );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __SSUBJECT );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __SMESSAGE );
+   DECLARE_STRING_STRUCT( S2_Send_Email, __STEMP );
+   short __IERROR;
+};
+
+
+
+#endif //__S2_SEND_EMAIL_H__
+

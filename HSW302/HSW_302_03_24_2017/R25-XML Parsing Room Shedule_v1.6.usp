@@ -1,0 +1,795 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name:UCSF	
+System Name:XML Parsing with Bret
+System Number:1
+Programmer:Bret Wittmann	
+Comments: Use Philip Hutchison's xml page for R25 Room Schedule 
+HEK Modify to include new string output CaptureTimes.
+4/24/15 BRW to modify to use Reservation vs. Event times....
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+#ENABLE_DYNAMIC
+#SYMBOL_NAME "R25-XML Parsing Room Schedule v1.6"
+// #HINT ""
+#DEFINE_CONSTANT delay1 25
+#DEFINE_CONSTANT delay2 10
+#DEFINE_CONSTANT delay3 500
+#DEFINE_CONSTANT delay4 1200
+
+// #CATEGORY "" 
+// #PRINT_TO_TRACE
+// #DIGITAL_EXPAND 
+// #ANALOG_SERIAL_EXPAND 
+// #OUTPUT_SHIFT 
+// #HELP_PDF_FILE ""
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+#ENCODING_ASCII
+// #ENCODING_UTF16
+// #ENCODING_INHERIT_FROM_PARENT
+// #ENCODING_INHERIT_FROM_PROGRAM
+/*
+#HELP_BEGIN
+   (add additional lines of help lines)
+#HELP_END
+*/
+
+/*******************************************************************************************
+  Include Libraries
+  (Uncomment and include additional libraries as needed)
+*******************************************************************************************/
+// #CRESTRON_LIBRARY ""
+// #USER_LIBRARY ""
+
+/*******************************************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+*******************************************************************************************/
+DIGITAL_INPUT sendScheduleQuery;
+DIGITAL_INPUT login_R25;
+DIGITAL_INPUT Logout_R25;
+DIGITAL_INPUT clearYesterday; 
+// ANALOG_INPUT 
+STRING_INPUT roomScheduleQuery[512];
+STRING_INPUT hostname[100];
+STRING_INPUT port[4];
+STRING_INPUT time_o_day[18];
+// BUFFER_INPUT 
+
+DIGITAL_OUTPUT connected_fb;
+DIGITAL_OUTPUT turn_proj_off_delay30;
+DIGITAL_OUTPUT turn_to_homepage;
+ANALOG_OUTPUT socketreturn;
+STRING_OUTPUT currentTitle;
+STRING_OUTPUT currentStartTime;
+STRING_OUTPUT currentEndTime;
+//STRING_OUTPUT currentTimeHalf;
+
+//STRING_OUTPUT turn_off_time[10];
+//STRING_OUTPUT currentDescription;
+//STRING_OUTPUT currentDisplay;
+//STRING_OUTPUT currentCaptureTimes;
+//STRING_OUTPUT title[6],startTime[6],endTime[6],description[6],display[6],captureTimes[12];
+
+//STRING_OUTPUT  r25Rx;
+
+/*******************************************************************************************
+  SOCKETS
+  (Uncomment and define socket definitions as needed)
+*******************************************************************************************/
+TCP_CLIENT tcpTxRx[4096];
+// TCP_SERVER
+// UDP_SOCKET
+
+/*******************************************************************************************
+  Parameters
+  (Uncomment and declare parameters as needed)
+*******************************************************************************************/
+// INTEGER_PARAMETER
+// SIGNED_INTEGER_PARAMETER
+// LONG_INTEGER_PARAMETER
+// SIGNED_LONG_INTEGER_PARAMETER
+// STRING_PARAMETER
+
+/*******************************************************************************************
+  Parameter Properties
+  (Uncomment and declare parameter properties as needed)
+*******************************************************************************************/
+/*
+#BEGIN_PARAMETER_PROPERTIES parameter_variable, parameter_variable, ...
+   // propValidUnits = // unitString or unitDecimal|unitHex|unitPercent|unitCharacter|unitTime|unitTicks;
+   // propDefaultUnit = // unitString, unitDecimal, unitHex, unitPercent, unitCharacter, unitTime or unitTicks;
+   // propBounds = lower_bound , upper_bound;
+   // propDefaultValue = ;  // or, propDefaultValue = "";
+   // propList = // { "value" , "label" } , { "value" , "label" } , ... ;
+   // propShortDescription = "status_bar_hint_text";
+   // #BEGIN_PROP_FULL_DESCRIPTION  line_1...  line_2...  line_n  #END_PROP_FULL_DESCRIPTION
+   // #BEGIN_PROP_NOTES line_1...  line_2...  line_n  #END_PROP_NOTES
+#END_PARAMETER_PROPERTIES
+*/
+
+/*******************************************************************************************
+  Structure Definitions
+  (Uncomment and define structure definitions as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: struct.myString = "";
+*******************************************************************************************/
+
+STRUCTURE classTimes
+{
+string title[60];
+string startTime[16];
+string endTime[16];
+//string description[150];
+//string display[100];
+//string captureTimes[150];
+};
+
+classTimes currentClass[10];
+
+//CLASS captureTimes
+//{
+	
+//}
+
+
+
+/*******************************************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+  Note:  Be sure to initialize all declared STRING variables as needed
+         For example, in Function Main: myString = "";
+*******************************************************************************************/
+INTEGER i;
+//SIGNED_INTEGER socketreturn;
+INTEGER classEndTime[10];
+INTEGER classNextStartTime[10];
+STRING  proj_off_time[10][8];
+
+// LONG_INTEGER
+// SIGNED_INTEGER
+// SIGNED_LONG_INTEGER
+// STRING
+
+/*******************************************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+*******************************************************************************************/
+function tryLogin()
+{
+
+	SIGNED_INTEGER status;
+    
+	status = SocketConnectClient (tcpTxRx, hostname, atoi(port), 1); //client, host, port, enable reconnect
+
+    if (status < 0)
+	{
+		Print("Error connecting socket to address on port");
+		GenerateUserError("Error connecting socket to address on port");
+		return;
+	}
+	else
+	{
+		connected_fb = 1;
+	}
+	        
+}
+
+function processXML(String xmlEvent)
+{
+
+	integer titleS,titleE;
+	//integer startS,startE;
+	//integer endS,endE;
+	integer ResStartS,ResStartE,ResEndS,ResEndE;
+  	//integer descriptionS,descriptionE;
+	//integer capturetimesS,capturetimesE;
+	print("\ni is %d\n", i);
+	titleS=	find("<title>",xmlEvent);
+	titleE=	find("</title>",xmlEvent);
+	//startS=	find("<start>",xmlEvent);
+	//startE=	find("</start>",xmlEvent);
+	//endS=  	find("<end>",xmlEvent);
+	//endE=	find("</end>",xmlEvent);
+	ResStartS = find("<ResStart>",xmlEvent);
+	ResStartE = find("</ResStart>",xmlEvent);
+	ResEndS = find("<ResEnd>",xmlEvent);
+	ResEndE = find("</ResEnd>",xmlEvent);
+	//displayS= find("<display>",xmlEvent);
+	//displayE= find("</display>",xmlEvent);
+	//descriptionS=find("<description>",xmlEvent);
+	//descriptionE=find("</description>",xmlEvent);
+	//capturetimesS=find("<capturetimes>",xmlEvent);
+	//capturetimesE=find("</capturetimes>",xmlEvent);
+	currentClass[i].title = mid(xmlEvent,(titleS + 7),titleE - (titleS + 7));
+	//title[i+1] = currentClass[i].title;
+	currentClass[i].startTime = mid(xmlEvent,(ResStartS + 10),ResStartE - (ResStartS + 10));
+	//startTime[i+1] = currentClass[i].startTime;
+	currentClass[i].endTime = mid(xmlEvent,(ResEndS + 8),ResEndE - (ResEndS + 8));
+	//endTime[i+1] = currentClass[i].endTime;
+	//currentClass[i].description=mid(xmlEvent,(descriptionS + 13),descriptionE - (descriptionS + 13));
+	//description[i+1] = currentClass[i].description;
+	//currentClass[i].display = mid(xmlEvent,(displayS + 9),displayE - (displayS + 9));
+	//display[i+1] = currentClass[i].display;
+	/*if (capturetimesS > 0)
+	{
+	currentClass[i].capturetimes = mid(xmlEvent,(capturetimesS + 14),capturetimesE - (capturetimesS + 14));
+	}
+	else
+	{
+	currentClass[i].capturetimes = ""; 
+	}*/
+	//print("capturetimeS is %d\n",capturetimesS);
+	//capturetimes[i+1] = currentClass[i].capturetimes;
+	processlogic();
+	delay(delay2);
+	//print("Capture %s starts at %s and ends at %s.\n",currentClass[i].title,currentClass[i].startTime,currentClass[i].endTime);	
+	i = i + 1;
+
+}
+
+
+integer_function timeToInt(string inputTime)
+{
+	string hours[2],minutes[2],AM_PM[1],time_combined[4];
+	integer hh,mn,AorP,tIntCombined,hours_to_min;
+	if(inputTime <> "")
+	{
+
+		hours = left(inputTime,2);
+		minutes = mid(inputTime,4,2);
+		AM_PM = mid(inputTime,7,1);
+		if (AM_PM = "P")
+		{	
+			if(hours = "01")
+			{
+				hours = "13";
+			}
+			else if(hours = "02")
+			{
+				hours = "14";
+			}
+			else if(hours = "03")
+			{
+				hours = "15";
+			}
+			else if(hours = "04")
+			{
+				hours = "16";
+			}
+			else if(hours = "05")
+			{
+				hours = "17";
+			}
+			else if(hours = "06")
+			{
+				hours = "18";
+			}
+			else if(hours = "07")
+			{
+				hours = "19";
+			}
+			else if(hours = "08")
+			{
+				hours = "20";
+			}
+			else if(hours = "09")
+			{
+				hours = "21";
+			}
+			else if(hours = "10")
+			{
+				hours = "22";
+			}
+			else if(hours = "11")
+			{
+				hours = "23";
+			}
+			else if(hours = "12")
+			{
+				hours = "12";
+			}
+		}
+		else if(AM_PM = "A")
+		{
+			if(hours = "12")
+			{
+				hours = "00";
+			}
+			else
+			{
+				hours = hours;
+			}		
+		}	
+
+		//time_combined = hours + minutes;
+		hh = atoi(hours);
+		hours_to_min = hh * 60;
+		mn = atoi(minutes);
+		tIntCombined = hours_to_min + mn;
+		//tIntCombined = atol(time_combined);
+		//print("hours is  %d, and minutes is %d\n", hh,mn);
+		//print("time combined in int is  %d\n", tIntCombined);
+		return (tIntCombined);
+	}	
+			
+}
+
+string_function addHalf(string inputTime)
+{
+	string hours[2],minutes[2],AM_PM[1];
+	string newHours[2],newMinutes[2],newAorP[2],turnOffTime[8];
+	integer hh,mn,newMin,newHH;
+	if(inputTime <> "")
+	{
+		hours = left(inputTime,2);
+		minutes = mid(inputTime,4,2);
+		AM_PM = mid(inputTime,7,1);
+		if (AM_PM = "P")
+		{	
+			if(hours = "01")
+			{
+				hours = "13";
+			}
+			else if(hours = "02")
+			{
+				hours = "14";
+			}
+			else if(hours = "03")
+			{
+				hours = "15";
+			}
+			else if(hours = "04")
+			{
+				hours = "16";
+			}
+			else if(hours = "05")
+			{
+				hours = "17";
+			}
+			else if(hours = "06")
+			{
+				hours = "18";
+			}
+			else if(hours = "07")
+			{
+				hours = "19";
+			}
+			else if(hours = "08")
+			{
+				hours = "20";
+			}
+			else if(hours = "09")
+			{
+				hours = "21";
+			}
+			else if(hours = "10")
+			{
+				hours = "22";
+			}
+			else if(hours = "11")
+			{
+				hours = "23";
+			}
+			else if(hours = "12")
+			{
+				hours = "12";
+			}
+		}
+		else if(AM_PM = "A")
+		{
+			if(hours = "12")
+			{
+				hours = "00";
+			}
+			else
+			{
+				hours = hours;
+			}		
+		}	
+
+		hh = atoi(hours);
+		//print("Integer time of hours is %d\n", hh);
+		mn = atoi(minutes);
+		//print("Integer time of minutes is %d\n", mn);
+		if(mn < 30)
+		{
+			newMin = mn + 30;
+			newHH = hh;
+		}
+		else
+		{
+			newMin = mn - 30;
+			newHH = hh + 1;
+			//print("New Minutes = %s\n",newMinutes );
+		}
+		if(newHH = 24)
+		{
+             newHH = 12;
+			newAorP = "AM";
+		}
+		else if((newHH > 12) && (newHH <24))
+		{
+			newHH = newHH - 12;
+			newAorP = "PM";
+		}
+		else if(newHH = 12)
+		{
+			newHH = 12;
+			newAorP = "PM";
+		}
+		else if((newHH >= 0) && (newHH < 12))
+		{
+			newHH = newHH;
+			newAorP = "AM";
+		}
+		newMinutes = itoa(newMin);
+		newHours = itoa(newHH);
+		if(len(newMinutes) < 2)
+		{
+			newMinutes = "0" + newMinutes;
+		}
+		if(len(newHours) < 2)
+		{
+			newHours = "0" + newHours;
+		}
+		//print("minutes %s is more than thirty\n",newMinutes );
+
+	turnOffTime = newHours + ":" + newMinutes + " " + newAorP;
+	return(turnOffTime);		
+	}	
+			
+}
+
+
+function checkinterval()
+{
+	integer t,w;
+	w = 0;
+	if(i>1)
+	{
+	
+		for (t=0 to (i-1) STEP 1)
+		{
+			
+			classEndTime[t] = timeToInt(currentClass[t].endTime);
+			print("%d class ends at %s\n",t,currentClass[t].endTime);
+			classNextStartTime[t] = timeToInt(currentClass[t+1].startTime);
+			print("following  class starts at %s\n",currentClass[t+1].startTime);
+	
+			If((classNextStartTime[t] - classEndTime[t]) > 180)
+			{				
+				proj_off_time[t] = addHalf(currentClass[t].endTime);
+				print("Projector will shut off at %s.\n", proj_off_time[t]);
+				w = w + 1;
+			}
+			else if (currentClass[t+1].startTime = "")
+			{
+				proj_off_time[t] = addHalf(currentClass[t].endTime);
+				print("Projector will shut off at %s.\n", proj_off_time[t]);
+				w = w + 1;
+			}					
+		}
+	}
+	else if (i=1)
+	{
+		t=0;
+		proj_off_time[t] = addHalf(currentClass[t].endTime);
+		print("Projector will shut off at %s.\n", proj_off_time[t]);
+		w = w + 1;		
+	}
+	print("Projector will shut off %d times.\n",w);	
+}
+
+function clearAllElements()
+{
+	integer n;
+	for (n = 0 TO 9 STEP 1)
+	{
+	clearbuffer(currentClass[n].title);
+	clearbuffer(currentClass[n].startTime);
+	clearbuffer(currentClass[n].endTime);
+	clearbuffer(proj_off_time[n]);
+	//print("CurrentClass title %d is  %s.\n",n,currentClass[n].title);
+	//print("CurrentClass startTime %d is  %s.\n",n,currentClass[n].startTime);
+	//print("CurrentClass endTime %d is  %s.\n",n,currentClass[n].endTime);
+	}
+}
+
+
+
+
+/*
+Integer_Function MyIntFunction1()
+{
+    // TODO:  Add local variable declarations here
+
+    // TODO:  Add code here
+
+    Return (0);
+}
+*/
+
+/*
+String_Function MyStrFunction1()
+{
+    // TODO:  Add local variable declarations here
+
+    // TODO:  Add code here
+
+    Return ("");
+}
+*/
+
+/*******************************************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+*******************************************************************************************/
+PUSH login_R25
+{    
+	SocketDisconnectClient(tcpTxRx);
+	
+	if(hostname="")
+	{
+		GenerateUserError("The hostname serial input is blank");
+		return;
+	}
+	delay(delay1);		
+	tryLogin();
+}
+
+
+PUSH Logout_R25
+{
+	SIGNED_INTEGER status;
+	status = Socketdisconnectclient(tcpTxRx);
+	if (status =0)
+	{
+		connected_fb = 0;
+	}
+}
+
+PUSH sendScheduleQuery
+{
+	//SIGNED_INTEGER status;
+	i=0;
+	//SIGNED_INTEGER retvalue;
+	//call clearbuffs();
+	socketreturn = SocketSend(tcpTxRx,roomScheduleQuery);
+	
+	if (socketreturn > 60000)
+	{
+		delay(delay4);
+		tryLogin();
+	}			
+}
+
+PUSH clearYesterday
+{
+	call clearAllElements();
+	//delay (delay3);
+	//print("Class endTime 0 is  %s.\n",currentClass[0].endTime);
+}
+
+
+
+
+/*
+RELEASE input
+{
+    // TODO:  Add code here
+}
+*/
+
+/*
+CHANGE input
+{
+    // TODO:  Add code here
+}
+*/
+
+/*
+EVENT
+{
+    // TODO:  Add code here
+}
+*/
+
+
+/*SOCKETCONNECT tcpTxRx
+{
+   SIGNED_LONG_INTEGER PortNumber;
+    SIGNED_INTEGER status;
+
+    SIGNED_INTEGER LocalStatus;
+
+    STRING RemoteIPAddress[30];
+
+    STRING RequestedAddress[512];
+    STRING sendString[2024];    
+
+    LocalStatus = SocketGetAddressAsRequested(tcpTxRx, RequestedAddress);
+
+    if (LocalStatus < 0)
+
+        Print("Error getting remote ip address. %d\n", LocalStatus);
+
+    Print("OnConnect: Connect call to %s successful\n", RequestedAddress);
+
+    
+
+    PortNumber = SocketGetPortNumber(tcpTxRx);
+
+    if (PortNumber < 0)
+
+        Print("Error getting client port number. %ld\n", PortNumber);
+
+        
+
+    LocalStatus = SocketGetRemoteIPAddress(tcpTxRx, RemoteIPAddress);
+
+    if (LocalStatus < 0)
+
+        Print("Error getting remote ip address. %d\n", LocalStatus);
+
+    Print("OnConnect: Connected to port %ld on address %s\n", 
+
+                PortNumber, RemoteIPAddress);
+               
+               
+}*/
+
+          
+
+/*SOCKETDISCONNECT tcpRx
+{
+ 
+socketConnected=0;       
+        
+}*/
+
+
+
+/*SOCKETRECEIVE tcpTxRx
+{
+	STRING getEvent[2048];
+	i=0;
+	while(len(tcpTxRx.SocketRxBuf)>40)  
+    	{
+		getEvent=remove("</event>",tcpTxRx.SocketRxBuf);
+		//print("getEvent is %s \n",getEvent);
+		processXML(getEvent);
+		//delay(delay1);
+		//print("i is %d\n",i);
+		}
+clearbuffer(tcpTxRx.SocketRxBuf); 
+}*/
+
+SOCKETRECEIVE tcpTxRx
+{
+	STRING getXML[4096];
+	STRING getEvent[2048];
+	i=0;
+	getXML = gather("</schedule>",tcpTxRx.SocketRxBuf);
+	//print("xml_gathered length is %d\n",len(getXML)); 
+	//if (len(getXML) > 305)--old code
+	if(find("<events>",getXML))
+		{ 
+    		//while (len(getXML) > 30)---old code
+			while(find("</event>",getXML))
+			{
+			getEvent = remove("</event>",getXML);
+			//print("getEvent is %s \n",getEvent);
+			call processXML(getEvent);
+			//print("xml_length is %d\n",len(getXML));
+			}
+			delay(delay1);
+			call checkinterval(); 
+		}
+	else
+		{
+			currentTitle = "NO CLASS TODAY";
+			currentStartTime = "";
+			currentEndTime = "";
+		}
+	print("There are %d classes today",i);
+	clearbuffer(tcpTxRx.SocketRxBuf);
+	clearbuffer(getXML);
+}
+
+change time_o_day
+{
+	integer x;
+	if(i > 0)
+	{	
+		for (x = 0 to (i-1) STEP 1)
+		{
+			//print("hello ass, integer x is %d\n", x);
+			if (time_o_day = currentClass[x].startTime)
+			{
+				currentTitle = currentClass[x].title;
+				currentStartTime = currentClass[x].startTime;
+				currentEndTime = currentClass[x].endTime;
+				//currentDescription = currentClass[x].description;
+				//currentDisplay = currentClass[x].display;
+				//currentCaptureTimes = currentClass[x].capturetimes;
+			}
+	
+			else if(time_o_day = currentClass[x].endTime)
+			{
+				//delay(delay1);
+				currentTitle = "NO CLASS PRESENTLY";
+				currentStartTime = "";
+				currentEndTime = "";
+				//currentDescription = "";
+				//currentDisplay = "NO CLASS RIGHT NOW";
+				//currentCaptureTimes = "";
+				pulse (60,turn_to_homepage);
+			}
+	
+			else if(time_o_day = proj_off_time[x])
+			{
+				pulse (60,turn_proj_off_delay30);			
+			}
+	
+			else if (x > 0)
+			{
+				if ((time_o_day = currentClass[x-1].endTime) && (time_o_day = currentClass[x].startTime))
+				{
+					currentTitle = currentClass[x].title;
+					currentStartTime = currentClass[x].startTime;
+					currentEndTime = currentClass[x].endTime;
+					//currentDescription = currentClass[x].description;
+					//currentDisplay = currentClass[x].display;
+					//currentCaptureTimes = currentClass[x].capturetimes;
+				}
+			}
+				 
+		}
+	}
+}	    
+/*change time_o_day
+{
+	currentTimeHalf = addHalf(time_o_day);	
+}*/
+
+
+/*
+SOCKETSTATUS
+{
+    // TODO:  Add code here
+}
+*/
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+
+Function Main()
+{
+    // TODO:  Add code here
+    // Initialize declared global and local variables/arrays as needed.
+
+WaitForInitializationComplete();
+i=0;
+currentTitle = "";
+currentStartTime = "";
+currentEndTime = "";
+//currentDescription = "";
+//currentDisplay = "";
+}
+
+

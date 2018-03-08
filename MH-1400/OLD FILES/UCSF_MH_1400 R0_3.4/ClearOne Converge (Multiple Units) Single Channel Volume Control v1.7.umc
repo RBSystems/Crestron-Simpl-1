@@ -1,0 +1,1286 @@
+[
+Version=1
+]
+[
+ObjTp=FSgntr
+Sgntr=UserMacro
+RelVrs=4.02.38
+IntStrVrs=2
+MinSMWVrs=0
+MinTIOVrs=0
+SavedBy=SMW2.11.27
+]
+[
+ObjTp=Hd
+S0Nd=1
+S1Nd=2
+SLNd=3
+PrNm=ClearOne Converge (Multiple Units) Single Channel Volume Control v1.7.umc
+DbVr=44.05.005.00
+DvcDbVr=55.00.002.00
+PgmNm=CRR/LP
+DlrNm=Crestron Electronics
+CltNm=Allows control of a single channel of volume for input/output/processor v1.7
+Incl=362,378,380,405,407,408,409,478,522,537,554,586,590,611,624,767,830,883,1032,1062,1079,1134,1157,1199,1220,1222,1299,1348,1439,1472,1473,1499,1746,1803,1975,2229,2354,2514,2523,2532,3708,3902,3912,3918,3925,1766,2574,2651,2817,2886,2938,2947,3181,3197,3233,3710,3735,3736,3816,
+McNm=ClearOne Converge (Multiple Un
+SmVr=889
+DvVr=889
+TpN1=1
+TpN2=2
+TpN3=3
+TpN4=4
+TpN5=5
+PdfHelp=ClearOne Converge (Multiple Units) Single Channel Volume Control v1.7 Help.pdf
+DT=Conferencing
+DST=Audio Teleconference
+Mfg=Clearone
+NumMdl=9
+Mdl1=880
+Mdl2=840T
+Mdl3=TH20
+Mdl4=8i
+Mdl5=880T
+Mdl6=SR1212
+Mdl7=880TA
+Mdl8=SR1212A
+Mdl9=VH20
+Tmpl=Audio Conference
+APg=1
+StdCmd=0
+FltTmp=1
+FpCS=0
+EnType=0
+ZeroOnIoOk=0
+]
+[
+ObjTp=Bk
+Nm1=\
+Sx1=0
+Sy1=0
+Mx1=0
+]
+[
+ObjTp=Bw
+H=1
+Lx=0
+Ly=0
+Rx=630
+Ry=427
+Xm=-1
+Ym=-1
+SH=15
+Z=100
+Ht=4
+Hi=1
+]
+[
+ObjTp=Symbol
+Name=ClearOne Converge (Multiple Units) Single Channel Volume Control v1.7
+Code=1
+SmplCName=ClearOne Converge (Multiple Units) Single Channel Volume Control v1.7.umc
+Smpl-C=3
+CompilerTimePrecision=Single_Or_Double_Precision
+Exclusions=1,19,20,21,88,89,167,168,179,213,214,215,216,217,225,226,248,249,266,267,310,718,756,854,
+Hint=Allows control of a single channel of volume for input/output/processor v1.7
+SMWRev=0
+TIORev=0
+S+=1
+HelpID=1055
+PdfHelp=ClearOne Converge (Multiple Units) Single Channel Volume Control v1.7 Help.pdf
+DT=Conferencing
+DST=Audio Teleconference
+Mfg=Clearone
+NumMdl=9
+Mdl1=880
+Mdl2=840T
+Mdl3=TH20
+Mdl4=8i
+Mdl5=880T
+Mdl6=SR1212
+Mdl7=880TA
+Mdl8=SR1212A
+Mdl9=VH20
+Tmpl=Audio Conference
+APg=1
+StdCmd=0
+FltTmp=1
+FpCS=0
+NumFixedInputs=8
+NumFixedOutputs=5
+NumFixedParams=6
+MinVariableInputs=0
+MinVariableInputsList2=0
+MinVariableInputsList3=0
+MinVariableOutputs=0
+MinVariableOutputsList2=0
+MinVariableOutputsList3=0
+MinVariableParams=0
+SymbolTree=20
+InputSigType1=Digital
+InputSigType2=Digital
+InputSigType3=Digital
+InputSigType4=Digital
+InputSigType5=Digital
+InputSigType6=Analog
+InputSigType7=Digital
+InputSigType8=Serial
+OutputSigType1=Analog
+OutputSigType2=Serial
+OutputSigType3=Digital
+OutputSigType4=Digital
+OutputSigType5=Serial
+ParamSigType1=List
+ParamSigType2=List
+ParamSigType3=List
+ParamSigType4=List
+ParamSigType5=List
+ParamSigType6=List
+InputCue1=VOLUME-UP
+InputCue2=VOLUME-DOWN
+InputCue3=VOLUME-MUTE-ON
+InputCue4=VOLUME-MUTE-OFF
+InputCue5=VOLUME-MUTE-TOGGLE
+InputCue6=VOLUME-SLIDER
+InputCue7=POLL
+InputCue8=FROM-CLEARONE-PROCESSOR$
+OutputCue1=VOLUME-BAR
+OutputCue2=VOLUME-TEXT$
+OutputCue3=VOLUME-MUTE-ON-FB
+OutputCue4=VOLUME-MUTE-OFF-FB
+OutputCue5=To_Device$
+ParamCue1=TYPE-ID-ASCII,1,3,2,A,D,G,H,I,E
+ParamCue2=TYPE-ID-HEX,31,32,33,41,44,47,48,49,45
+ParamCue3=UNIT-ID-ASCII,0,1,2,3,4,5,6,7,8,9,B,A,C,D,E,F
+ParamCue4=CHANNEL-ID-ASCII,1,2,3,4,5,6,7,8,9,10,11,12,A,B,C,D,E,F,G,H,13
+ParamCue5=CHANNEL-ID-HEX,01,02,03,04,05,06,07,08,09,0A,0B,0C,41,42,43,44,45,46,47,48,0D
+ParamCue6=PARAMETER-ID-HEX,49,4F,4D,50,4C,52,54,46,5A,4B
+MPi=8
+Pi1=1
+Pi2=2
+Pi3=3
+Pi4=4
+Pi5=5
+Pi6=6
+Pi7=7
+Pi8=8
+MPo=5
+Po1=9
+Po2=10
+Po3=11
+Po4=12
+Po5=13
+MPp=6
+Pp1=14
+Pp2=19
+Pp3=15
+Pp4=16
+Pp5=17
+Pp6=18
+FileName=ClearOne Converge (Multiple Units) Single Channel Volume Control v1.7.umc
+EncodingType=0
+ZeroOnIoOk=0
+]
+[
+ObjTp=Sm
+H=1
+SmC=157
+Nm=Central Control Modules
+ObjVer=1
+CF=2
+n1I=1
+n1O=1
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=2
+SmC=157
+Nm=Network Modules
+ObjVer=1
+CF=2
+n1I=1
+n1O=1
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=3
+SmC=157
+Nm=Ethernet
+ObjVer=1
+CF=2
+n1I=1
+n1O=1
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=4
+SmC=156
+Nm=Logic
+ObjVer=1
+CF=2
+mC=21
+C1=7
+C2=10
+C3=11
+C4=20
+C5=28
+C6=17
+C7=18
+C8=19
+C9=21
+C10=13
+C11=22
+C12=23
+C13=25
+C14=16
+C15=8
+C16=24
+C17=26
+C18=27
+C19=14
+C20=12
+C21=15
+]
+[
+ObjTp=Sm
+H=5
+SmC=157
+Nm=DefineArguments
+ObjVer=1
+CF=2
+n1I=1
+n1O=1
+mC=1
+C1=6
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=6
+SmC=55
+Nm=Argument Definition
+ObjVer=1
+PrH=5
+CF=2
+n1I=8
+n1O=5
+mI=8
+I1=4
+I2=5
+I3=6
+I4=7
+I5=8
+I6=24
+I7=15
+I8=9
+mO=5
+tO=5
+O1=10
+O2=22
+O3=11
+O4=12
+O5=13
+mP=6
+P1=TYPE-ID-ASCII
+P2=TYPE-ID-HEX
+P3=UNIT-ID-ASCII
+P4=CHANNEL-ID-ASCII
+P5=CHANNEL-ID-HEX
+P6=PARAMETER-ID-HEX
+MPi=8
+Pi1=1
+Pi2=2
+Pi3=3
+Pi4=4
+Pi5=5
+Pi6=6
+Pi7=7
+Pi8=8
+MPo=5
+Po1=9
+Po2=10
+Po3=11
+Po4=12
+Po5=13
+MPp=6
+Pp1=14
+Pp2=19
+Pp3=15
+Pp4=16
+Pp5=17
+Pp6=18
+]
+[
+ObjTp=Sm
+H=7
+SmC=22
+Nm=Analog Ramp
+ObjVer=1
+PrH=4
+CF=2
+n1I=3
+n1O=1
+mI=3
+I1=4
+I2=5
+mO=1
+tO=1
+O1=10
+mP=1
+P1=14s
+]
+[
+ObjTp=Sm
+H=8
+SmC=96
+Nm=Serial to Analog
+ObjVer=1
+PrH=4
+CF=2
+n1I=1
+n1O=1
+mI=1
+I1=23
+mO=1
+tO=1
+O1=17
+mP=8
+P1=01FDH
+P2=01\[#TYPE-ID-HEX\]H
+P3=010\[#UNIT-ID-ASCII\]H
+P4=0101H
+P5=01\[#CHANNEL-ID-HEX\]H
+P6=01\[#PARAMETER-ID-HEX\]H
+P7=0200H
+P8=01FEH
+]
+[
+ObjTp=Sm
+H=10
+SmC=65
+Nm=Analog Scaler w/o Zero Pass
+ObjVer=1
+PrH=4
+CF=2
+n1I=1
+n1O=1
+mI=1
+I1=10
+mO=1
+tO=1
+O1=14
+mP=3
+P1=86D
+P2=
+P3=-65d
+]
+[
+ObjTp=Sm
+H=11
+SmC=3
+Nm=OR
+ObjVer=1
+PrH=4
+CF=2
+n1I=2
+n1O=1
+mI=2
+I1=4
+I2=5
+mO=1
+tO=1
+O1=21
+]
+[
+ObjTp=Sm
+H=12
+SmC=56
+Nm=Serial Buffer
+ObjVer=1
+PrH=4
+CF=2
+n1I=3
+n1O=2
+mI=3
+I1=1
+I2=16
+I3=19
+mO=2
+tO=2
+O1=16
+O2=19
+]
+[
+ObjTp=Sm
+H=13
+SmC=89
+Nm=Serial Send
+ObjVer=1
+PrH=4
+CF=2
+n1I=1
+n1O=1
+mI=1
+I1=28
+mO=1
+tO=1
+O1=34
+mP=1
+P1="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\] GAIN \[#CHANNEL-ID-ASCII\] \x\[#PARAMETER-ID-HEX\]\x20"
+]
+[
+ObjTp=Sm
+H=14
+SmC=101
+Nm=Serial I/O
+ObjVer=1
+PrH=4
+CF=2
+n1I=7
+n1O=2
+mI=7
+I3=6
+I4=7
+I5=8
+I6=15
+I7=15
+mO=2
+tO=2
+O1=13
+mP=7
+P1=
+P2="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20MUTE \[#CHANNEL-ID-ASCII\] \x\[#PARAMETER-ID-HEX\] 1\r"
+P3="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20MUTE \[#CHANNEL-ID-ASCII\] \x\[#PARAMETER-ID-HEX\] 0\r"
+P4="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20MUTE \[#CHANNEL-ID-ASCII\] \x\[#PARAMETER-ID-HEX\] 2\r"
+P5="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20MUTE \[#CHANNEL-ID-ASCII\] \x\[#PARAMETER-ID-HEX\]\r"
+P6="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20GAIN \[#CHANNEL-ID-ASCII\] \x\[#PARAMETER-ID-HEX\]\r"
+P7=
+]
+[
+ObjTp=Sm
+H=15
+SmC=103
+Nm=ClearOne Converge Generator v1.7.usp
+ObjVer=1
+PrH=4
+CF=2
+n2I=9
+mI=9
+I1=14
+I2=29
+I3=1
+I4=1
+I5=1
+I6=1
+I7=34
+I8=1
+I9=1
+mO=4
+tO=4
+O1=13
+O2=22
+O3=16
+O4=19
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=16
+SmC=56
+Nm=Serial Buffer
+ObjVer=1
+PrH=4
+CF=2
+n1I=2
+n1O=1
+mI=2
+I1=31
+I2=9
+mO=1
+tO=1
+O1=23
+]
+[
+ObjTp=Sm
+H=17
+SmC=46
+Nm=Analog Buffer
+ObjVer=1
+PrH=4
+CF=2
+n1I=2
+n1O=1
+mI=2
+I1=2
+I2=24
+mO=1
+tO=1
+O1=10
+]
+[
+ObjTp=Sm
+H=18
+SmC=72
+Nm=Serial/Analog One-Shot
+ObjVer=1
+PrH=4
+CF=2
+n1I=1
+n1O=2
+mI=1
+I1=24
+mO=2
+tO=2
+O1=25
+O2=30
+mP=1
+P1=.3S
+]
+[
+ObjTp=Sm
+H=19
+SmC=3
+Nm=OR
+ObjVer=1
+PrH=4
+CF=2
+n1I=2
+n1O=1
+mI=2
+I1=26
+I2=25
+mO=1
+tO=1
+O1=27
+]
+[
+ObjTp=Sm
+H=20
+SmC=11
+Nm=Pulse Stretcher
+ObjVer=1
+PrH=4
+CF=2
+n1I=1
+n1O=2
+mI=1
+I1=21
+mO=2
+tO=2
+O1=26
+mP=1
+P1=.2S
+]
+[
+ObjTp=Sm
+H=21
+SmC=8
+Nm=Oscillator
+ObjVer=1
+PrH=4
+CF=2
+n1I=1
+n1O=1
+mI=1
+I1=27
+mO=1
+tO=1
+O1=28
+mP=2
+P1=.1s
+P2=.1s
+]
+[
+ObjTp=Sm
+H=22
+SmC=46
+Nm=Analog Buffer
+ObjVer=1
+PrH=4
+CF=2
+n1I=2
+n1O=1
+mI=2
+I1=30
+I2=14
+mO=1
+tO=1
+O1=29
+]
+[
+ObjTp=Sm
+H=23
+SmC=4
+Nm=NOR
+ObjVer=1
+PrH=4
+CF=2
+n1I=3
+n1O=1
+mI=3
+I1=4
+I2=5
+I3=25
+mO=1
+tO=1
+O1=33
+]
+[
+ObjTp=Sm
+H=24
+SmC=24
+Nm=Analog Scaler
+ObjVer=1
+PrH=4
+CF=2
+n1I=1
+n1O=1
+mI=1
+I1=17
+mO=1
+tO=1
+O1=10
+mP=3
+P1=65535D
+P2=85D
+P3=0D
+]
+[
+ObjTp=Sm
+H=25
+SmC=11
+Nm=Pulse Stretcher
+ObjVer=1
+PrH=4
+CF=2
+n1I=1
+n1O=2
+mI=1
+I1=33
+mO=2
+tO=2
+O1=31
+mP=1
+P1=.3S
+]
+[
+ObjTp=Sm
+H=26
+SmC=96
+Nm=Serial to Analog
+ObjVer=1
+PrH=4
+CF=2
+n1I=1
+n1O=1
+mI=1
+I1=9
+mO=1
+tO=1
+O1=18
+mP=8
+P1=01FDH
+P2=01\[#TYPE-ID-HEX\]H
+P3=010\[#UNIT-ID-ASCII\]H
+P4=0102H
+P5=01\[#CHANNEL-ID-HEX\]H
+P6=01\[#PARAMETER-ID-HEX\]H
+P7=0200H
+P8=01FEH
+]
+[
+ObjTp=Sm
+H=27
+SmC=38
+Nm=Analog Equate
+ObjVer=1
+PrH=4
+CF=2
+n1I=2
+n1O=2
+mI=2
+I1=18
+mO=2
+tO=2
+O1=11
+O2=12
+mP=2
+P1=49d
+P2=48d
+]
+[
+ObjTp=Sm
+H=28
+SmC=32
+Nm=Analog Initialize
+ObjVer=1
+PrH=4
+CF=2
+n1I=1
+n1O=1
+mI=1
+I1=1
+mO=1
+tO=1
+O1=24
+mP=1
+P1=0d
+]
+[
+ObjTp=Sg
+H=4
+Nm=VOLUME-UP
+]
+[
+ObjTp=Sg
+H=5
+Nm=VOLUME-DOWN
+]
+[
+ObjTp=Sg
+H=6
+Nm=VOLUME-MUTE-ON
+]
+[
+ObjTp=Sg
+H=7
+Nm=VOLUME-MUTE-OFF
+]
+[
+ObjTp=Sg
+H=8
+Nm=VOLUME-MUTE-TOGGLE
+]
+[
+ObjTp=Sg
+H=9
+Nm=FROM-CLEARONE-PROCESSOR$
+SgTp=4
+]
+[
+ObjTp=Sg
+H=10
+Nm=VOLUME-BAR
+SgTp=2
+]
+[
+ObjTp=Sg
+H=11
+Nm=VOLUME-MUTE-ON-FB
+]
+[
+ObjTp=Sg
+H=12
+Nm=VOLUME-MUTE-OFF-FB
+]
+[
+ObjTp=Sg
+H=13
+Nm=To_Device$
+SgTp=4
+]
+[
+ObjTp=Sg
+H=14
+Nm=VOLUME-MXB
+SgTp=2
+]
+[
+ObjTp=Sg
+H=15
+Nm=POLL
+]
+[
+ObjTp=Sg
+H=16
+Nm=X-TEXT$
+SgTp=4
+]
+[
+ObjTp=Sg
+H=17
+Nm=LEVEL-IN
+SgTp=2
+]
+[
+ObjTp=Sg
+H=18
+Nm=MUTE-IN
+SgTp=2
+]
+[
+ObjTp=Sg
+H=19
+Nm=Y-TEXT$
+SgTp=4
+]
+[
+ObjTp=Sg
+H=21
+Nm=CHANGE-OR
+]
+[
+ObjTp=Sg
+H=22
+Nm=VOLUME-TEXT$
+SgTp=4
+]
+[
+ObjTp=Sg
+H=23
+Nm=CLEARONE-RX$-B
+SgTp=4
+]
+[
+ObjTp=Sg
+H=24
+Nm=VOLUME-SLIDER
+SgTp=2
+]
+[
+ObjTp=Sg
+H=25
+Nm=VOLUME-SLIDING
+]
+[
+ObjTp=Sg
+H=26
+Nm=CHANGING
+]
+[
+ObjTp=Sg
+H=27
+Nm=VOLUME-GO
+]
+[
+ObjTp=Sg
+H=28
+Nm=VOLUME-OSC
+]
+[
+ObjTp=Sg
+H=29
+Nm=VOLUME-MXB-BB
+SgTp=2
+]
+[
+ObjTp=Sg
+H=30
+Nm=VOLUME-NOT-SLIDING
+]
+[
+ObjTp=Sg
+H=31
+Nm=NOT-ADJUSTING-M
+]
+[
+ObjTp=Sg
+H=33
+Nm=NOT-ADJUSTING
+]
+[
+ObjTp=Sg
+H=34
+Nm=START-OF-COMMAND$
+SgTp=4
+]
+[
+ObjTp=Dp
+H=1
+Tp=2
+DT=1
+FD1=Volume up
+SD=Volume Up
+Trg=2
+Cmd=244
+]
+[
+ObjTp=Dp
+H=2
+Tp=2
+DT=1
+FD1=Volume down
+SD=Volume Down
+Trg=2
+Cmd=243
+]
+[
+ObjTp=Dp
+H=3
+Tp=2
+DT=1
+FD1=Volume mute on
+SD=Volume Mute On
+Trg=1
+]
+[
+ObjTp=Dp
+H=4
+Tp=2
+DT=1
+FD1=Volume mute off
+SD=Volume Mute Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=5
+Tp=2
+DT=1
+FD1=Volume mute on or off
+SD=Volume Mute
+Trg=1
+Cmd=157
+]
+[
+ObjTp=Dp
+H=6
+Tp=4
+FD1=Volume control from touchpanel slider definition
+SD=Volume Control
+NF=63
+DNF=1
+]
+[
+ObjTp=Dp
+H=7
+Tp=2
+DT=1
+FD1=Poll volume
+SD=Poll Volume
+Trg=1
+]
+[
+ObjTp=Dp
+H=8
+Tp=6
+DT=4
+FD1=Serial information coming from ClearOne Converge 840T Feedback Processor||1
+FD2=module.
+SD=Serial information coming from ClearOne module
+]
+[
+ObjTp=Dp
+H=9
+Tp=5
+FD1=Volume level for analog bar
+SD=Volume level for analog bar
+DNF=1
+]
+[
+ObjTp=Dp
+H=10
+Tp=7
+DT=4
+FD1=Volume level text for indirect text field
+SD=Volume level text for indirect text field
+]
+[
+ObjTp=Dp
+H=11
+Tp=3
+DT=1
+FD1=Volume mute is on
+SD=Volume mute is on
+RE=Volume mute turned on
+HS=Volume mute is on
+]
+[
+ObjTp=Dp
+H=12
+Tp=3
+DT=1
+FD1=Volume mute is off
+SD=Volume mute is off
+RE=Volume mute turned off
+HS=Volume mute is off
+]
+[
+ObjTp=Dp
+H=13
+Tp=7
+DT=4
+FD1=Serial information to send to a 2-way com port
+SD=Serial information to send to a 2-way com port
+]
+[
+ObjTp=Dp
+H=14
+Tp=1
+FD1=Type ID (ASCII)
+SD=Type ID (ASCII)
+HD=TRUE
+DV=1
+NoS=FALSE
+EncFmt=0
+DVLF=1
+VVS=2
+VN=9
+Val1=1
+Lbl1=880
+Val2=3
+Lbl2=840T
+Val3=2
+Lbl3=TH20
+Val4=A
+Lbl4=8i
+Val5=D
+Lbl5=880T
+Val6=G
+Lbl6=SR1212
+Val7=H
+Lbl7=880TA
+Val8=I
+Lbl8=SR1212A
+Val9=E
+Lbl9=VH20
+Sgn=0
+]
+[
+ObjTp=Dp
+H=15
+Tp=1
+FD1=Unit ID (ASCII)
+SD=Unit ID (ASCII)
+HD=TRUE
+DV=0
+NoS=FALSE
+EncFmt=0
+DVLF=1
+VVS=2
+VN=16
+Val1=0
+Lbl1=ID0
+Val2=1
+Lbl2=ID1
+Val3=2
+Lbl3=ID2
+Val4=3
+Lbl4=ID3
+Val5=4
+Lbl5=ID4
+Val6=5
+Lbl6=ID5
+Val7=6
+Lbl7=ID6
+Val8=7
+Lbl8=ID7
+Val9=8
+Lbl9=ID8
+Val10=9
+Lbl10=ID9
+Val11=B
+Lbl11=IDB
+Val12=A
+Lbl12=IDA
+Val13=C
+Lbl13=IDC
+Val14=D
+Lbl14=IDD
+Val15=E
+Lbl15=IDE
+Val16=F
+Lbl16=IDF
+Sgn=0
+]
+[
+ObjTp=Dp
+H=16
+Tp=1
+FD1=Channel ID (ASCII)
+SD=Channel ID (ASCII)
+HD=TRUE
+DV=1
+NoS=FALSE
+EncFmt=0
+DVLF=1
+VVS=2
+VN=21
+Val1=1
+Lbl1=Channel 1
+Val2=2
+Lbl2=Channel 2
+Val3=3
+Lbl3=Channel 3
+Val4=4
+Lbl4=Channel 4
+Val5=5
+Lbl5=Channel 5
+Val6=6
+Lbl6=Channel 6
+Val7=7
+Lbl7=Channel 7
+Val8=8
+Lbl8=Channel 8
+Val9=9
+Lbl9=Channel 9
+Val10=10
+Lbl10=Channel 10
+Val11=11
+Lbl11=Channel 11
+Val12=12
+Lbl12=Channel 12
+Val13=A
+Lbl13=Channel A
+Val14=B
+Lbl14=Channel B
+Val15=C
+Lbl15=Channel C
+Val16=D
+Lbl16=Channel D
+Val17=E
+Lbl17=Channel E
+Val18=F
+Lbl18=Channel F
+Val19=G
+Lbl19=Channel G
+Val20=H
+Lbl20=Channel H
+Val21=13
+Lbl21=Channel 13
+Sgn=0
+]
+[
+ObjTp=Dp
+H=17
+Tp=1
+FD1=Channel ID (HEX)
+SD=Channel ID (HEX)
+HD=TRUE
+DV=01
+NoS=FALSE
+EncFmt=0
+DVLF=1
+VVS=2
+VN=21
+Val1=01
+Lbl1=Channel 1
+Val2=02
+Lbl2=Channel 2
+Val3=03
+Lbl3=Channel 3
+Val4=04
+Lbl4=Channel 4
+Val5=05
+Lbl5=Channel 5
+Val6=06
+Lbl6=Channel 6
+Val7=07
+Lbl7=Channel 7
+Val8=08
+Lbl8=Channel 8
+Val9=09
+Lbl9=Channel 9
+Val10=0A
+Lbl10=Channel 10
+Val11=0B
+Lbl11=Channel 11
+Val12=0C
+Lbl12=Channel 12
+Val13=41
+Lbl13=Channel A
+Val14=42
+Lbl14=Channel B
+Val15=43
+Lbl15=Channel C
+Val16=44
+Lbl16=Channel D
+Val17=45
+Lbl17=Channel E
+Val18=46
+Lbl18=Channel F
+Val19=47
+Lbl19=Channel G
+Val20=48
+Lbl20=Channel H
+Val21=0D
+Lbl21=Channel 13
+Sgn=0
+]
+[
+ObjTp=Dp
+H=18
+Tp=1
+FD1=Parameter ID (HEX)
+SD=Parameter ID (HEX)
+HD=TRUE
+DV=50
+NoS=FALSE
+EncFmt=0
+DVLF=1
+VVS=2
+VN=10
+Val1=49
+Lbl1=Input
+Val2=4F
+Lbl2=Output
+Val3=4D
+Lbl3=Mic Input
+Val4=50
+Lbl4=Processing
+Val5=4C
+Lbl5=Line Input
+Val6=52
+Lbl6=Telco Receive
+Val7=54
+Lbl7=Telco Transmit
+Val8=46
+Lbl8=Fader
+Val9=5A
+Lbl9=VoIP Receive
+Val10=4B
+Lbl10=VoIP Transmit
+Sgn=0
+]
+[
+ObjTp=Dp
+H=19
+Tp=1
+FD1=Type ID (HEX)
+SD=Type ID (HEX)
+HD=TRUE
+DV=31
+NoS=FALSE
+EncFmt=0
+DVLF=1
+VVS=2
+VN=9
+Val1=31
+Lbl1=880
+Val2=32
+Lbl2=TH20
+Val3=33
+Lbl3=840T
+Val4=41
+Lbl4=8i
+Val5=44
+Lbl5=880T
+Val6=47
+Lbl6=SR1212
+Val7=48
+Lbl7=880TA
+Val8=49
+Lbl8=SR1212A
+Val9=45
+Lbl9=VH20
+Sgn=0
+]

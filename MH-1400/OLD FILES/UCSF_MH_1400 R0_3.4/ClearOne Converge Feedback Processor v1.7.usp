@@ -1,0 +1,381 @@
+/***********************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+***********************************************************************/
+/*
+Dealer Name: Crestron Electronics
+System Name:
+System Number:
+Programmer: CRR/KK
+Comments:
+*/
+
+/***********************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+***********************************************************************/
+#SYMBOL_NAME "ClearOne Converge Feedback Processor v1.7"
+// #HINT "Processes all feedback received from the ClearOne Converge"
+// #DEFINE_CONSTANT
+#DEFAULT_VOLATILE
+#HELP_BEGIN
+To be used with the ClearOne Converge Feedback Processor module v1.7.umc module only.
+Not to be used as a stand-alone module.
+#HELP_END
+
+
+/**********************************************************************
+  Include Libraries
+  (Uncomment and include additional librarys as needed)
+***********************************************************************/
+// #CRESTRON_LIBRARY ""
+// #USER_LIBRARY "0"
+
+/***********************************************************************
+  DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+  (Uncomment and declare inputs and outputs as needed)
+***********************************************************************/
+// DIGITAL_INPUT 
+// ANALOG_INPUT 
+// STRING_INPUT 
+BUFFER_INPUT From_Device$[1000];
+
+// DIGITAL_OUTPUT 
+// ANALOG_OUTPUT 
+STRING_OUTPUT ToProgram$;
+
+/***********************************************************************
+  Global Variables
+  (Uncomment and declare global variables as needed)
+***********************************************************************/
+INTEGER RxOk, Marker1, Marker2, Marker3, Marker4, Marker5, Marker6;
+INTEGER Value, Channel, Parameter, Unit, Type, Field, Channel2, Parameter2;
+STRING Value$[20], Function$[8], Channel$[2], Channel2$[2];
+STRING DeviceMsg$[50];
+
+/***********************************************************************
+  Functions
+  (Add any additional functions here)
+  Note:  Functions must be physically placed before the location in
+         the code that calls them.
+***********************************************************************/
+
+Function Process2()
+{
+	Channel$ = Mid(DeviceMsg$, Marker1 + 1, Marker2 - Marker1 - 1);
+	Channel = Byte(Channel$, 1);
+	If((Channel > 47) && (Channel < 58)) Channel = atoi(Channel$);
+	Value$ = Mid(DeviceMsg$, Marker2 + 1, Marker4 - Marker2 - 1);
+	MakeString(ToProgram$, "\xFD%s%s%s%s%s\xFE", chr(Type), chr(Unit), chr(Field), chr(Channel), Value$);
+	processlogic();
+}
+    
+Function Process3()
+{
+	Channel$ = Mid(DeviceMsg$, Marker1 + 1, Marker2 - Marker1 - 1);
+	Channel = Byte(Channel$, 1);
+	If((Channel > 47) && (Channel < 58)) Channel = atoi(Channel$);
+	Parameter = Byte(Mid(DeviceMsg$, MArker2 + 1, Marker3 - Marker2 - 1), 1);
+	Value$ = Mid(DeviceMsg$, Marker3 + 1, Marker4 - Marker3 - 1);
+	MakeString(ToProgram$, "\xFD%s%s%s%s%s%s\xFE", chr(Type), chr(Unit), chr(Field), chr(Channel), Chr(parameter), Value$);
+	processlogic();
+}
+	
+Function Process4()
+{
+	Value$ = mid(DeviceMsg$, Marker2 + 1, Marker4 - Marker3 - 1);
+	Value = atoi(Value$);
+	Makestring(ToProgram$, "\xFD%s%s%s%s\xFE", chr(Type), chr(Unit), chr(Field), chr(Value));
+	processlogic();
+}
+
+Function Process5()
+{
+	Value$ = mid(DeviceMsg$, Marker1 + 1, 1);
+	Value = atoi(Value$);
+	Makestring(ToProgram$, "\xFD%s%s%s%s\xFE", chr(Type), chr(Unit), chr(Field), chr(Value));
+	processlogic();
+}
+
+Function Process6()
+{
+	Channel$ = Mid(DeviceMsg$, Marker1 + 1, Marker2 - Marker1 - 1);
+	Channel = Byte(Channel$, 1);
+	If((Channel > 47) && (Channel < 58)) Channel = atoi(Channel$);
+	Parameter = Byte(Mid(DeviceMsg$, MArker2 + 1, Marker3 - Marker2 - 1), 1);
+	Value$ = Mid(DeviceMsg$, Marker3 + 1, Marker4 - Marker3 - 1);
+	Value = atoi(Value$);
+	MakeString(ToProgram$, "\xFD%s%s%s%s%s%s\xFE", chr(Type), chr(Unit), chr(Field), chr(Channel), Chr(parameter), chr(Value));
+	processlogic();
+}
+
+
+
+
+/***********************************************************************
+  Event Handlers
+  (Uncomment and declare additional event handlers as needed)
+***********************************************************************/
+
+
+// Function for processing messages recevied from CHANGE From_Device$
+FUNCTION ProcessDeviceMsg()
+{
+    Marker1 = find("#", DeviceMsg$);
+    if(Marker1 > 0)
+    {
+        DeviceMsg$ = mid(DeviceMsg$, Marker1, len(DeviceMsg$) - Marker1);
+        Type = Byte(DeviceMsg$, 2);
+        Unit = Byte(DeviceMsg$, 3) - 48;
+        Marker1 = find(" ", DeviceMsg$, 5);
+        Marker2 = find(" ", DeviceMsg$, Marker1 + 1);
+        Marker3 = find(" ", DeviceMsg$, Marker2 + 1);
+        Marker4 = find("\x0D", DeviceMsg$, MArker3 + 1);
+        Function$ = mid(DeviceMsg$, 5, Marker1 - 5);
+        if(Function$ = "GAIN")
+        {
+            Channel$ = Mid(DeviceMsg$, Marker1 + 1, Marker2 - Marker1 - 1); 
+            Channel = Byte(Channel$, 1);
+            If((Channel > 47) && (Channel < 58)) Channel = atoi(Channel$);
+            Parameter = Byte(Mid(DeviceMsg$, Marker2 + 1, Marker3 - Marker2 - 1), 1);
+            Value$ = Mid(DeviceMsg$, Marker3 + 1, Marker4 - Marker3 - 1);
+            if(Byte(Value$, 1) = 45) Value = 65 - atoi(Value$);
+            else Value = 65 + atoi(Value$);
+            MakeString(ToProgram$, "\xFD%s%s\x01%s%s%s\xFE", chr(Type), chr(Unit), chr(Channel), Chr(parameter), chr(value));
+            processlogic();
+        }
+        else if(Function$ = "MUTE")
+        {
+            Field = 2; 
+            Call Process3();
+        }
+        else if(Function$ = "NOM")
+        {
+            Field = 3;
+            if(Type = 0x37)
+                Call process3();
+            else
+                Call Process2();
+        }
+        else if(Function$ = "AGC")
+        {
+            Field = 4;
+            Call Process3();
+        }
+        else if(Function$ = "PP")
+        {
+            Field = 5;
+            Call Process2();
+        }
+        else if(Function$ = "MLINE")
+        {
+            Field = 6;
+            Call Process2();
+        }
+        else if(Function$ = "AAMB")
+        {
+            Field = 7;
+            Call Process2();
+        } 
+        else if(Function$ = "DECAY")
+        {
+            Field = 8;
+            Call Process2();
+        } 
+        else if(Function$ = "CHAIRO")
+        {
+            Field = 9;
+            Call Process2();
+        }
+        else if(Function$ = "AMBLVL")
+        {
+            Channel$ = Mid(DeviceMsg$, Marker1 + 1, MArker2 - Marker1 - 1); 
+            Channel = Byte(Channel$, 1);
+            If((Channel > 47) && (Channel < 58)) Channel = atoi(Channel$);
+            Value$ = Mid(DeviceMsg$, Marker2 + 1, Marker4 - Marker2 - 1);
+            if(Byte(Value$, 1) = 45) Value = 80 - atoi(Value$);
+            else Value = 80 + atoi(Value$);
+            MakeString(ToProgram$, "\xFD%s%s\x0A%s%s\xFE", chr(Type), chr(Unit), chr(Channel), chr(value));
+            processlogic();
+        }
+        else if(Function$ = "LMO")
+        {
+            Field = 11;
+            Call Process2();
+        }
+        else if(Function$ = "FMP")
+        {
+            Field = 12;
+            Call Process2();
+        }
+        else if(Function$ = "MMAX")
+        {
+            Field = 13;
+            Call Process2();
+        }
+        else if(Function$ = "GATE")
+        {
+            Value$ = Mid(DeviceMsg$, Marker1 + 1, Marker4 - Marker1 - 1); 
+            Value$ = Right(Value$, 2);
+            MakeString(ToProgram$, "\xFD%s%s\x0E\x00%s\xFE", chr(Type), chr(Unit), Value$);
+            processlogic();
+        }
+        else if(Function$ = "MTRXLVL")
+        {
+            Marker5 = find(" ", DeviceMsg$, Marker3 + 1);
+            Marker6 = find(" ", DeviceMsg$, Marker5 + 1);
+            Channel$ = Mid(DeviceMsg$, Marker1 + 1, MArker2 - Marker1 - 1); 
+            Channel = Byte(Channel$, 1);
+            If((Channel > 47) && (Channel < 58)) Channel = atoi(Channel$);
+            Parameter = Byte(Mid(DeviceMsg$, MArker2 + 1, Marker3 - Marker2 - 1), 1);
+            Channel2$ = Mid(DeviceMsg$, Marker3 + 1, MArker5 - Marker3 - 1);
+            Channel2 = Byte(Channel2$, 1);
+            if((Channel2 > 47) && (Channel2 < 58)) Channel2 = atoi(Channel2$);
+            Parameter2 = Byte(Mid(DeviceMsg$, Marker5 + 1, Marker6 - Marker5 - 1), 1);
+            Value$ = Mid(DeviceMsg$, Marker6 + 1, MArker4 - Marker6 - 1);
+            if(Byte(Value$, 1) = 45) Value = 60 - atoi(Value$);
+            else Value = 60;
+            MakeString(ToProgram$, "\xFD%s%s\x0F%s%s%s%s%s\xFE", chr(Type), chr(Unit), chr(Channel), Chr(parameter), chr(Channel2), Chr(parameter2), chr(value));
+            processlogic();
+        } 
+        else if(Function$ = "AEC")
+        {
+            Field = 16;
+            Call Process2();
+        }
+        else if(Function$ = "NCSEL")
+        {
+            Field = 17;
+            if(Type = 0x37)
+                Call process3();
+            else
+                Call Process2();
+        }
+        else if(Function$ = "NCD")
+        {
+            Channel$ = Mid(DeviceMsg$, Marker1 + 1, MArker2 - Marker1 - 1); 
+            Channel = Byte(Channel$, 1);
+            If((Channel > 47) && (Channel < 58)) Channel = atoi(Channel$);
+            if(Type = 0x37)
+            {
+                Parameter = Byte(Mid(DeviceMsg$, MArker2 + 1, Marker3 - Marker2 - 1), 1);
+                Value$ = Mid(DeviceMsg$, Marker3 + 1, Marker4 - Marker3 - 1);
+                Value = atoi(Value$) - 6;
+                MakeString(ToProgram$, "\xFD%s%s\x12%s%s%s\xFE", chr(Type), chr(Unit), chr(Channel), chr(Parameter), chr(value));
+            }
+            else
+            {
+                Value$ = Mid(DeviceMsg$, Marker2 + 1, Marker4 - Marker2 - 1);
+                Value = atoi(Value$) - 6;
+                MakeString(ToProgram$, "\xFD%s%s\x12%s%s\xFE", chr(Type), chr(Unit), chr(Channel), chr(value));
+            }
+            processlogic();
+        }
+        else if(Function$ = "AA")
+        {
+            Field = 19;
+            Call Process4();
+        }
+        else if(Function$ = "TE")
+        {
+            Field = 20;
+            Call Process4();
+        }
+        else if(Function$ = "AD")
+        {
+            Field = 21;
+            Call Process4();
+        }
+        else if(Function$ = "RXBOOST")
+        {
+            Field = 22;
+            Call Process4();
+        }
+        else if(Function$ = "RXBSTEN")
+        {
+            Field = 23;
+            Call Process4();
+        }
+        else if(Function$ = "RING")
+        {
+            Field = 24;
+            Makestring(ToProgram$, "\xFD%s%s%s1\xFE", chr(Type), chr(Unit), chr(Field));
+            processlogic();
+        }
+        else if(Function$ = "SIGGENEN")
+        {
+            Field = 25;
+            Call Process5();
+        }
+        else if(Function$ = "FE")
+        {
+            Field = 26; 
+            Call Process3();
+        }
+        else if(Function$ = "XCOMPSEL")
+        {
+            Field = 27; 
+            Call Process3();
+        }
+        else if(Function$ = "XAA")
+        {
+            Field = 28;
+            Call Process6();
+        }
+        else if(Function$ = "XTE")
+        {
+            Field = 29;
+            Call Process6();
+        }
+        else if(Function$ = "XRING")
+        {
+            Field = 30;
+            Makestring(ToProgram$, "\xFD%s%s%s1\xFE", chr(Type), chr(Unit), chr(Field));
+            processlogic();
+        }
+    }
+}
+
+#if_series3
+THREADSAFE CHANGE From_Device$
+{
+    while (1)
+    {
+        try
+        {
+            DeviceMsg$ = gather("\x0D\x0A", From_Device$);
+            ProcessDeviceMsg();
+        }
+        catch
+        {
+            print("Problem processing Device Rx Message\n");
+        }
+    }
+}
+#else
+CHANGE From_Device$
+{
+	if(RxOk = 1)
+	{
+		RxOk = 0;
+		While(find("\x0D\x0A", From_Device$) > 0)
+		{
+			DeviceMsg$ = Remove("\x0D\x0A", From_Device$);
+			ProcessDeviceMsg();
+		} // while
+		RxOk = 1;
+	}
+}
+#endif
+
+
+/***********************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+***********************************************************************/
+
+Function Main()
+	{
+    RxOk = 1;
+    }

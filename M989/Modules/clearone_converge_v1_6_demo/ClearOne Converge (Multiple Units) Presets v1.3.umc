@@ -1,0 +1,2242 @@
+[
+Version=1
+]
+[
+ObjTp=FSgntr
+Sgntr=UserMacro
+RelVrs=2.11.27
+IntStrVrs=2
+MinSMWVrs=0
+MinTIOVrs=0
+SavedBy=SMW2.11.27
+]
+[
+ObjTp=Hd
+S0Nd=1
+S1Nd=2
+SLNd=3
+PrNm=ClearOne Converge (Multiple Units) Presets v1.3.umc
+DbVr=21.02.016.00
+DvcDbVr=26.00.005.00
+PgmNm=CRR/LP
+DlrNm=Crestron Electronics
+CltNm=Allows control of all 32 available presets v1.3
+Incl=362,378,380,405,407,408,409,478,522,537,554,586,590,611,624,767,830,883,1032,1062,1079,1134,1157,1199,1220,1222,1299,1348,1439,1472,1473,1499,1746,1803,1975,167,168,216,225,248,249,266,
+McNm=ClearOne Converge (Multiple Un
+SmVr=648
+DvVr=648
+TpN1=1
+TpN2=2
+TpN3=3
+TpN4=4
+TpN5=5
+PdfHelp=ClearOne Converge (Multiple Units) Presets v1.3 Help.pdf
+DT=Conferencing
+DST=Audio Teleconference
+Mfg=Clearone
+NumMdl=9
+Mdl1=880
+Mdl2=840T
+Mdl3=TH20
+Mdl4=8i
+Mdl5=880T
+Mdl6=SR1212
+Mdl7=880TA
+Mdl8=SR1212A
+Mdl9=VH20
+Tmpl=Audio Conference
+APg=1
+StdCmd=0
+FltTmp=1
+FpCS=0
+]
+[
+ObjTp=Bk
+Nm1=\
+Sx1=0
+Sy1=0
+Mx1=0
+]
+[
+ObjTp=Symbol
+Name=ClearOne Converge (Multiple Units) Presets v1.3
+Code=1
+SmplCName=ClearOne Converge (Multiple Units) Presets v1.3.umc
+Smpl-C=3
+CompilerTimePrecision=Single_Or_Double_Precision
+Hint=Allows control of all 32 available presets v1.3
+SMWRev=0
+TIORev=0
+HelpID=1055
+PdfHelp=ClearOne Converge (Multiple Units) Presets v1.3 Help.pdf
+DT=Conferencing
+DST=Audio Teleconference
+Mfg=Clearone
+NumMdl=9
+Mdl1=880
+Mdl2=840T
+Mdl3=TH20
+Mdl4=8i
+Mdl5=880T
+Mdl6=SR1212
+Mdl7=880TA
+Mdl8=SR1212A
+Mdl9=VH20
+Tmpl=Audio Conference
+APg=1
+StdCmd=0
+FltTmp=1
+FpCS=0
+NumFixedInputs=96
+NumFixedOutputs=1
+NumFixedParams=2
+MinVariableInputs=0
+MinVariableInputsList2=0
+MinVariableInputsList3=0
+MinVariableOutputs=0
+MinVariableOutputsList2=0
+MinVariableOutputsList3=0
+MinVariableParams=0
+SymbolTree=20
+OutputSigType1=Serial
+ParamSigType1=List
+ParamSigType2=List
+InputCue1=PRESET-1-ON
+InputCue2=PRESET-2-ON
+InputCue3=PRESET-3-ON
+InputCue4=PRESET-4-ON
+InputCue5=PRESET-5-ON
+InputCue6=PRESET-6-ON
+InputCue7=PRESET-7-ON
+InputCue8=PRESET-8-ON
+InputCue9=PRESET-9-ON
+InputCue10=PRESET-10-ON
+InputCue11=PRESET-11-ON
+InputCue12=PRESET-12-ON
+InputCue13=PRESET-13-ON
+InputCue14=PRESET-14-ON
+InputCue15=PRESET-15-ON
+InputCue16=PRESET-16-ON
+InputCue17=PRESET-17-ON
+InputCue18=PRESET-18-ON
+InputCue19=PRESET-19-ON
+InputCue20=PRESET-20-ON
+InputCue21=PRESET-21-ON
+InputCue22=PRESET-22-ON
+InputCue23=PRESET-23-ON
+InputCue24=PRESET-24-ON
+InputCue25=PRESET-25-ON
+InputCue26=PRESET-26-ON
+InputCue27=PRESET-27-ON
+InputCue28=PRESET-28-ON
+InputCue29=PRESET-29-ON
+InputCue30=PRESET-30-ON
+InputCue31=PRESET-31-ON
+InputCue32=PRESET-32-ON
+InputCue33=PRESET-1-OFF
+InputCue34=PRESET-2-OFF
+InputCue35=PRESET-3-OFF
+InputCue36=PRESET-4-OFF
+InputCue37=PRESET-5-OFF
+InputCue38=PRESET-6-OFF
+InputCue39=PRESET-7-OFF
+InputCue40=PRESET-8-OFF
+InputCue41=PRESET-9-OFF
+InputCue42=PRESET-10-OFF
+InputCue43=PRESET-11-OFF
+InputCue44=PRESET-12-OFF
+InputCue45=PRESET-13-OFF
+InputCue46=PRESET-14-OFF
+InputCue47=PRESET-15-OFF
+InputCue48=PRESET-16-OFF
+InputCue49=PRESET-17-OFF
+InputCue50=PRESET-18-OFF
+InputCue51=PRESET-19-OFF
+InputCue52=PRESET-20-OFF
+InputCue53=PRESET-21-OFF
+InputCue54=PRESET-22-OFF
+InputCue55=PRESET-23-OFF
+InputCue56=PRESET-24-OFF
+InputCue57=PRESET-25-OFF
+InputCue58=PRESET-26-OFF
+InputCue59=PRESET-27-OFF
+InputCue60=PRESET-28-OFF
+InputCue61=PRESET-29-OFF
+InputCue62=PRESET-30-OFF
+InputCue63=PRESET-31-OFF
+InputCue64=PRESET-32-OFF
+InputCue65=PRESET-1-ON/OFF
+InputCue66=PRESET-2-ON/OFF
+InputCue67=PRESET-3-ON/OFF
+InputCue68=PRESET-4-ON/OFF
+InputCue69=PRESET-5-ON/OFF
+InputCue70=PRESET-6-ON/OFF
+InputCue71=PRESET-7-ON/OFF
+InputCue72=PRESET-8-ON/OFF
+InputCue73=PRESET-9-ON/OFF
+InputCue74=PRESET-10-ON/OFF
+InputCue75=PRESET-11-ON/OFF
+InputCue76=PRESET-12-ON/OFF
+InputCue77=PRESET-13-ON/OFF
+InputCue78=PRESET-14-ON/OFF
+InputCue79=PRESET-15-ON/OFF
+InputCue80=PRESET-16-ON/OFF
+InputCue81=PRESET-17-ON/OFF
+InputCue82=PRESET-18-ON/OFF
+InputCue83=PRESET-19-ON/OFF
+InputCue84=PRESET-20-ON/OFF
+InputCue85=PRESET-21-ON/OFF
+InputCue86=PRESET-22-ON/OFF
+InputCue87=PRESET-23-ON/OFF
+InputCue88=PRESET-24-ON/OFF
+InputCue89=PRESET-25-ON/OFF
+InputCue90=PRESET-26-ON/OFF
+InputCue91=PRESET-27-ON/OFF
+InputCue92=PRESET-28-ON/OFF
+InputCue93=PRESET-29-ON/OFF
+InputCue94=PRESET-30-ON/OFF
+InputCue95=PRESET-31-ON/OFF
+InputCue96=PRESET-32-ON/OFF
+OutputCue1=To_Device$
+ParamCue1=TYPE-ID-ASCII,1,3,2,A,D,G,H,I,E
+ParamCue2=UNIT-ID-ASCII,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F
+MPi=96
+Pi1=1
+Pi2=2
+Pi3=3
+Pi4=4
+Pi5=5
+Pi6=6
+Pi7=7
+Pi8=8
+Pi9=9
+Pi10=10
+Pi11=11
+Pi12=12
+Pi13=13
+Pi14=14
+Pi15=15
+Pi16=16
+Pi17=17
+Pi18=18
+Pi19=19
+Pi20=20
+Pi21=21
+Pi22=22
+Pi23=23
+Pi24=24
+Pi25=25
+Pi26=26
+Pi27=27
+Pi28=28
+Pi29=29
+Pi30=30
+Pi31=31
+Pi32=32
+Pi33=33
+Pi34=34
+Pi35=35
+Pi36=36
+Pi37=37
+Pi38=38
+Pi39=39
+Pi40=40
+Pi41=41
+Pi42=42
+Pi43=43
+Pi44=44
+Pi45=45
+Pi46=46
+Pi47=47
+Pi48=48
+Pi49=49
+Pi50=50
+Pi51=51
+Pi52=52
+Pi53=53
+Pi54=54
+Pi55=55
+Pi56=56
+Pi57=57
+Pi58=58
+Pi59=59
+Pi60=60
+Pi61=61
+Pi62=62
+Pi63=63
+Pi64=64
+Pi65=65
+Pi66=66
+Pi67=67
+Pi68=68
+Pi69=69
+Pi70=70
+Pi71=71
+Pi72=72
+Pi73=73
+Pi74=74
+Pi75=75
+Pi76=76
+Pi77=77
+Pi78=78
+Pi79=79
+Pi80=80
+Pi81=81
+Pi82=82
+Pi83=83
+Pi84=84
+Pi85=85
+Pi86=86
+Pi87=87
+Pi88=88
+Pi89=89
+Pi90=90
+Pi91=91
+Pi92=92
+Pi93=93
+Pi94=94
+Pi95=95
+Pi96=96
+MPo=1
+Po1=97
+MPp=2
+Pp1=98
+Pp2=99
+FileName=ClearOne Converge (Multiple Units) Presets v1.3.umc
+]
+[
+ObjTp=Sm
+H=1
+SmC=157
+Nm=Central Control Modules
+ObjVer=1
+CF=2
+n1I=1
+n1O=1
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=2
+SmC=157
+Nm=Network Modules
+ObjVer=1
+CF=2
+n1I=1
+n1O=1
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=3
+SmC=157
+Nm=Ethernet
+ObjVer=1
+CF=2
+n1I=1
+n1O=1
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=4
+SmC=156
+Nm=Logic
+ObjVer=1
+CF=2
+mC=1
+C1=14
+]
+[
+ObjTp=Sm
+H=5
+SmC=157
+Nm=DefineArguments
+ObjVer=1
+CF=2
+n1I=1
+n1O=1
+mC=1
+C1=6
+mI=1
+mO=1
+tO=1
+mP=1
+P1=
+]
+[
+ObjTp=Sm
+H=6
+SmC=55
+ObjVer=1
+PrH=5
+CF=2
+n1I=96
+n1O=1
+mI=96
+I1=69
+I2=70
+I3=71
+I4=72
+I5=73
+I6=74
+I7=75
+I8=76
+I9=77
+I10=78
+I11=79
+I12=80
+I13=81
+I14=82
+I15=83
+I16=84
+I17=85
+I18=86
+I19=87
+I20=88
+I21=89
+I22=90
+I23=91
+I24=92
+I25=93
+I26=94
+I27=95
+I28=96
+I29=97
+I30=98
+I31=99
+I32=100
+I33=101
+I34=102
+I35=103
+I36=104
+I37=105
+I38=106
+I39=107
+I40=108
+I41=109
+I42=110
+I43=111
+I44=112
+I45=113
+I46=114
+I47=115
+I48=116
+I49=117
+I50=118
+I51=119
+I52=120
+I53=121
+I54=122
+I55=123
+I56=124
+I57=125
+I58=126
+I59=127
+I60=128
+I61=129
+I62=130
+I63=131
+I64=132
+I65=4
+I66=5
+I67=9
+I68=10
+I69=14
+I70=15
+I71=16
+I72=17
+I73=18
+I74=19
+I75=20
+I76=48
+I77=49
+I78=50
+I79=51
+I80=52
+I81=53
+I82=54
+I83=55
+I84=56
+I85=57
+I86=58
+I87=59
+I88=60
+I89=61
+I90=62
+I91=63
+I92=64
+I93=65
+I94=66
+I95=67
+I96=68
+mO=1
+tO=1
+O1=13
+mP=2
+P1=TYPE-ID-ASCII
+P2=UNIT-ID-ASCII
+MPi=96
+Pi1=1
+Pi2=2
+Pi3=3
+Pi4=4
+Pi5=5
+Pi6=6
+Pi7=7
+Pi8=8
+Pi9=9
+Pi10=10
+Pi11=11
+Pi12=12
+Pi13=13
+Pi14=14
+Pi15=15
+Pi16=16
+Pi17=17
+Pi18=18
+Pi19=19
+Pi20=20
+Pi21=21
+Pi22=22
+Pi23=23
+Pi24=24
+Pi25=25
+Pi26=26
+Pi27=27
+Pi28=28
+Pi29=29
+Pi30=30
+Pi31=31
+Pi32=32
+Pi33=33
+Pi34=34
+Pi35=35
+Pi36=36
+Pi37=37
+Pi38=38
+Pi39=39
+Pi40=40
+Pi41=41
+Pi42=42
+Pi43=43
+Pi44=44
+Pi45=45
+Pi46=46
+Pi47=47
+Pi48=48
+Pi49=49
+Pi50=50
+Pi51=51
+Pi52=52
+Pi53=53
+Pi54=54
+Pi55=55
+Pi56=56
+Pi57=57
+Pi58=58
+Pi59=59
+Pi60=60
+Pi61=61
+Pi62=62
+Pi63=63
+Pi64=64
+Pi65=65
+Pi66=66
+Pi67=67
+Pi68=68
+Pi69=69
+Pi70=70
+Pi71=71
+Pi72=72
+Pi73=73
+Pi74=74
+Pi75=75
+Pi76=76
+Pi77=77
+Pi78=78
+Pi79=79
+Pi80=80
+Pi81=81
+Pi82=82
+Pi83=83
+Pi84=84
+Pi85=85
+Pi86=86
+Pi87=87
+Pi88=88
+Pi89=89
+Pi90=90
+Pi91=91
+Pi92=92
+Pi93=93
+Pi94=94
+Pi95=95
+Pi96=96
+MPo=1
+Po1=97
+MPp=2
+Pp1=98
+Pp2=99
+]
+[
+ObjTp=Sm
+H=14
+SmC=101
+ObjVer=1
+PrH=4
+CF=2
+n1I=98
+n1O=2
+mI=98
+I3=4
+I4=5
+I5=9
+I6=10
+I7=14
+I8=15
+I9=16
+I10=17
+I11=18
+I12=19
+I13=20
+I14=48
+I15=49
+I16=50
+I17=51
+I18=52
+I19=53
+I20=54
+I21=55
+I22=56
+I23=57
+I24=58
+I25=59
+I26=60
+I27=61
+I28=62
+I29=63
+I30=64
+I31=65
+I32=66
+I33=67
+I34=68
+I35=69
+I36=70
+I37=71
+I38=72
+I39=73
+I40=74
+I41=75
+I42=76
+I43=77
+I44=78
+I45=79
+I46=80
+I47=81
+I48=82
+I49=83
+I50=84
+I51=85
+I52=86
+I53=87
+I54=88
+I55=89
+I56=90
+I57=91
+I58=92
+I59=93
+I60=94
+I61=95
+I62=96
+I63=97
+I64=98
+I65=99
+I66=100
+I67=101
+I68=102
+I69=103
+I70=104
+I71=105
+I72=106
+I73=107
+I74=108
+I75=109
+I76=110
+I77=111
+I78=112
+I79=113
+I80=114
+I81=115
+I82=116
+I83=117
+I84=118
+I85=119
+I86=120
+I87=121
+I88=122
+I89=123
+I90=124
+I91=125
+I92=126
+I93=127
+I94=128
+I95=129
+I96=130
+I97=131
+I98=132
+mO=2
+tO=2
+O1=13
+mP=98
+P1=
+P2="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 1 2\r"
+P3="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 2 2\r"
+P4="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 3 2\r"
+P5="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 4 2\r"
+P6="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 5 2\r"
+P7="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 6 2\r"
+P8="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 7 2\r"
+P9="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 8 2\r"
+P10="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 9 2\r"
+P11="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 10 2\r"
+P12="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 11 2\r"
+P13="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 12 2\r"
+P14="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 13 2\r"
+P15="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 14 2\r"
+P16="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 15 2\r"
+P17="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 16 2\r"
+P18="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 17 2\r"
+P19="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 18 2\r"
+P20="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 19 2\r"
+P21="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 20 2\r"
+P22="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 21 2\r"
+P23="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 22 2\r"
+P24="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 23 2\r"
+P25="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 24 2\r"
+P26="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 25 2\r"
+P27="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 26 2\r"
+P28="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 27 2\r"
+P29="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 28 2\r"
+P30="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 29 2\r"
+P31="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 30 2\r"
+P32="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 31 2\r"
+P33="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 32 2\r"
+P34="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 1 1\r"
+P35="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 2 1\r"
+P36="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 3 1\r"
+P37="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 4 1\r"
+P38="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 5 1\r"
+P39="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 6 1\r"
+P40="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 7 1\r"
+P41="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 8 1\r"
+P42="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 9 1\r"
+P43="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 10 1\r"
+P44="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 11 1\r"
+P45="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 12 1\r"
+P46="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 13 1\r"
+P47="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 14 1\r"
+P48="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 15 1\r"
+P49="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 16 1\r"
+P50="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 17 1\r"
+P51="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 18 1\r"
+P52="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 19 1\r"
+P53="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 20 1\r"
+P54="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 21 1\r"
+P55="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 22 1\r"
+P56="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 23 1\r"
+P57="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 24 1\r"
+P58="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 25 1\r"
+P59="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 26 1\r"
+P60="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 27 1\r"
+P61="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 28 1\r"
+P62="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 29 1\r"
+P63="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 30 1\r"
+P64="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 31 1\r"
+P65="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 32 1\r"
+P66="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 1 0\r"
+P67="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 2 0\r"
+P68="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 3 0\r"
+P69="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 4 0\r"
+P70="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 5 0\r"
+P71="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 6 0\r"
+P72="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 7 0\r"
+P73="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 8 0\r"
+P74="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 9 0\r"
+P75="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 10 0\r"
+P76="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 11 0\r"
+P77="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 12 0\r"
+P78="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 13 0\r"
+P79="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 14 0\r"
+P80="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 15 0\r"
+P81="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 16 0\r"
+P82="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 17 0\r"
+P83="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 18 0\r"
+P84="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 19 0\r"
+P85="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 20 0\r"
+P86="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 21 0\r"
+P87="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 22 0\r"
+P88="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 23 0\r"
+P89="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 24 0\r"
+P90="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 25 0\r"
+P91="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 26 0\r"
+P92="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 27 0\r"
+P93="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 28 0\r"
+P94="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 29 0\r"
+P95="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 30 0\r"
+P96="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 31 0\r"
+P97="#\[#TYPE-ID-ASCII\]\[#UNIT-ID-ASCII\]\x20PRESET 32 0\r"
+P98=
+]
+[
+ObjTp=Sg
+H=4
+Nm=PRESET-1-ON/OFF
+]
+[
+ObjTp=Sg
+H=5
+Nm=PRESET-2-ON/OFF
+]
+[
+ObjTp=Sg
+H=9
+Nm=PRESET-3-ON/OFF
+]
+[
+ObjTp=Sg
+H=10
+Nm=PRESET-4-ON/OFF
+]
+[
+ObjTp=Sg
+H=13
+Nm=To_Device$
+SgTp=4
+]
+[
+ObjTp=Sg
+H=14
+Nm=PRESET-5-ON/OFF
+]
+[
+ObjTp=Sg
+H=15
+Nm=PRESET-6-ON/OFF
+]
+[
+ObjTp=Sg
+H=16
+Nm=PRESET-7-ON/OFF
+]
+[
+ObjTp=Sg
+H=17
+Nm=PRESET-8-ON/OFF
+]
+[
+ObjTp=Sg
+H=18
+Nm=PRESET-9-ON/OFF
+]
+[
+ObjTp=Sg
+H=19
+Nm=PRESET-10-ON/OFF
+]
+[
+ObjTp=Sg
+H=20
+Nm=PRESET-11-ON/OFF
+]
+[
+ObjTp=Sg
+H=48
+Nm=PRESET-12-ON/OFF
+]
+[
+ObjTp=Sg
+H=49
+Nm=PRESET-13-ON/OFF
+]
+[
+ObjTp=Sg
+H=50
+Nm=PRESET-14-ON/OFF
+]
+[
+ObjTp=Sg
+H=51
+Nm=PRESET-15-ON/OFF
+]
+[
+ObjTp=Sg
+H=52
+Nm=PRESET-16-ON/OFF
+]
+[
+ObjTp=Sg
+H=53
+Nm=PRESET-17-ON/OFF
+]
+[
+ObjTp=Sg
+H=54
+Nm=PRESET-18-ON/OFF
+]
+[
+ObjTp=Sg
+H=55
+Nm=PRESET-19-ON/OFF
+]
+[
+ObjTp=Sg
+H=56
+Nm=PRESET-20-ON/OFF
+]
+[
+ObjTp=Sg
+H=57
+Nm=PRESET-21-ON/OFF
+]
+[
+ObjTp=Sg
+H=58
+Nm=PRESET-22-ON/OFF
+]
+[
+ObjTp=Sg
+H=59
+Nm=PRESET-23-ON/OFF
+]
+[
+ObjTp=Sg
+H=60
+Nm=PRESET-24-ON/OFF
+]
+[
+ObjTp=Sg
+H=61
+Nm=PRESET-25-ON/OFF
+]
+[
+ObjTp=Sg
+H=62
+Nm=PRESET-26-ON/OFF
+]
+[
+ObjTp=Sg
+H=63
+Nm=PRESET-27-ON/OFF
+]
+[
+ObjTp=Sg
+H=64
+Nm=PRESET-28-ON/OFF
+]
+[
+ObjTp=Sg
+H=65
+Nm=PRESET-29-ON/OFF
+]
+[
+ObjTp=Sg
+H=66
+Nm=PRESET-30-ON/OFF
+]
+[
+ObjTp=Sg
+H=67
+Nm=PRESET-31-ON/OFF
+]
+[
+ObjTp=Sg
+H=68
+Nm=PRESET-32-ON/OFF
+]
+[
+ObjTp=Sg
+H=69
+Nm=PRESET-1-ON
+]
+[
+ObjTp=Sg
+H=70
+Nm=PRESET-2-ON
+]
+[
+ObjTp=Sg
+H=71
+Nm=PRESET-3-ON
+]
+[
+ObjTp=Sg
+H=72
+Nm=PRESET-4-ON
+]
+[
+ObjTp=Sg
+H=73
+Nm=PRESET-5-ON
+]
+[
+ObjTp=Sg
+H=74
+Nm=PRESET-6-ON
+]
+[
+ObjTp=Sg
+H=75
+Nm=PRESET-7-ON
+]
+[
+ObjTp=Sg
+H=76
+Nm=PRESET-8-ON
+]
+[
+ObjTp=Sg
+H=77
+Nm=PRESET-9-ON
+]
+[
+ObjTp=Sg
+H=78
+Nm=PRESET-10-ON
+]
+[
+ObjTp=Sg
+H=79
+Nm=PRESET-11-ON
+]
+[
+ObjTp=Sg
+H=80
+Nm=PRESET-12-ON
+]
+[
+ObjTp=Sg
+H=81
+Nm=PRESET-13-ON
+]
+[
+ObjTp=Sg
+H=82
+Nm=PRESET-14-ON
+]
+[
+ObjTp=Sg
+H=83
+Nm=PRESET-15-ON
+]
+[
+ObjTp=Sg
+H=84
+Nm=PRESET-16-ON
+]
+[
+ObjTp=Sg
+H=85
+Nm=PRESET-17-ON
+]
+[
+ObjTp=Sg
+H=86
+Nm=PRESET-18-ON
+]
+[
+ObjTp=Sg
+H=87
+Nm=PRESET-19-ON
+]
+[
+ObjTp=Sg
+H=88
+Nm=PRESET-20-ON
+]
+[
+ObjTp=Sg
+H=89
+Nm=PRESET-21-ON
+]
+[
+ObjTp=Sg
+H=90
+Nm=PRESET-22-ON
+]
+[
+ObjTp=Sg
+H=91
+Nm=PRESET-23-ON
+]
+[
+ObjTp=Sg
+H=92
+Nm=PRESET-24-ON
+]
+[
+ObjTp=Sg
+H=93
+Nm=PRESET-25-ON
+]
+[
+ObjTp=Sg
+H=94
+Nm=PRESET-26-ON
+]
+[
+ObjTp=Sg
+H=95
+Nm=PRESET-27-ON
+]
+[
+ObjTp=Sg
+H=96
+Nm=PRESET-28-ON
+]
+[
+ObjTp=Sg
+H=97
+Nm=PRESET-29-ON
+]
+[
+ObjTp=Sg
+H=98
+Nm=PRESET-30-ON
+]
+[
+ObjTp=Sg
+H=99
+Nm=PRESET-31-ON
+]
+[
+ObjTp=Sg
+H=100
+Nm=PRESET-32-ON
+]
+[
+ObjTp=Sg
+H=101
+Nm=PRESET-1-OFF
+]
+[
+ObjTp=Sg
+H=102
+Nm=PRESET-2-OFF
+]
+[
+ObjTp=Sg
+H=103
+Nm=PRESET-3-OFF
+]
+[
+ObjTp=Sg
+H=104
+Nm=PRESET-4-OFF
+]
+[
+ObjTp=Sg
+H=105
+Nm=PRESET-5-OFF
+]
+[
+ObjTp=Sg
+H=106
+Nm=PRESET-6-OFF
+]
+[
+ObjTp=Sg
+H=107
+Nm=PRESET-7-OFF
+]
+[
+ObjTp=Sg
+H=108
+Nm=PRESET-8-OFF
+]
+[
+ObjTp=Sg
+H=109
+Nm=PRESET-9-OFF
+]
+[
+ObjTp=Sg
+H=110
+Nm=PRESET-10-OFF
+]
+[
+ObjTp=Sg
+H=111
+Nm=PRESET-11-OFF
+]
+[
+ObjTp=Sg
+H=112
+Nm=PRESET-12-OFF
+]
+[
+ObjTp=Sg
+H=113
+Nm=PRESET-13-OFF
+]
+[
+ObjTp=Sg
+H=114
+Nm=PRESET-14-OFF
+]
+[
+ObjTp=Sg
+H=115
+Nm=PRESET-15-OFF
+]
+[
+ObjTp=Sg
+H=116
+Nm=PRESET-16-OFF
+]
+[
+ObjTp=Sg
+H=117
+Nm=PRESET-17-OFF
+]
+[
+ObjTp=Sg
+H=118
+Nm=PRESET-18-OFF
+]
+[
+ObjTp=Sg
+H=119
+Nm=PRESET-19-OFF
+]
+[
+ObjTp=Sg
+H=120
+Nm=PRESET-20-OFF
+]
+[
+ObjTp=Sg
+H=121
+Nm=PRESET-21-OFF
+]
+[
+ObjTp=Sg
+H=122
+Nm=PRESET-22-OFF
+]
+[
+ObjTp=Sg
+H=123
+Nm=PRESET-23-OFF
+]
+[
+ObjTp=Sg
+H=124
+Nm=PRESET-24-OFF
+]
+[
+ObjTp=Sg
+H=125
+Nm=PRESET-25-OFF
+]
+[
+ObjTp=Sg
+H=126
+Nm=PRESET-26-OFF
+]
+[
+ObjTp=Sg
+H=127
+Nm=PRESET-27-OFF
+]
+[
+ObjTp=Sg
+H=128
+Nm=PRESET-28-OFF
+]
+[
+ObjTp=Sg
+H=129
+Nm=PRESET-29-OFF
+]
+[
+ObjTp=Sg
+H=130
+Nm=PRESET-30-OFF
+]
+[
+ObjTp=Sg
+H=131
+Nm=PRESET-31-OFF
+]
+[
+ObjTp=Sg
+H=132
+Nm=PRESET-32-OFF
+]
+[
+ObjTp=Dp
+H=1
+Tp=2
+DT=1
+FD1=Preset 1 On
+SD=Preset 1 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=2
+Tp=2
+DT=1
+FD1=Preset 2 On
+SD=Preset 2 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=3
+Tp=2
+DT=1
+FD1=Preset 3 On
+SD=Preset 3 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=4
+Tp=2
+DT=1
+FD1=Preset 4 On
+SD=Preset 4 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=5
+Tp=2
+DT=1
+FD1=Preset 5 On
+SD=Preset 5 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=6
+Tp=2
+DT=1
+FD1=Preset 6 On
+SD=Preset 6 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=7
+Tp=2
+DT=1
+FD1=Preset 7 On
+SD=Preset 7 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=8
+Tp=2
+DT=1
+FD1=Preset 8 On
+SD=Preset 8 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=9
+Tp=2
+DT=1
+FD1=Preset 9 On
+SD=Preset 9 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=10
+Tp=2
+DT=1
+FD1=Preset 10 On
+SD=Preset 10 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=11
+Tp=2
+DT=1
+FD1=Preset 11 On
+SD=Preset 11 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=12
+Tp=2
+DT=1
+FD1=Preset 12 On
+SD=Preset 12 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=13
+Tp=2
+DT=1
+FD1=Preset 13 On
+SD=Preset 13 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=14
+Tp=2
+DT=1
+FD1=Preset 14 On
+SD=Preset 14 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=15
+Tp=2
+DT=1
+FD1=Preset 15 On
+SD=Preset 15 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=16
+Tp=2
+DT=1
+FD1=Preset 16 On
+SD=Preset 16 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=17
+Tp=2
+DT=1
+FD1=Preset 17 On
+SD=Preset 17 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=18
+Tp=2
+DT=1
+FD1=Preset 18 On
+SD=Preset 18 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=19
+Tp=2
+DT=1
+FD1=Preset 19 On
+SD=Preset 19 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=20
+Tp=2
+DT=1
+FD1=Preset 20 On
+SD=Preset 20 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=21
+Tp=2
+DT=1
+FD1=Preset 21 On
+SD=Preset 21 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=22
+Tp=2
+DT=1
+FD1=Preset 22 On
+SD=Preset 22 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=23
+Tp=2
+DT=1
+FD1=Preset 23 On
+SD=Preset 23 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=24
+Tp=2
+DT=1
+FD1=Preset 24 On
+SD=Preset 24 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=25
+Tp=2
+DT=1
+FD1=Preset 25 On
+SD=Preset 25 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=26
+Tp=2
+DT=1
+FD1=Preset 26 On
+SD=Preset 26 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=27
+Tp=2
+DT=1
+FD1=Preset 27 On
+SD=Preset 27 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=28
+Tp=2
+DT=1
+FD1=Preset 28 On
+SD=Preset 28 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=29
+Tp=2
+DT=1
+FD1=Preset 29 On
+SD=Preset 29 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=30
+Tp=2
+DT=1
+FD1=Preset 30 On
+SD=Preset 30 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=31
+Tp=2
+DT=1
+FD1=Preset 31 On
+SD=Preset 31 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=32
+Tp=2
+DT=1
+FD1=Preset 32 On
+SD=Preset 32 On
+Trg=1
+]
+[
+ObjTp=Dp
+H=33
+Tp=2
+DT=1
+FD1=Preset 1 Off
+SD=Preset 1 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=34
+Tp=2
+DT=1
+FD1=Preset 2 Off
+SD=Preset 2 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=35
+Tp=2
+DT=1
+FD1=Preset 3 Off
+SD=Preset 3 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=36
+Tp=2
+DT=1
+FD1=Preset 4 Off
+SD=Preset 4 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=37
+Tp=2
+DT=1
+FD1=Preset 5 Off
+SD=Preset 5 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=38
+Tp=2
+DT=1
+FD1=Preset 6 Off
+SD=Preset 6 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=39
+Tp=2
+DT=1
+FD1=Preset 7 Off
+SD=Preset 7 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=40
+Tp=2
+DT=1
+FD1=Preset 8 Off
+SD=Preset 8 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=41
+Tp=2
+DT=1
+FD1=Preset 9 Off
+SD=Preset 9 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=42
+Tp=2
+DT=1
+FD1=Preset 10 Off
+SD=Preset 10 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=43
+Tp=2
+DT=1
+FD1=Preset 11 Off
+SD=Preset 11 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=44
+Tp=2
+DT=1
+FD1=Preset 12 Off
+SD=Preset 12 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=45
+Tp=2
+DT=1
+FD1=Preset 13 Off
+SD=Preset 13 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=46
+Tp=2
+DT=1
+FD1=Preset 14 Off
+SD=Preset 14 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=47
+Tp=2
+DT=1
+FD1=Preset 15 Off
+SD=Preset 15 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=48
+Tp=2
+DT=1
+FD1=Preset 16 Off
+SD=Preset 16 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=49
+Tp=2
+DT=1
+FD1=Preset 17 Off
+SD=Preset 17 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=50
+Tp=2
+DT=1
+FD1=Preset 18 Off
+SD=Preset 18 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=51
+Tp=2
+DT=1
+FD1=Preset 19 Off
+SD=Preset 19 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=52
+Tp=2
+DT=1
+FD1=Preset 20 Off
+SD=Preset 20 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=53
+Tp=2
+DT=1
+FD1=Preset 21 Off
+SD=Preset 21 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=54
+Tp=2
+DT=1
+FD1=Preset 22 Off
+SD=Preset 22 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=55
+Tp=2
+DT=1
+FD1=Preset 23 Off
+SD=Preset 23 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=56
+Tp=2
+DT=1
+FD1=Preset 24 Off
+SD=Preset 24 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=57
+Tp=2
+DT=1
+FD1=Preset 25 Off
+SD=Preset 25 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=58
+Tp=2
+DT=1
+FD1=Preset 26 Off
+SD=Preset 26 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=59
+Tp=2
+DT=1
+FD1=Preset 27 Off
+SD=Preset 27 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=60
+Tp=2
+DT=1
+FD1=Preset 28 Off
+SD=Preset 28 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=61
+Tp=2
+DT=1
+FD1=Preset 29 Off
+SD=Preset 29 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=62
+Tp=2
+DT=1
+FD1=Preset 30 Off
+SD=Preset 30 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=63
+Tp=2
+DT=1
+FD1=Preset 31 Off
+SD=Preset 31 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=64
+Tp=2
+DT=1
+FD1=Preset 32 Off
+SD=Preset 32 Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=65
+Tp=2
+DT=1
+FD1=Preset 1 On or Off
+SD=Preset 1 On or Off
+Trg=1
+Cmd=168
+]
+[
+ObjTp=Dp
+H=66
+Tp=2
+DT=1
+FD1=Preset 2 On or Off
+SD=Preset 2 On or Off
+Trg=1
+Cmd=170
+]
+[
+ObjTp=Dp
+H=67
+Tp=2
+DT=1
+FD1=Preset 3 On or Off
+SD=Preset 3 On or Off
+Trg=1
+Cmd=171
+]
+[
+ObjTp=Dp
+H=68
+Tp=2
+DT=1
+FD1=Preset 4 On or Off
+SD=Preset 4 On or Off
+Trg=1
+Cmd=172
+]
+[
+ObjTp=Dp
+H=69
+Tp=2
+DT=1
+FD1=Preset 5 On or Off
+SD=Preset 5 On or Off
+Trg=1
+Cmd=173
+]
+[
+ObjTp=Dp
+H=70
+Tp=2
+DT=1
+FD1=Preset 6 On or Off
+SD=Preset 6 On or Off
+Trg=1
+Cmd=174
+]
+[
+ObjTp=Dp
+H=71
+Tp=2
+DT=1
+FD1=Preset 7 On or Off
+SD=Preset 7 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=72
+Tp=2
+DT=1
+FD1=Preset 8 On or Off
+SD=Preset 8 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=73
+Tp=2
+DT=1
+FD1=Preset 9 On or Off
+SD=Preset 9 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=74
+Tp=2
+DT=1
+FD1=Preset 10 On or Off
+SD=Preset 10 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=75
+Tp=2
+DT=1
+FD1=Preset 11 On or Off
+SD=Preset 11 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=76
+Tp=2
+DT=1
+FD1=Preset 12 On or Off
+SD=Preset 12 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=77
+Tp=2
+DT=1
+FD1=Preset 13 On or Off
+SD=Preset 13 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=78
+Tp=2
+DT=1
+FD1=Preset 14 On or Off
+SD=Preset 14 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=79
+Tp=2
+DT=1
+FD1=Preset 15 On or Off
+SD=Preset 15 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=80
+Tp=2
+DT=1
+FD1=Preset 16 On or Off
+SD=Preset 16 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=81
+Tp=2
+DT=1
+FD1=Preset 17 On or Off
+SD=Preset 17 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=82
+Tp=2
+DT=1
+FD1=Preset 18 On or Off
+SD=Preset 18 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=83
+Tp=2
+DT=1
+FD1=Preset 19 On or Off
+SD=Preset 19 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=84
+Tp=2
+DT=1
+FD1=Preset 20 On or Off
+SD=Preset 20 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=85
+Tp=2
+DT=1
+FD1=Preset 21 On or Off
+SD=Preset 21 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=86
+Tp=2
+DT=1
+FD1=Preset 22 On or Off
+SD=Preset 22 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=87
+Tp=2
+DT=1
+FD1=Preset 23 On or Off
+SD=Preset 23 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=88
+Tp=2
+DT=1
+FD1=Preset 24 On or Off
+SD=Preset 24 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=89
+Tp=2
+DT=1
+FD1=Preset 25 On or Off
+SD=Preset 25 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=90
+Tp=2
+DT=1
+FD1=Preset 26 On or Off
+SD=Preset 26 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=91
+Tp=2
+DT=1
+FD1=Preset 27 On or Off
+SD=Preset 27 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=92
+Tp=2
+DT=1
+FD1=Preset 28 On or Off
+SD=Preset 28 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=93
+Tp=2
+DT=1
+FD1=Preset 29 On or Off
+SD=Preset 29 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=94
+Tp=2
+DT=1
+FD1=Preset 30 On or Off
+SD=Preset 30 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=95
+Tp=2
+DT=1
+FD1=Preset 31 On or Off
+SD=Preset 31 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=96
+Tp=2
+DT=1
+FD1=Preset 32 On or Off
+SD=Preset 32 On or Off
+Trg=1
+]
+[
+ObjTp=Dp
+H=97
+Tp=7
+DT=4
+FD1=Serial information to send to a 2-way com port
+SD=Serial information to send to a 2-way com port
+]
+[
+ObjTp=Dp
+H=98
+Tp=1
+FD1=Type ID (ASCII)
+SD=Type ID (ASCII)
+HD=TRUE
+DV=1
+NoS=FALSE
+VVS=2
+VN=9
+Val1=1
+Lbl1=880
+Val2=3
+Lbl2=840T
+Val3=2
+Lbl3=TH20
+Val4=A
+Lbl4=8i
+Val5=D
+Lbl5=880T
+Val6=G
+Lbl6=SR1212
+Val7=H
+Lbl7=880TA
+Val8=I
+Lbl8=SR1212A
+Val9=E
+Lbl9=VH20
+Sgn=0
+]
+[
+ObjTp=Dp
+H=99
+Tp=1
+FD1=Unit ID (ASCII)
+SD=Unit ID (ASCII)
+HD=TRUE
+DV=0
+NoS=FALSE
+VVS=2
+VN=16
+Val1=0
+Lbl1=ID0
+Val2=1
+Lbl2=ID1
+Val3=2
+Lbl3=ID2
+Val4=3
+Lbl4=ID3
+Val5=4
+Lbl5=ID4
+Val6=5
+Lbl6=ID5
+Val7=6
+Lbl7=ID6
+Val8=7
+Lbl8=ID7
+Val9=8
+Lbl9=ID8
+Val10=9
+Lbl10=ID9
+Val11=A
+Lbl11=IDA
+Val12=B
+Lbl12=IDB
+Val13=C
+Lbl13=IDC
+Val14=D
+Lbl14=IDD
+Val15=E
+Lbl15=IDE
+Val16=F
+Lbl16=IDF
+Sgn=0
+]
